@@ -1,13 +1,21 @@
 using UnityEngine;
+using TMPro;
+using System.Collections;
 
 public class PlayerSense : MonoBehaviour
 {
-	public float raycastDist;
+	public float raycastDist = 5f;
 	public LayerMask layerMask;
 	public Transform raycastPoint;
 
 	[Space(10)]
 	public Player player;
+	public HoverInfo hoverInfo;
+
+	[Space(10)]
+	public float errorTime = 1f;
+	public GameObject errorParent;
+	public TextMeshProUGUI errorText;
 
 	private Interactable lastHover = null;
 
@@ -15,7 +23,6 @@ public class PlayerSense : MonoBehaviour
 	private void Update()
 	{
 		UpdateHover();
-		UpdateInteraction();
 	}
 
 	private void UpdateHover()
@@ -28,24 +35,43 @@ public class PlayerSense : MonoBehaviour
 			//If hovering overinteractable
 			if (curHover != null)
 			{
-				curHover.StartHover(player);
+				curHover.StartHover(hoverInfo);
 
 				//Interact if key pressed
-				if (Input.GetMouseButtonDown(0)) curHover.Interact(player);
+				if (Input.GetMouseButtonDown(0))
+				{
+					InteractionInfo info = curHover.Interact(player);
+
+					//Display error if fail
+					if (!info.success) DisplayError(info.info);
+				}
 			}
-			else lastHover.EndHover(player);
+			else lastHover.EndHover(hoverInfo);
 		}
 		lastHover = curHover;
 	}
+
+
 	private Interactable GetCurHover()
 	{
 		Interactable curHover = null;
 
 		if (Physics.Raycast(raycastPoint.position, raycastPoint.forward, out RaycastHit hit, raycastDist, layerMask))
 		{
-			curHover = hit.gameObject.GetComponentInParent<Interactable>();
+			curHover = hit.collider.gameObject.GetComponentInParent<Interactable>();
 		}
 
 		return curHover;
+	}
+	private void DisplayError(string errorMessage)
+	{
+		errorParent.SetActive(true);
+		errorText.text = errorMessage;
+		StartCoroutine(HideError());
+	}
+	private IEnumerator HideError()
+	{
+		yield return new WaitForSeconds(errorTime);
+		errorParent.SetActive(false);
 	}
 }

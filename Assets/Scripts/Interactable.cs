@@ -3,10 +3,10 @@ using UnityEngine.Events;
 
 public class Interactable : MonoBehaviour
 {
-	public UnityEvent OnInteract;
+	public UnityEvent<Player player> OnInteract;
 	public Transform hoverInfoPoint;
 	public string hoverName;
-	public string hoverInfo;
+	public string hoverInfoText;
 
 	private Outline outline;
 
@@ -21,29 +21,30 @@ public class Interactable : MonoBehaviour
 		outline = AddComponent<Outline>();
 	}
 
-	public void Interact(Player player)
+	public InteractionInfo Interact(Player player)
 	{
-		if (OnInteract != null) OnInteract();
+		if (OnInteract != null) return OnInteract.Invoke(player);
+		return InteractionInfo.Success();
 	}
 
-	public void StartHover(Player player)
+	public void StartHover(HoverInfo hoverInfo)
 	{
 		//Show outline
 		outline.enabled = true;
 
 		//Show info
-		player.hoverInfo.enabled = true;
-		player.hoverInfo.SetInfo(hoverName, hoverInfo);
-		player.hoverInfo.positionTransform = hoverInfoPoint;
+		hoverInfo.gameObject.SetActive(true);
+		hoverInfo.SetInfo(hoverName, hoverInfoText);
+		hoverInfo.positionPoint = hoverInfoPoint;
 	}
 
-	public void EndHover(Player player)
+	public void EndHover(HoverInfo hoverInfo)
 	{
 		//Hide outline
 		outline.enabled = false;
 
 		//Hide info
-		player.hoverInfo.enabled = false;
+		hoverInfo.gameObject.SetActive(false);
 	}
 
 }
