@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Interactable : MonoBehaviour
+public abstract class Interactable : MonoBehaviour
 {
-	public UnityEvent<Player player> OnInteract;
 	public Transform hoverInfoPoint;
 	public string hoverName;
 	public string hoverInfoText;
@@ -18,14 +17,10 @@ public class Interactable : MonoBehaviour
 
 	private void CreateOutline()
 	{
-		outline = AddComponent<Outline>();
+		outline = gameObject.AddComponent<Outline>();
 	}
 
-	public InteractionInfo Interact(Player player)
-	{
-		if (OnInteract != null) return OnInteract.Invoke(player);
-		return InteractionInfo.Success();
-	}
+	public abstract InteractionInfo Interact(Player player);
 
 	public void StartHover(HoverInfo hoverInfo)
 	{

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Door : MonoBehaviour
+public class Door : Interactable
 {
 	public bool open;
 	public bool unlocked;
@@ -20,7 +20,7 @@ public class Door : MonoBehaviour
 	}
 
 
-	public InteractionInfo TryOpen()
+	public override InteractionInfo Interact(Player player)
 	{
 		if (!unlocked) return InteractionInfo.Fail(lockedReason);
 
@@ -33,5 +33,4 @@ public class Door : MonoBehaviour
 
 		return InteractionInfo.Success();
 	}
-
 }
