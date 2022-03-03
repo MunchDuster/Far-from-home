@@ -21,13 +21,18 @@ public class Door : Interactable
 	{
 		animator = GetComponent<Animator>();
 	}
-	
+
 	public void SetLocked(bool locked)
 	{
 		unlocked = !locked;
 
 		if (locked) { if (OnLock != null) OnLock.Invoke(); }
 		else if (OnLock != null) OnLock.Invoke();
+	}
+
+	public void SetInfo(string info)
+	{
+		hoverInfoText = info;
 	}
 
 	public override InteractionInfo Interact(Player player)
