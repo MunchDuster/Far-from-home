@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 public abstract class Interactable : MonoBehaviour
 {
@@ -7,18 +6,7 @@ public abstract class Interactable : MonoBehaviour
 	public string hoverName;
 	public string hoverInfoText;
 
-	private Outline outline;
-
-	// Start is called before the first frame update
-	private void Start()
-	{
-		CreateOutline();
-	}
-
-	private void CreateOutline()
-	{
-		outline = gameObject.AddComponent<Outline>();
-	}
+	public Outline outline;
 
 	public abstract InteractionInfo Interact(Player player);
 

@@ -18,6 +18,7 @@ public class HoverInfo : MonoBehaviour
 	//Update is called every frame.
 	private void Update()
 	{
+		if(positionPoint  == null) return;
 		transform.position = positionPoint.position;
 		transform.LookAt(target);
 	}

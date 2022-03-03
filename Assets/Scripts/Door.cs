@@ -10,6 +10,9 @@ public class Door : Interactable
 	public UnityEvent OnOpen;
 	public UnityEvent OnClose;
 
+	public UnityEvent OnLock;
+	public UnityEvent OnUnlock;
+
 	public Animator animator;
 
 
@@ -18,13 +21,22 @@ public class Door : Interactable
 	{
 		animator = GetComponent<Animator>();
 	}
+	
+	public void SetLocked(bool locked)
+	{
+		unlocked = !locked;
 
+		if (locked) { if (OnLock != null) OnLock.Invoke(); }
+		else if (OnLock != null) OnLock.Invoke();
+	}
 
 	public override InteractionInfo Interact(Player player)
 	{
 		if (!unlocked) return InteractionInfo.Fail(lockedReason);
 
 		open = !open;
+
+		Debug.Log("Dorr set open: " + open);
 
 		animator.SetBool("open", open);
 
