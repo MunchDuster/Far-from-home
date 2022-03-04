@@ -11,11 +11,8 @@ public class PlayerSense : MonoBehaviour
 	[Space(10)]
 	public Player player;
 	public HoverInfo hoverInfo;
+	public PlayerUI playerUI;
 
-	[Space(10)]
-	public float errorTime = 1f;
-	public GameObject errorParent;
-	public TextMeshProUGUI errorText;
 
 	private Interactable lastHover = null;
 
@@ -49,7 +46,7 @@ public class PlayerSense : MonoBehaviour
 			InteractionInfo info = curHover.Interact(player);
 
 			//Display error if fail
-			if (!info.success) DisplayError(info.info);
+			if (!info.success) playerUI.ShowError(info.info);
 		}
 		lastHover = curHover;
 	}
@@ -65,16 +62,5 @@ public class PlayerSense : MonoBehaviour
 		}
 
 		return curHover;
-	}
-	private void DisplayError(string errorMessage)
-	{
-		errorParent.SetActive(true);
-		errorText.text = errorMessage;
-		StartCoroutine(HideError());
-	}
-	private IEnumerator HideError()
-	{
-		yield return new WaitForSeconds(errorTime);
-		errorParent.SetActive(false);
 	}
 }

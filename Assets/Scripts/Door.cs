@@ -27,7 +27,7 @@ public class Door : Interactable
 		unlocked = !locked;
 
 		if (locked) { if (OnLock != null) OnLock.Invoke(); }
-		else if (OnLock != null) OnLock.Invoke();
+		else if (OnUnlock != null) OnUnlock.Invoke();
 	}
 
 	public void SetInfo(string info)
