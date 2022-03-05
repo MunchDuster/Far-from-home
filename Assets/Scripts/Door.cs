@@ -41,8 +41,6 @@ public class Door : Interactable
 
 		open = !open;
 
-		Debug.Log("Dorr set open: " + open);
-
 		animator.SetBool("open", open);
 
 		if (open) { if (OnOpen != null) OnOpen.Invoke(); }

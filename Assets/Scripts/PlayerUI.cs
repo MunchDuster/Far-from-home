@@ -14,19 +14,20 @@ public class PlayerUI : MonoBehaviour
 	}
 
 	private int errorId;
-	
+
 	public void ShowError(string errorMsg)
 	{
 		errorId++;
+		errorText.text = errorMsg;
 		StartCoroutine(HideError(errorId));
 	}
 	IEnumerator HideError(int myId)
 	{
 		yield return new WaitForSeconds(errorTimePerChar * errorText.text.Length);
-		
-		if(myId == errorId)
+
+		if (myId == errorId)
 		{
 			errorText.text = "";
-		}		
+		}
 	}
 }

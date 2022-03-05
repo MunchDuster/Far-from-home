@@ -11,12 +11,12 @@ public class InteractionInfo
 
 		return info;
 	}
-	public static InteractionInfo Fail(string message)
+	public static InteractionInfo Fail(string error)
 	{
 		InteractionInfo info = new InteractionInfo();
 
 		info.success = false;
-		info.info = message;
+		info.info = error;
 
 		return info;
 	}

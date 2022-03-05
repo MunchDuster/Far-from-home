@@ -25,7 +25,7 @@ public class PlayerSense : MonoBehaviour
 	private void UpdateHover()
 	{
 		Interactable curHover = GetCurHover();
-		
+
 		//If hover changed
 		if (curHover != lastHover)
 		{
@@ -42,7 +42,6 @@ public class PlayerSense : MonoBehaviour
 		//Interact if key pressed
 		if (Input.GetMouseButtonDown(0) && curHover != null)
 		{
-			Debug.Log("Clicking!");
 			InteractionInfo info = curHover.Interact(player);
 
 			//Display error if fail
