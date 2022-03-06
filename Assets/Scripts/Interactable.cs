@@ -2,14 +2,21 @@ using UnityEngine;
 
 public abstract class Interactable : MonoBehaviour
 {
-	public Transform hoverInfoPoint;
+	[Header("Hover Info")]
 	public string hoverName;
 	public string hoverInfoText;
 
+
+	[Header("Interactable References")]
+	public Transform hoverInfoPoint;
 	public Outline outline;
 
+	//Functions are used by player sense
+
+	//On click
 	public abstract InteractionInfo Interact(Player player);
 
+	//Shows hover info
 	public void StartHover(HoverInfo hoverInfo)
 	{
 		//Show outline
@@ -21,6 +28,7 @@ public abstract class Interactable : MonoBehaviour
 		hoverInfo.positionPoint = hoverInfoPoint;
 	}
 
+	//Hides hover info
 	public void EndHover(HoverInfo hoverInfo)
 	{
 		//Hide outline
