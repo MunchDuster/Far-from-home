@@ -1,27 +1,32 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Door : InteractableWithRequirements
+public class Door : Interactable
 {
+	public RequirementList openRequirements;
+
 	//Main vars, controlled internally
 	private bool open;
-	public bool unlocked { get { return requirementsMet; } }
+	public bool unlocked { get { return openRequirements == null || openRequirements.completed; } }
 
 	//UnityEvents triggering chain events
 	public UnityEvent OnOpen;
 	public UnityEvent OnClose;
 	public UnityEvent OnUnlock;
+	public UnityEvent OnLock;
 
 	//Reference to animator
 	public Animator animator;
 
 	//Start is called before first update.
-	protected override void Start()
+	private void Start()
 	{
 		animator = GetComponent<Animator>();
 
-		//Call start method of parent class
-		base.Start();
+		openRequirements.Start();
+
+		openRequirements.onCompleted += UpdateLocked;
+		openRequirements.onUncompleted += UpdateLocked;
 	}
 
 	//Called by UnityEvents to chage hover info
@@ -33,12 +38,20 @@ public class Door : InteractableWithRequirements
 	//Attempt to toggle open/close if not locked
 	public override InteractionInfo Interact(Player player)
 	{
-		Task incompleteTask = GetIncompleteTask();
+		Task incompleteTask = openRequirements.GetIncompleteTask();
 
 		if (incompleteTask != null) return InteractionInfo.Fail(incompleteTask.description);
 
-		open = !open;
 
+		SetOpen(!open);
+
+		return InteractionInfo.Success();
+	}
+
+	//Main opening/closing door function
+	private void SetOpen(bool open)
+	{
+		this.open = open;
 		animator.SetBool("open", open);
 
 		if (open)
@@ -50,12 +63,37 @@ public class Door : InteractableWithRequirements
 			if (OnClose != null) OnClose.Invoke();
 		}
 
-		return InteractionInfo.Success();
 	}
 
 	//Call UnLock event when all requirements are met
-	protected override void OnRequirementsMet()
+	private void UpdateLocked()
 	{
-		if (OnUnlock != null) OnUnlock.Invoke();
+		if (unlocked)
+		{
+			if (OnUnlock != null) OnUnlock.Invoke();
+		}
+		else
+		{
+			if (OnLock != null) OnLock.Invoke();
+		}
+	}
+
+	//Allow for unityEvents to set task completed
+	public void CompleteOpenRequirement(string name)
+	{
+		openRequirements.SetTaskCompleted(name, true);
+	}
+	public void UncompleteOpenRequirement(string name)
+	{
+		openRequirements.SetTaskCompleted(name, false);
+	}
+
+	public void CloseNow()
+	{
+		SetOpen(false);
+	}
+	public void OpenNow()
+	{
+		SetOpen(true);
 	}
 }

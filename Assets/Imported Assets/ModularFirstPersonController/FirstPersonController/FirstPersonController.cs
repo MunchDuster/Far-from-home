@@ -135,10 +135,7 @@ public class FirstPersonController : MonoBehaviour
 	{
 		rb = GetComponent<Rigidbody>();
 
-		crosshairObject = GetComponentInChildren<Image>();
-
 		// Set internal variables
-		playerCamera.fieldOfView = fov;
 		originalScale = transform.localScale;
 		jointOriginalPos = joint.localPosition;
 
@@ -156,46 +153,6 @@ public class FirstPersonController : MonoBehaviour
 			Cursor.lockState = CursorLockMode.Locked;
 		}
 
-		if (crosshair)
-		{
-			crosshairObject.sprite = crosshairImage;
-			crosshairObject.color = crosshairColor;
-		}
-		else
-		{
-			crosshairObject.gameObject.SetActive(false);
-		}
-
-		#region Sprint Bar
-
-		sprintBarCG = GetComponentInChildren<CanvasGroup>();
-
-		if (useSprintBar)
-		{
-			sprintBarBG.gameObject.SetActive(true);
-			sprintBar.gameObject.SetActive(true);
-
-			float screenWidth = Screen.width;
-			float screenHeight = Screen.height;
-
-			sprintBarWidth = screenWidth * sprintBarWidthPercent;
-			sprintBarHeight = screenHeight * sprintBarHeightPercent;
-
-			sprintBarBG.rectTransform.sizeDelta = new Vector3(sprintBarWidth, sprintBarHeight, 0f);
-			sprintBar.rectTransform.sizeDelta = new Vector3(sprintBarWidth - 2, sprintBarHeight - 2, 0f);
-
-			if (hideBarWhenFull)
-			{
-				sprintBarCG.alpha = 0;
-			}
-		}
-		else
-		{
-			sprintBarBG.gameObject.SetActive(false);
-			sprintBar.gameObject.SetActive(false);
-		}
-
-		#endregion
 	}
 
 	float camRotation;
@@ -407,10 +364,6 @@ public class FirstPersonController : MonoBehaviour
 						Crouch();
 					}
 
-					if (hideBarWhenFull && !unlimitedSprint)
-					{
-						sprintBarCG.alpha += 5 * Time.deltaTime;
-					}
 				}
 
 				rb.AddForce(velocityChange, ForceMode.VelocityChange);
@@ -419,11 +372,6 @@ public class FirstPersonController : MonoBehaviour
 			else
 			{
 				isSprinting = false;
-
-				if (hideBarWhenFull && sprintRemaining == sprintDuration)
-				{
-					sprintBarCG.alpha -= 3 * Time.deltaTime;
-				}
 
 				targetVelocity = transform.TransformDirection(targetVelocity) * walkSpeed;
 
