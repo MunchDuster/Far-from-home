@@ -6,7 +6,6 @@ public abstract class Interactable : MonoBehaviour
 	public string hoverName;
 	public string hoverInfoText;
 
-
 	[Header("Interactable References")]
 	public Transform hoverInfoPoint;
 	public Outline outline;

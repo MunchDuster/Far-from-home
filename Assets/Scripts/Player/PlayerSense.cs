@@ -8,8 +8,12 @@ public class PlayerSense : MonoBehaviour
 	public LayerMask layerMask;
 	public Transform raycastPoint;
 
+	public delegate void OnEvent(Interactable item);
+	public OnEvent OnHoverItem;
+
 	[Space(10)]
-	public Player player;
+	[HideInInspector] public Player player;
+
 	public HoverInfo hoverInfo;
 	public PlayerUI playerUI;
 
@@ -29,15 +33,19 @@ public class PlayerSense : MonoBehaviour
 		//If hover changed
 		if (curHover != lastHover)
 		{
+			//Call event
+			if (OnHoverItem != null) OnHoverItem(curHover);
+
 			//If hovering overinteractable
 			if (curHover != null)
 			{
 				curHover.StartHover(hoverInfo);
-
 			}
-			else lastHover.EndHover(hoverInfo);
+			else
+			{
+				lastHover.EndHover(hoverInfo);
+			}
 		}
-
 
 		//Interact if key pressed
 		if (Input.GetMouseButtonDown(0) && curHover != null)
@@ -57,7 +65,12 @@ public class PlayerSense : MonoBehaviour
 
 		if (Physics.Raycast(raycastPoint.position, raycastPoint.forward, out RaycastHit hit, raycastDist, layerMask))
 		{
+			Debug.DrawRay(raycastPoint.position, raycastPoint.forward * hit.distance, Color.red);
 			curHover = hit.collider.gameObject.GetComponentInParent<Interactable>();
+		}
+		else
+		{
+			Debug.DrawRay(raycastPoint.position, raycastPoint.forward * raycastDist, Color.green);
 		}
 
 		return curHover;
