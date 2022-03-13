@@ -13,6 +13,12 @@ public class RequirementList
 	//Called before first frame update
 	public void Start()
 	{
+		if (requirements == null)
+		{
+			completed = true;
+			return;
+		}
+
 		foreach (Task task in requirements)
 		{
 			task.OnCompleted.AddListener(UpdateCompleted);
@@ -23,19 +29,15 @@ public class RequirementList
 	//Checks whether requirements are met, if so then OnCompleted is called
 	private void UpdateCompleted()
 	{
-		Debug.Log("UpdateCompleted");
 		Task incompleteTask = GetIncompleteTask();
 		if (incompleteTask == null)
 		{
-
-			Debug.Log("Completed true");
 			bool wasCompleted = completed;
 			completed = true;
 			if (!wasCompleted && onCompleted != null) onCompleted();
 		}
 		else
 		{
-			Debug.Log("Completed false");
 			bool wasCompleted = completed;
 			completed = false;
 			if (wasCompleted && onUncompleted != null) onUncompleted();

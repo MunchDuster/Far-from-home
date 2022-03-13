@@ -245,8 +245,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: JIMBO
+  camera: {fileID: 0}
   sensor: {fileID: 0}
   pickuper: {fileID: 0}
+  ui: {fileID: 0}
+  movement: {fileID: 0}
 --- !u!114 &1265181205
 MonoBehaviour:
   m_ObjectHideFlags: 0

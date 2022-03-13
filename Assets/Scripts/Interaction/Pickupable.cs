@@ -6,7 +6,6 @@ public class Pickupable : Interactable
 	{
 		if (player.pickuper.item == null)
 		{
-			Debug.Log("Picking up item.");
 			player.pickuper.Pickup(this);
 			return InteractionInfo.Success();
 		}
