@@ -11,7 +11,6 @@ public abstract class Interactable : MonoBehaviour
 	public Outline outline;
 
 	//Functions are used by player sense
-
 	//On click
 	public abstract InteractionInfo Interact(Player player);
 
