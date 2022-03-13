@@ -83,6 +83,8 @@ public class CardLock : Lock
 	{
 		Debug.Log("Game update.");
 
+		if(player.pickuper.item == null) return;
+
 		//If the user is holding left mouse down
 		if (Input.GetMouseButton(0))
 		{
