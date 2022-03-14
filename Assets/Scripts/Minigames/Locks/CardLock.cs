@@ -3,7 +3,8 @@ using TMPro;
 
 public class CardLock : Lock
 {
-	public Transform card;
+
+	public Pickupable card;
 	public new Camera camera;
 	public TextMeshProUGUI text;
 	public Vector3 cardRotationOffset = Vector3.zero;
@@ -83,7 +84,7 @@ public class CardLock : Lock
 	{
 		Debug.Log("Game update.");
 
-		if(player.pickuper.item == null) return;
+		if (player.pickuper.item == null) return;
 
 		//If the user is holding left mouse down
 		if (Input.GetMouseButton(0))
@@ -109,23 +110,31 @@ public class CardLock : Lock
 	//The actual scan code
 	private void Scan()
 	{
-		float speed = Mathf.Abs((y - lastY) / Time.deltaTime);
+		if (player.pickuper.item == card)
+		{
+			float speed = Mathf.Abs((y - lastY) / Time.deltaTime);
 
-		Debug.Log("speed: " + speed);
-		if (speed > maxSpeed)
-		{
-			text.text = "Error: Too fast.";
-			if (OnFail != null) OnFail.Invoke();
-		}
-		else if (speed < minSpeed)
-		{
-			text.text = "Error: Too slow.";
-			if (OnFail != null) OnFail.Invoke();
+			Debug.Log("speed: " + speed);
+			if (speed > maxSpeed)
+			{
+				text.text = "<color=\"red\">Error: Too fast.</color>";
+				if (OnFail != null) OnFail.Invoke();
+			}
+			else if (speed < minSpeed)
+			{
+				text.text = "<color=\"red\">Error: Too slow.</color>";
+				if (OnFail != null) OnFail.Invoke();
+			}
+			else
+			{
+				if (OnUnlock != null) OnUnlock.Invoke();
+				text.text = "Validation success.";
+			}
 		}
 		else
 		{
-			if (OnUnlock != null) OnUnlock.Invoke();
-			text.text = "Validation success.";
+			text.text = "<color=\"red\">Error: Uniditentified item.</color>";
+			if (OnFail != null) OnFail.Invoke();
 		}
 	}
 }
