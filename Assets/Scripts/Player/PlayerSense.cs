@@ -32,11 +32,10 @@ public class PlayerSense : MonoBehaviour
 
 		UpdateHover();
 
-
-
 		CheckInteract();
 
 		lastHover = curHover;
+		lastHoverObject = (curHover != null) ? curHover.gameObject : null;
 	}
 
 	//To disable/enable sensing and also disable hover over any curent ineractable."
@@ -53,8 +52,9 @@ public class PlayerSense : MonoBehaviour
 		isOn = false;
 		if (curHover != null) curHover.EndHover(hoverInfo);
 		lastHover = curHover;
+		lastHoverObject = curHover.gameObject;
+
 		curHover = null;
-		lastHoverObject = null;
 	}
 
 	private void UpdateHover()
@@ -94,14 +94,13 @@ public class PlayerSense : MonoBehaviour
 			if (hit.collider.gameObject != lastHoverObject)
 			{
 				curHover = hit.collider.gameObject.GetComponentInParent<Interactable>();
-				lastHoverObject = hit.collider.gameObject;
 			}
 		}
 		else
 		{
 			Debug.DrawRay(raycastPoint.position, raycastPoint.forward * raycastDist, Color.green);
 			curHover = null;
-			lastHoverObject = null;
+
 		}
 	}
 }
