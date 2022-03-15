@@ -55,6 +55,7 @@ public abstract class Minigame : Interactable
 		return InteractionInfo.Success();
 	}
 
+	//Handles basic admin starting of game
 	private void StartGame()
 	{
 		//Save the current player camera transform
@@ -72,6 +73,9 @@ public abstract class Minigame : Interactable
 		//Disable player movement
 		player.movement.enabled = false;
 
+		//Disable the player sense
+		player.sensor.TurnOff();
+
 		//Add check for if plaer is trying to leave game
 		OnGameUpdate += CheckLeave;
 
@@ -79,6 +83,7 @@ public abstract class Minigame : Interactable
 		OnPlayerJoin();
 	}
 
+	//Handles basic admin of finishing a game
 	private void EndGame()
 	{
 		//Reset camera
@@ -91,6 +96,10 @@ public abstract class Minigame : Interactable
 
 		//Enable player movement
 		player.movement.enabled = true;
+
+		//Eable the player sense
+		player.sensor.TurnOn();
+
 
 		//Remove check for if plaer is trying to leave game
 		OnGameUpdate -= CheckLeave;
@@ -107,5 +116,4 @@ public abstract class Minigame : Interactable
 	{
 		if (player != null) OnGameUpdate();
 	}
-
 }

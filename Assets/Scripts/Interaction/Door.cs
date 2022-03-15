@@ -87,7 +87,6 @@ public class Door : Interactable
 	{
 		openRequirements.SetTaskCompleted(name, false);
 	}
-
 	public void CloseNow()
 	{
 		SetOpen(false);

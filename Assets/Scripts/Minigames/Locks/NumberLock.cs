@@ -21,7 +21,6 @@ public class NumberLock : Lock
 	protected override void Start()
 	{
 		base.Start();
-
 		digits = new int[noOfDigits];
 	}
 
@@ -33,24 +32,29 @@ public class NumberLock : Lock
 
 	public void EnterDigit(int digit)
 	{
+		//Set digit
 		digits[index] = digit;
+
+		//Update index to next digit
 		index = (index + 1) % noOfDigits;
 
+		//Init text
 		UpdateText();
 	}
 
 	//Checks whether entered correct number
 	public void CheckDigits()
 	{
-		int enteredNum = 0;
+		//convert array of entered digits to string
 		string str = "";
 		for (int i = 0; i < noOfDigits; i++)
 		{
 			str += digits[i];
 		}
-		enteredNum = System.Convert.ToInt32(str);
-		Debug.Log("eneteered num: " + enteredNum);
+		//Parse string as integer
+		int enteredNum = enteredNum = System.Convert.ToInt32(str);
 
+		//Check answer
 		if (enteredNum == answer)
 		{
 			if (OnUnlock != null) OnUnlock.Invoke();
@@ -65,23 +69,27 @@ public class NumberLock : Lock
 
 	private IEnumerator FlashText(string text)
 	{
+		//Flash given text
 		for (float t = 0; t < flashTime; t += flashTick)
 		{
 			this.text.text = ((t / flashTick) % 2 > 0.5f) ? "" : text;
 			yield return new WaitForSeconds(flashTick);
 		}
-		Debug.Log("Finished flashing.");
-		this.text.text = text;
+
+		//Show digits again after flashing
+		UpdateText();
 	}
 
 	private void UpdateText()
 	{
+		//Stop flashing if flashing
 		if (flashingText != null)
 		{
 			StopCoroutine(flashingText);
 			flashingText = null;
 		}
 
+		//Show digits, underline selected digit
 		string str = builder;
 		for (int i = 0; i < noOfDigits; i++)
 		{
@@ -91,6 +99,8 @@ public class NumberLock : Lock
 
 			str = str.Replace(replacee, replacement);
 		}
+
+		//Set text
 		text.text = str;
 	}
 }

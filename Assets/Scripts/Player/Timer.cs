@@ -33,8 +33,8 @@ public class Timer : MonoBehaviour
 	{
 		if (timeLeft >= 60)
 		{
-			int mins = Mathf.RoundToInt(timeLeft / 60f);
-			int secs = Mathf.RoundToInt(timeLeft % 60);
+			int mins = (int)Mathf.Ceil(timeLeft / 60f);
+			int secs = (int)Mathf.Ceil(timeLeft % 60);
 			return mins + "m " + secs + "s";
 		}
 		else

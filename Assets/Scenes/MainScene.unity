@@ -9910,7 +9910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0183e4ad94a35344889cb4f712cef4be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startTimeLeft: 100
+  startTimeLeft: 200
   running: 1
   text: {fileID: 1448731853}
   OnRunOut:
@@ -9968,7 +9968,7 @@ MonoBehaviour:
   camera: {fileID: 8765489994903951807}
   sensor: {fileID: 1265181207}
   pickuper: {fileID: 1265181211}
-  ui: {fileID: 0}
+  ui: {fileID: 1213673199}
   movement: {fileID: 1265181206}
 --- !u!1 &1223228757
 GameObject:

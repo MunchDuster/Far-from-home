@@ -17,62 +17,91 @@ public class PlayerSense : MonoBehaviour
 	public HoverInfo hoverInfo;
 	public PlayerUI playerUI;
 
-
-	private Interactable lastHover = null;
+	private Interactable curHover = null; //Interactable hovering this frame
+	private Interactable lastHover = null; //Interactabl hovering last frame
+	private GameObject lastHoverObject = null; //Gameobject of lastHover (for quick check)
+	private bool isOn = true;
 
 	//Update is called every frame.
 	private void Update()
 	{
+		if (!isOn) return;
+
+		GetCurrentHover();
+
+
 		UpdateHover();
+
+
+
+		CheckInteract();
+
+		lastHover = curHover;
+	}
+
+	//To disable/enable sensing and also disable hover over any curent ineractable."
+	public void TurnOn()
+	{
+		Debug.Log("Turning on");
+
+		isOn = true;
+	}
+	public void TurnOff()
+	{
+		Debug.Log("Turning off");
+
+		isOn = false;
+		if (curHover != null) curHover.EndHover(hoverInfo);
+		lastHover = curHover;
+		curHover = null;
+		lastHoverObject = null;
 	}
 
 	private void UpdateHover()
 	{
-		Interactable curHover = GetCurHover();
+		//Skip hover hasn't changed
+		if (curHover == lastHover) return;
 
-		//If hover changed
-		if (curHover != lastHover)
-		{
-			//Call event
-			if (OnHoverItem != null) OnHoverItem(curHover);
+		//Call event
+		if (OnHoverItem != null) OnHoverItem(curHover);
 
-			//If hovering overinteractable
-			if (curHover != null)
-			{
-				curHover.StartHover(hoverInfo);
-			}
-			else
-			{
-				lastHover.EndHover(hoverInfo);
-			}
-		}
+		//Call functions
+		if (curHover != null) curHover.StartHover(hoverInfo);
+		if (lastHover != null) lastHover.EndHover(hoverInfo);
+	}
+
+	private void CheckInteract()
+	{
+		Debug.Log("curHover: " + curHover);
 
 		//Interact if key pressed
 		if (Input.GetMouseButtonDown(0) && curHover != null)
 		{
+			Debug.Log("interacting");
 			InteractionInfo info = curHover.Interact(player);
 
 			//Display error if fail
 			if (!info.success) playerUI.ShowError(info.info);
 		}
-		lastHover = curHover;
 	}
 
-
-	private Interactable GetCurHover()
+	private void GetCurrentHover()
 	{
-		Interactable curHover = null;
-
 		if (Physics.Raycast(raycastPoint.position, raycastPoint.forward, out RaycastHit hit, raycastDist, layerMask))
 		{
 			Debug.DrawRay(raycastPoint.position, raycastPoint.forward * hit.distance, Color.red);
-			curHover = hit.collider.gameObject.GetComponentInParent<Interactable>();
+
+			if (hit.collider.gameObject != lastHoverObject)
+			{
+				curHover = hit.collider.gameObject.GetComponentInParent<Interactable>();
+				lastHoverObject = hit.collider.gameObject;
+			}
 		}
 		else
 		{
 			Debug.DrawRay(raycastPoint.position, raycastPoint.forward * raycastDist, Color.green);
+			curHover = null;
+			lastHoverObject = null;
 		}
-
-		return curHover;
 	}
 }
