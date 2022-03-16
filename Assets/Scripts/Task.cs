@@ -6,11 +6,13 @@ public class Task
 {
 	public string name;
 	public string description;
+	[SerializeField] private bool _completed = false;
 
-	public UnityEvent OnCompleted;
+	public delegate void OnEvent();
+	public event OnEvent OnCompleted;
+	public event OnEvent OnUncompleted;
 
 	//Getter which calls OnCompleted when set true
-	private bool _completed = false;
 	public bool completed { get { return _completed; } }
 
 	//Used by unityEvents
@@ -20,10 +22,11 @@ public class Task
 
 		if (_completed)
 		{
-			if (OnCompleted != null)
-			{
-				OnCompleted.Invoke();
-			}
+			if (OnCompleted != null) OnCompleted.Invoke();
+		}
+		else
+		{
+			if (OnUncompleted != null) OnUncompleted.Invoke();
 		}
 	}
 }

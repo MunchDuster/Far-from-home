@@ -21,7 +21,8 @@ public class RequirementList
 
 		foreach (Task task in requirements)
 		{
-			task.OnCompleted.AddListener(UpdateCompleted);
+			task.OnCompleted += UpdateCompleted;
+			task.OnUncompleted += UpdateCompleted;
 		}
 		UpdateCompleted();
 	}
@@ -32,12 +33,14 @@ public class RequirementList
 		Task incompleteTask = GetIncompleteTask();
 		if (incompleteTask == null)
 		{
+			//must set completed before calling events
 			bool wasCompleted = completed;
 			completed = true;
 			if (!wasCompleted && onCompleted != null) onCompleted();
 		}
 		else
 		{
+			//must set completed before calling events
 			bool wasCompleted = completed;
 			completed = false;
 			if (wasCompleted && onUncompleted != null) onUncompleted();

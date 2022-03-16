@@ -45,7 +45,7 @@ public class CardLock : Lock
 	}
 	protected override void StopPlaying()
 	{
-		if (player.pickuper.item.transform != null)
+		if (player.pickuper.item != null)
 		{
 			player.pickuper.item.transform.localPosition = Vector3.zero;
 			player.pickuper.item.transform.localRotation = Quaternion.identity;

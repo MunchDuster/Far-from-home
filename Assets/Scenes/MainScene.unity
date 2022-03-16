@@ -1911,6 +1911,8 @@ MonoBehaviour:
   hoverInfoText: Protect your body from space
   hoverInfoPoint: {fileID: 1673664093}
   outline: {fileID: 223744443}
+  wearingHoverName: Space suit holder
+  wearingHoverInfo: Put back spacesuit
   OnWear:
     m_PersistentCalls:
       m_Calls:
@@ -1962,6 +1964,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 935612372}
+        m_TargetAssemblyTypeName: Door, Project.MyScripts
+        m_MethodName: UncompleteOpenRequirement
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Not wearing spacesuit
+          m_BoolArgument: 0
+        m_CallState: 2
   OnUnwear:
     m_PersistentCalls:
       m_Calls:
@@ -2011,6 +2025,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 935612372}
+        m_TargetAssemblyTypeName: Door, Project.MyScripts
+        m_MethodName: CompleteOpenRequirement
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Not wearing spacesuit
           m_BoolArgument: 1
         m_CallState: 2
   wearRequirements:
@@ -6562,7 +6588,10 @@ MonoBehaviour:
   hoverInfoPoint: {fileID: 334712645}
   outline: {fileID: 801236549}
   openRequirements:
-    requirements: []
+    requirements:
+    - name: Not wearing spacesuit
+      description: Must not be wearing spacesuit past this point.
+      _completed: 1
     completed: 0
   OnOpen:
     m_PersistentCalls:
@@ -8296,8 +8325,8 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1121512748}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0.109}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: 0.70710677, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.054999955}
   m_LocalScale: {x: 0.0046458147, y: 0.0050638, z: 0.0030116998}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -8307,7 +8336,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.069, y: 0.055}
+  m_AnchoredPosition: {x: -0.06899977, y: -0.109000206}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1121512750
@@ -9856,7 +9885,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1213673197}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.437}
+  m_LocalPosition: {x: -18.5, y: 0, z: -19.437}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11871,8 +11900,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1431443273}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.167, y: 0.3, z: 0.15962029}
+  m_LocalRotation: {x: 0.70710677, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0.16699994, y: -0.15962026, z: 0.30000007}
   m_LocalScale: {x: 0.4645815, y: 0.50638, z: 0.30117}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11989,9 +12018,7 @@ MonoBehaviour:
     requirements:
     - name: Fix greenhouse
       description: Cannot open door until breach has been sealed.
-      OnCompleted:
-        m_PersistentCalls:
-          m_Calls: []
+      _completed: 0
     completed: 0
   OnOpen:
     m_PersistentCalls:
@@ -12574,7 +12601,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d3a126d5a6d7b29439b1ddb343a40172,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d3a126d5a6d7b29439b1ddb343a40172,
         type: 3}
@@ -12584,7 +12611,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d3a126d5a6d7b29439b1ddb343a40172,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d3a126d5a6d7b29439b1ddb343a40172,
         type: 3}
@@ -12599,7 +12626,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d3a126d5a6d7b29439b1ddb343a40172,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d3a126d5a6d7b29439b1ddb343a40172,
         type: 3}
@@ -13059,8 +13086,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1498914975}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.167, y: -0.3, z: 0.15962029}
+  m_LocalRotation: {x: 0.70710677, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0.16699994, y: -0.15962031, z: -0.30000007}
   m_LocalScale: {x: 0.4645815, y: 0.50638, z: 0.30117}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13998,9 +14025,7 @@ MonoBehaviour:
     requirements:
     - name: Keycard
       description: Door locked
-      OnCompleted:
-        m_PersistentCalls:
-          m_Calls: []
+      _completed: 0
     completed: 0
   OnOpen:
     m_PersistentCalls:
@@ -14346,12 +14371,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 8e4ffce3b181bdf46b256346be9ccc89,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8e4ffce3b181bdf46b256346be9ccc89,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: -0.70710677
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8e4ffce3b181bdf46b256346be9ccc89,
         type: 3}
@@ -14366,7 +14391,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 8e4ffce3b181bdf46b256346be9ccc89,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8e4ffce3b181bdf46b256346be9ccc89,
         type: 3}
@@ -14392,19 +14417,19 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8e4ffce3b181bdf46b256346be9ccc89,
         type: 3}
-      insertIndex: 0
+      insertIndex: -1
       addedObject: {fileID: 1431443274}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8e4ffce3b181bdf46b256346be9ccc89,
         type: 3}
-      insertIndex: 1
+      insertIndex: -1
       addedObject: {fileID: 1498914976}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8e4ffce3b181bdf46b256346be9ccc89,
         type: 3}
-      insertIndex: 2
+      insertIndex: -1
       addedObject: {fileID: 1917764321}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8e4ffce3b181bdf46b256346be9ccc89,
         type: 3}
-      insertIndex: 3
+      insertIndex: -1
       addedObject: {fileID: 1121512749}
   m_SourcePrefab: {fileID: 100100000, guid: 8e4ffce3b181bdf46b256346be9ccc89, type: 3}
 --- !u!4 &1633818971 stripped
@@ -14430,7 +14455,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.481393, y: 0.48848093, z: 0.21670128}
+  m_Size: {x: 0.481393, y: 0.2167013, z: 0.4884809}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1633818974
 MonoBehaviour:
@@ -16830,8 +16855,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1917764320}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0.99084926}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: 0.70710677, w: 0}
+  m_LocalPosition: {x: 0, y: -0.99084926, z: 0}
   m_LocalScale: {x: 0.4645815, y: 0.50638, z: 0.30117}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17397,9 +17422,7 @@ MonoBehaviour:
     requirements:
     - name: Wear Spacesuit
       description: Must put on spacesuit before decompressing room.
-      OnCompleted:
-        m_PersistentCalls:
-          m_Calls: []
+      _completed: 0
     completed: 0
   OnOpen:
     m_PersistentCalls:
@@ -18524,6 +18547,11 @@ PrefabInstance:
     - target: {fileID: 4459864850019384738, guid: 6bacecc4f3df9584198879c73a6b6c36,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4459864850019384740, guid: 6bacecc4f3df9584198879c73a6b6c36,
+        type: 3}
+      propertyPath: enableCrouch
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4459864850019384740, guid: 6bacecc4f3df9584198879c73a6b6c36,
