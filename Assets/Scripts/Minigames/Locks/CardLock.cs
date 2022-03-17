@@ -41,7 +41,7 @@ public class CardLock : Lock
 		lastY = y;
 
 		//Init dist
-		dist = (player.camera.position - transform.position).magnitude;
+		dist = (player.camera.transform.position - transform.position).magnitude;
 	}
 	protected override void StopPlaying()
 	{

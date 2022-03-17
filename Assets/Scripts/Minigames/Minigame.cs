@@ -87,8 +87,8 @@ public abstract class Minigame : Interactable
 	private void EndGame()
 	{
 		//Reset camera
-		player.camera.localPosition = initialLocalPosition;
-		player.camera.localRotation = initialLocalRotation;
+		player.camera.transform.localPosition = initialLocalPosition;
+		player.camera.transform.localRotation = initialLocalRotation;
 
 		//Lock the cursor
 		Cursor.lockState = CursorLockMode.Locked;

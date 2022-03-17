@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
 	public string playerName;
 
 	[Header("Attachments")]
-	public new Transform camera;
+	public new Camera camera;
 	public PlayerSense sensor;
 	public PlayerPickup pickuper;
 	public PlayerUI ui;
