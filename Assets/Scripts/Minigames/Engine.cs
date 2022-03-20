@@ -4,26 +4,45 @@ using UnityEngine.Events;
 
 public class Engine : Minigame
 {
-	public Transform itemPlane;
+	public float stiffness = 3;
+	public float nozzleStiffness = 3;
+	public float maxFuel = 40;
 
+	[Space(10)]
+	public Pickupable fuelCan;
+	public Transform itemPlane;
+	public Transform fuelPoint;
+	public Transform fuelHandle;
+	public Transform fuelNozzle;
+
+	[Space(10)]
 	public Slider fullnessSlider;
 
+	[Space(10)]
 	public UnityEvent OnStart;
 	public UnityEvent OnStop;
+	public UnityEvent OnFuelled;
 
 	private Plane plane;
 
+	private float fuel;
+
 
 	// Start is called before the first frame update
-	protected override void Start()
+	protected void Start()
 	{
-		base.Start();
-
 		OnPlayerJoin += StartGame;
 		OnPlayerLeave += StopGame;
-		OnGameUpdate += GameUpdate;
+		OnGameUpdate += UpdateInput;
+		OnGameFixedUpdate += GameUpdate;
 
-		plane = new Plane(itemPlane.right, itemPlane.up);
+		plane = new Plane(itemPlane.forward, itemPlane.position);
+	}
+
+	protected override InteractionInfo CheckRequirements(Player player)
+	{
+		if (player.pickuper.item != fuelCan) return InteractionInfo.Fail("You must be holding fuel can.");
+		else return InteractionInfo.Success();
 	}
 
 	private Rigidbody rb;
@@ -31,31 +50,54 @@ public class Engine : Minigame
 	private void StartGame()
 	{
 		OnStart.Invoke();
-		if (player.pickuper.item != null)
-		{
-			rb = player.pickuper.item.GetComponentInChildren<Rigidbody>();
 
-			if (rb != null) rb.isKinematic = false;
+		rb = player.pickuper.item.GetComponentInChildren<Rigidbody>();
+
+		rb.isKinematic = false;
+
+		targetPos = GetItemTargetPosition(new Vector2(Screen.width / 2, Screen.height / 2));
+
+		//Reset pickup position
+		fuelCan.transform.position = targetPos;
+	}
+
+	private Vector3 targetPos;
+
+	private void UpdateInput()
+	{
+		if (Input.GetMouseButton(0))
+		{
+			targetPos = GetItemTargetPosition(Input.mousePosition);
 		}
 	}
 	private void GameUpdate()
 	{
-		if (player.pickuper.item == null) return;
 
-		if (Input.GetMouseButton(0)) player.pickuper.item.transform.position = GetItemPosition();
+		//Go to mouse position
+		Vector3 handleDirection = targetPos - fuelHandle.position;
+		Debug.DrawRay(fuelHandle.position, handleDirection, Color.red);
+		rb.AddForceAtPosition(handleDirection.normalized * stiffness * Time.fixedDeltaTime * handleDirection.magnitude, fuelHandle.position);
+
+		//Point towards feulPoint
+		Vector3 nozzleDirection = fuelPoint.position - fuelNozzle.position;
+		Debug.DrawRay(fuelNozzle.position, nozzleDirection, Color.green);
+		rb.AddForceAtPosition(nozzleDirection.normalized * nozzleStiffness * Time.fixedDeltaTime, fuelNozzle.position);
+
 	}
 	private void StopGame()
 	{
 		OnStop.Invoke();
-		if (player.pickuper.item != null)
-		{
-			if (rb != null) rb.isKinematic = true;
-		}
+
+		rb.isKinematic = true;
+
+		//Reset pickup position
+		fuelCan.transform.localPosition = Vector3.zero;
+		fuelCan.transform.localRotation = Quaternion.identity;
 	}
 
-	private Vector3 GetItemPosition()
+	private Vector3 GetItemTargetPosition(Vector2 screenPos)
 	{
-		Ray ray = player.camera.ScreenPointToRay(Input.mousePosition);
+		Ray ray = player.camera.ScreenPointToRay(screenPos);
 
 		if (plane.Raycast(ray, out float enter))
 		{
@@ -66,7 +108,22 @@ public class Engine : Minigame
 		{
 			return Vector3.zero;
 		}
-
 	}
 
+	public void AddFuel(float amount)
+	{
+		if (fuel >= maxFuel) return;
+
+		fuel += amount;
+
+		if (fuel >= maxFuel)
+		{
+			fullnessSlider.value = 1;
+			OnFuelled.Invoke();
+		}
+		else
+		{
+			fullnessSlider.value = fuel / maxFuel;
+		}
+	}
 }

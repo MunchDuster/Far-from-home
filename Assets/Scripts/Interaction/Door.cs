@@ -68,7 +68,6 @@ public class Door : Interactable
 	//Call UnLock event when all requirements are met
 	private void UpdateLocked()
 	{
-		Debug.Log("Updating locked: " + unlocked);
 		if (unlocked)
 		{
 			if (OnUnlock != null) OnUnlock.Invoke();

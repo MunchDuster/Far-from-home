@@ -18,15 +18,10 @@ public class NumberLock : Lock
 	private int[] digits;
 
 	// Start is called before the first frame update
-	protected override void Start()
+	protected void Start()
 	{
-		base.Start();
 		digits = new int[noOfDigits];
 	}
-
-	protected override void StartPlaying() { }
-	protected override void StopPlaying() { }
-	protected override void GameUpdate() { }
 
 	private Coroutine flashingText;
 
@@ -102,5 +97,10 @@ public class NumberLock : Lock
 
 		//Set text
 		text.text = str;
+	}
+
+	protected override InteractionInfo CheckRequirements(Player player)
+	{
+		return InteractionInfo.Success();
 	}
 }

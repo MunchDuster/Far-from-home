@@ -72,12 +72,9 @@ public class PlayerSense : MonoBehaviour
 
 	private void CheckInteract()
 	{
-		Debug.Log("curHover: " + curHover);
-
 		//Interact if key pressed
 		if (Input.GetMouseButtonDown(0) && curHover != null)
 		{
-			Debug.Log("interacting");
 			InteractionInfo info = curHover.Interact(player);
 
 			//Display error if fail

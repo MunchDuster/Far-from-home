@@ -28,28 +28,40 @@ public class CardLock : Lock
 	private float maxSpeed { get { return targetSpeed + (targetSpeedRange / 2f); } }
 	private float minSpeed { get { return targetSpeed - (targetSpeedRange / 2f); } }
 
-	protected override void StartPlaying()
-	{
-		if (player.pickuper.item == null) return;
 
-		//Init position and rotation
+	// Start is called before the first frame update
+	private void Start()
+	{
+		OnPlayerJoin += StartPlaying;
+		OnPlayerLeave += StartPlaying;
+		OnGameUpdate += GameUpdate;
+	}
+
+	private void StartPlaying()
+	{
+		//Set item position and rotation
 		player.pickuper.item.transform.position = slideStart.position;
 		player.pickuper.item.transform.rotation = slideStart.rotation * Quaternion.Euler(cardRotationOffset);
 
-		//Init y position
+		//Init vars
 		y = slideStart.position.y;
 		lastY = y;
-
-		//Init dist
 		dist = (player.camera.transform.position - transform.position).magnitude;
 	}
-	protected override void StopPlaying()
+	private void StopPlaying()
 	{
 		if (player.pickuper.item != null)
 		{
 			player.pickuper.item.transform.localPosition = Vector3.zero;
 			player.pickuper.item.transform.localRotation = Quaternion.identity;
 		}
+	}
+
+	protected override InteractionInfo CheckRequirements(Player player)
+	{
+		if (player.pickuper.item == null) return InteractionInfo.Fail("Needs an item to use.");
+		else if (player.pickuper.item != card) return InteractionInfo.Fail("Can't use this item.");
+		else return InteractionInfo.Success();
 	}
 
 	// Gets angle of mouse
@@ -80,7 +92,7 @@ public class CardLock : Lock
 	}
 
 	//Main update while user is playing
-	protected override void GameUpdate()
+	private void GameUpdate()
 	{
 		Debug.Log("Game update.");
 

@@ -3,23 +3,17 @@ using UnityEngine;
 public abstract class Minigame : Interactable
 {
 	public Transform cameraPoint;
-	public RequirementList requirementsToPlay;
 
 	protected delegate void MinigameEvent();
 	protected event MinigameEvent OnPlayerJoin;
 	protected event MinigameEvent OnPlayerLeave;
 	protected event MinigameEvent OnGameUpdate;
+	protected event MinigameEvent OnGameFixedUpdate;
 
 	protected Player player;
 
 	private Vector3 initialLocalPosition;
 	private Quaternion initialLocalRotation;
-
-	// Start is called before the first frame update
-	protected virtual void Start()
-	{
-		requirementsToPlay.Start();
-	}
 
 	//Checks whether the player is leaving the game
 	private void CheckLeave()
@@ -28,31 +22,25 @@ public abstract class Minigame : Interactable
 		player.camera.transform.position = cameraPoint.position;
 		player.camera.transform.rotation = cameraPoint.rotation;
 
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			EndGame();
-		}
+		if (Input.GetKeyDown(KeyCode.Space)) EndGame();
 	}
+
 
 	//Interact is called when the player clicks on this
 	public override InteractionInfo Interact(Player player)
 	{
-		//Player already using, clicking on it for another reason
+		//Player already using,then clicking on it for another reason
 		if (this.player != null) return InteractionInfo.Success();
 
-		//Check if reuirements met
-		if (!requirementsToPlay.completed)
+		InteractionInfo info = CheckRequirements(player);
+
+		if (info.success)
 		{
-			return InteractionInfo.Fail(requirementsToPlay.GetIncompleteTask().description);
+			this.player = player;
+			StartGame();
 		}
 
-		//Set var
-		this.player = player;
-
-		StartGame();
-
-		//Return success
-		return InteractionInfo.Success();
+		return info;
 	}
 
 	//Handles basic admin starting of game
@@ -100,7 +88,6 @@ public abstract class Minigame : Interactable
 		//Eable the player sense
 		player.sensor.TurnOn();
 
-
 		//Remove check for if plaer is trying to leave game
 		OnGameUpdate -= CheckLeave;
 
@@ -111,9 +98,17 @@ public abstract class Minigame : Interactable
 		player = null;
 	}
 
+	protected abstract InteractionInfo CheckRequirements(Player player);
+
 	// Update is called every frame
 	private void Update()
 	{
 		if (player != null) OnGameUpdate();
+	}
+
+	// FixedUpdate is called every physics update
+	private void FixedUpdate()
+	{
+		if (player != null && OnGameFixedUpdate != null) OnGameFixedUpdate.Invoke();
 	}
 }
