@@ -89,7 +89,7 @@ public class Flow : MonoBehaviour
 
 	[Space(10)]
 	public Transform pourPoint;
-	public Transform fuelPoint;
+	[HideInInspector] public Transform fuelPoint;
 	public Engine engine;
 	public Rigidbody rb;
 	public LineRenderer baseLineRenderer;

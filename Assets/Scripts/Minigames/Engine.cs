@@ -10,6 +10,10 @@ public class Engine : Minigame
 
 	[Space(10)]
 	public Pickupable fuelCan;
+	public Flow fuelFlow;
+	public Color sliderStartColor;
+	public Color sliderStopColor;
+
 	public Transform itemPlane;
 	public Transform fuelPoint;
 	public Transform fuelHandle;
@@ -17,6 +21,7 @@ public class Engine : Minigame
 
 	[Space(10)]
 	public Slider fullnessSlider;
+	public Image fullnessSliderImage;
 
 	[Space(10)]
 	public UnityEvent OnStart;
@@ -57,8 +62,12 @@ public class Engine : Minigame
 
 		targetPos = GetItemTargetPosition(new Vector2(Screen.width / 2, Screen.height / 2));
 
+		fuelFlow.fuelPoint = fuelPoint;
+
 		//Reset pickup position
 		fuelCan.transform.position = targetPos;
+
+		fullnessSliderImage.color = sliderStartColor;
 	}
 
 	private Vector3 targetPos;
@@ -89,6 +98,9 @@ public class Engine : Minigame
 		OnStop.Invoke();
 
 		rb.isKinematic = true;
+
+		fullnessSliderImage.color = sliderStopColor;
+
 
 		//Reset pickup position
 		fuelCan.transform.localPosition = Vector3.zero;
