@@ -92,6 +92,9 @@ public class Engine : Minigame
 		Debug.DrawRay(fuelNozzle.position, nozzleDirection, Color.green);
 		rb.AddForceAtPosition(nozzleDirection.normalized * nozzleStiffness * Time.fixedDeltaTime, fuelNozzle.position);
 
+		Vector3 fuelPointOnPlane = plane.ClosestPointOnPlane(rb.position);
+		Vector3 alignmentForce = fuelPointOnPlane - rb.position;
+		rb.AddForce(alignmentForce, ForceMode.VelocityChange);
 	}
 	private void StopGame()
 	{
