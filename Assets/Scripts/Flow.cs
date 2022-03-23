@@ -6,6 +6,7 @@ public class Flow : MonoBehaviour
 	[Header("Point settings")]
 	public float lifeTime = 5;
 	public float bounceFriction = 0.2f;
+	public float pressure = 3;
 	public LayerMask layerMask;
 	public float fuelPerPoint = 0.05f;
 
@@ -137,7 +138,7 @@ public class Flow : MonoBehaviour
 				curStream = newStream;
 			}
 
-			curStream.AddPoint(pourPoint.position, rb.GetPointVelocity(pourPoint.position), lifeTime);
+			curStream.AddPoint(pourPoint.position, rb.GetPointVelocity(pourPoint.position) + pressure * pourPoint.forward, lifeTime);
 		}
 		else
 		{
@@ -161,7 +162,7 @@ public class Flow : MonoBehaviour
 			{
 				DestroyPointByIndex(i);
 			}
-			else if ((Point.points[i].position - fuelPoint.position).magnitude <= closeness)
+			else if (fuelPoint != null && (Point.points[i].position - fuelPoint.position).magnitude <= closeness)
 			{
 				engine.AddFuel(fuelPerPoint);
 				DestroyPointByIndex(i);

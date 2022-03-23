@@ -4,8 +4,9 @@ using UnityEngine.Events;
 
 public class Engine : Minigame
 {
-	public float stiffness = 3;
+	public float bodyStiffness = 3;
 	public float nozzleStiffness = 3;
+	public float alignmentStiffness = 3;
 	public float maxFuel = 40;
 
 	[Space(10)]
@@ -60,12 +61,17 @@ public class Engine : Minigame
 
 		rb.isKinematic = false;
 
+		fuelCan.GetComponent<Collider>().enabled = true;
+
 		targetPos = GetItemTargetPosition(new Vector2(Screen.width / 2, Screen.height / 2));
 
 		fuelFlow.fuelPoint = fuelPoint;
+		fuelFlow.engine = this;
 
 		//Reset pickup position
 		fuelCan.transform.position = targetPos;
+
+		fullnessSlider.value = 0;
 
 		fullnessSliderImage.color = sliderStartColor;
 	}
@@ -81,20 +87,24 @@ public class Engine : Minigame
 	}
 	private void GameUpdate()
 	{
+		Vector3 fuelHandleOnPlane = plane.ClosestPointOnPlane(fuelHandle.position);
+
 
 		//Go to mouse position
-		Vector3 handleDirection = targetPos - fuelHandle.position;
+		Vector3 handleDirection = targetPos - fuelHandleOnPlane;
 		Debug.DrawRay(fuelHandle.position, handleDirection, Color.red);
-		rb.AddForceAtPosition(handleDirection.normalized * stiffness * Time.fixedDeltaTime * handleDirection.magnitude, fuelHandle.position);
+		rb.AddForceAtPosition(handleDirection.normalized * bodyStiffness * Time.fixedDeltaTime * handleDirection.magnitude, fuelHandle.position);
 
 		//Point towards feulPoint
 		Vector3 nozzleDirection = fuelPoint.position - fuelNozzle.position;
 		Debug.DrawRay(fuelNozzle.position, nozzleDirection, Color.green);
 		rb.AddForceAtPosition(nozzleDirection.normalized * nozzleStiffness * Time.fixedDeltaTime, fuelNozzle.position);
 
-		Vector3 fuelPointOnPlane = plane.ClosestPointOnPlane(rb.position);
-		Vector3 alignmentForce = fuelPointOnPlane - rb.position;
-		rb.AddForce(alignmentForce, ForceMode.VelocityChange);
+		Vector3 rbOnPlane = plane.ClosestPointOnPlane(rb.position);
+		float distance = (rbOnPlane - rb.position).magnitude;
+		Vector3 alignmentForce = (rbOnPlane - rb.position) * (distance) * alignmentStiffness;
+		Debug.DrawRay(rb.position, alignmentForce, Color.blue);
+		rb.AddForce(alignmentForce);
 	}
 	private void StopGame()
 	{
@@ -133,7 +143,9 @@ public class Engine : Minigame
 
 		if (fuel >= maxFuel)
 		{
+			Debug.Log("Full!");
 			fullnessSlider.value = 1;
+			fullnessSliderImage.color = sliderStopColor;
 			OnFuelled.Invoke();
 		}
 		else
