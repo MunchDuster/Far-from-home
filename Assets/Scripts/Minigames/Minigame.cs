@@ -10,7 +10,7 @@ public abstract class Minigame : Interactable
 	protected event MinigameEvent OnGameUpdate;
 	protected event MinigameEvent OnGameFixedUpdate;
 
-	protected Player player;
+	protected Player player = null;
 
 	private Vector3 initialLocalPosition;
 	private Quaternion initialLocalRotation;
