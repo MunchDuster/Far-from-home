@@ -22,7 +22,7 @@ public abstract class Minigame : Interactable
 		player.camera.transform.position = cameraPoint.position;
 		player.camera.transform.rotation = cameraPoint.rotation;
 
-		if (Input.GetKeyDown(KeyCode.Space)) EndGame();
+		if (Input.GetKeyDown(KeyCode.Escape)) EndGame();
 	}
 
 
