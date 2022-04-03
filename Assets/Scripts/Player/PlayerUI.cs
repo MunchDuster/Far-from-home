@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
+using System.Text;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerUI : MonoBehaviour
 {
@@ -17,7 +19,6 @@ public class PlayerUI : MonoBehaviour
 	}
 
 	private Coroutine errorCoroutine;
-
 	public void ShowError(string errorMsg)
 	{
 		if (errorCoroutine != null)
@@ -47,4 +48,48 @@ public class PlayerUI : MonoBehaviour
 		errorText.text = "";
 		errorCoroutine = null;
 	}
+
+	//Task management
+	private static List<Task> tasks = new List<Task>();
+
+	public void AddTask(Task task)
+	{
+		tasks.Insert(0, task);
+		UpdateTasksText();
+	}
+	public void RemoveTask(Task task)
+	{
+		tasks.Remove(task);
+		UpdateTasksText();
+	}
+	public void CompleteTask(Task task)
+	{
+		task.SetCompleted(true);
+		UpdateTasksText();
+	}
+
+	private void UpdateTasksText()
+	{
+		StringBuilder text = new StringBuilder();
+
+		text.Append("<B><u>Tasks</u></B>\n");
+
+		for (int i = 0; i < tasks.Count; i++)
+		{
+			if (tasks[i].completed)
+			{
+				text.Append("<s>");
+				text.Append(tasks[i].name);
+				text.Append("</s>");
+			}
+			else
+			{
+				text.Append(tasks[i].name);
+			}
+			text.Append('\n');
+		}
+
+		tasksText.text = text.ToString();
+	}
+
 }

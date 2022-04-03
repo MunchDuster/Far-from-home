@@ -23,23 +23,29 @@ public class RocketComputer : MonoBehaviour
 			lines.Add(this);
 		}
 	}
+
 	public TextMeshProUGUI loadingText;
 	public TextMeshProUGUI consoleText;
+	public Animator animator;
 
+	[Header("Settings")]
 	public float dotsDelta = 0.25f;
 	public float bootTime = 3;
 	public float blinkSpeed = 0.7f;
-
 	public string systemColour = "green";
 
+	[Header("Control")]
+	public bool enginesAreFuelled = false;
+	public bool flightPathCreated = false;
+
+	[Header("Events")]
 	public UnityEvent OnTurnOn;
 	public UnityEvent OnTurnOff;
+	public UnityEvent OnLaunch;
 
 	private delegate void OnEvent();
 	private OnEvent onGui;
-
 	private delegate void OnSetText(string text);
-
 	private Dictionary<string, OnEvent> commands = new Dictionary<string, OnEvent>();
 
 	//Console logs
@@ -47,17 +53,16 @@ public class RocketComputer : MonoBehaviour
 	private string inputText;
 	private bool takingInput;
 
-
 	// Start is called before the first frame update
 	private void Start()
 	{
 		commands.Add("clear", ClearConsole);
 		commands.Add("diagnostics", () => { StartCoroutine(RunDiagnostics()); });
 		commands.Add("help", ListCommands);
+		commands.Add("launch", () => { StartCoroutine(Launch()); });
 
 		Line.lines = new List<Line>();
 	}
-
 
 	//Events
 	private void OnFinishedTurningOn()
@@ -69,7 +74,9 @@ public class RocketComputer : MonoBehaviour
 
 		new Line(SystemText("Enter \"help\" for a list of commands."));
 		inputLine = new Line();
+
 		UpdateConsole();
+
 		onGui += CommandInput;
 		onGui += UpdateConsole;
 	}
@@ -92,7 +99,6 @@ public class RocketComputer : MonoBehaviour
 	{
 		return (Time.time % blinkSpeed < blinkSpeed / 2) ? "\u2588" : "";
 	}
-
 
 	//Main public functions
 	public void TurnOn()
@@ -121,14 +127,29 @@ public class RocketComputer : MonoBehaviour
 	{
 		Line loadingLine = new Line("");
 
-		yield return StartCoroutine(LoadText("Checking", 2, (string text) => { loadingLine.text = text; }, () => { }));
+		yield return StartCoroutine(LoadText("Checking", 2, (string text) => { loadingLine.text = text; }));
 
 		string tick = "<sprite name=\"tick\" color=\"#00FF00\">";
 		string cross = "<sprite name=\"cross\" color=\"#FF0000\">";
 
+		if (enginesAreFuelled)
+		{
+			new Line(SystemText("Engines Fuelled: " + tick));
 
-		bool enginesAreFuelled = false;
-		if (enginesAreFuelled) new Line(SystemText("Engines Fuelled: " + tick));
+			yield return StartCoroutine(LoadText("Checking", 2, (string text) => { loadingLine.text = text; }));
+
+			if (flightPathCreated)
+			{
+				//Diagnostics success
+				loadingLine.text += SystemText(" Done");
+				new Line(SystemText("Flight path: " + tick));
+			}
+			else
+			{
+				loadingLine.text += SystemText(" Error.", 2);
+				new Line(SystemText("Flight path: " + cross, 2));
+			}
+		}
 		else
 		{
 			loadingLine.text += SystemText(" Error.", 2);
@@ -136,6 +157,39 @@ public class RocketComputer : MonoBehaviour
 		}
 
 		OnFinishedCommand();
+	}
+	private IEnumerator Launch()
+	{
+		Line initLine = new Line();
+
+		yield return StartCoroutine(LoadText(SystemText("Initializing launch sequence", 1), 2, (string text) => { initLine.text = text; }));
+
+		if (enginesAreFuelled && flightPathCreated)
+		{
+			initLine.text += SystemText(" Done", 1);
+
+			Line countdownLine = new Line();
+
+			//Countdown
+			for (int i = 10; i > 0; i--)
+			{
+				countdownLine.text = SystemText("Launching in... " + i, 1);
+				yield return new WaitForSeconds(1);
+			}
+
+			countdownLine.text = SystemText("Launching!", 1);
+
+			OnLaunch.Invoke();
+		}
+		else
+		{
+			initLine.text += SystemText(" Error!", 2);
+
+			new Line(SystemText("Error: systems not ready to launch, check diagnostics for more info.", 2));
+
+			OnFinishedCommand();
+		}
+
 	}
 	private void ListCommands()
 	{
@@ -167,12 +221,29 @@ public class RocketComputer : MonoBehaviour
 
 		callback();
 	}
+	private IEnumerator LoadText(string text, float time, OnSetText setter)
+	{
+		int noOfDots = -1;
 
-	void OnGUI()
+		for (float t = 0; t < time; t += dotsDelta)
+		{
+			//Loop from 0 to 3 dots
+			noOfDots = ++noOfDots % 4;
+
+			//Put that many dots onto string
+			string dots = "";
+			for (int i = 0; i < noOfDots; i++) dots += ".";
+
+			setter(SystemText(text + dots));
+
+			yield return new WaitForSeconds(dotsDelta);
+		}
+	}
+
+	private void OnGUI()
 	{
 		if (onGui != null) onGui();
 	}
-
 	private void CommandInput()
 	{
 		Event e = Event.current;
@@ -215,7 +286,6 @@ public class RocketComputer : MonoBehaviour
 			}
 		}
 	}
-
 	private void UpdateConsole()
 	{
 		if (takingInput) inputLine.text = SystemText("Input: ") + inputText + InputChar();
@@ -230,11 +300,8 @@ public class RocketComputer : MonoBehaviour
 
 		consoleText.text = log.ToString();
 	}
-
 	private void CheckCommand()
 	{
-		Debug.Log("Command: " + inputText);
-
 		inputLine.text = SystemText("Input: ") + inputText;
 
 		string[] words = inputText.Split(" ");

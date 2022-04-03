@@ -10,7 +10,6 @@ public abstract class Interactable : MonoBehaviour
 	public Transform hoverInfoPoint;
 	public Outline outline;
 
-	//Functions are used by player sense
 	//On click
 	public abstract InteractionInfo Interact(Player player);
 
@@ -29,11 +28,7 @@ public abstract class Interactable : MonoBehaviour
 	//Hides hover info
 	public void EndHover(HoverInfo hoverInfo)
 	{
-		//Hide outline
 		outline.enabled = false;
-
-		//Hide info
 		hoverInfo.gameObject.SetActive(false);
 	}
-
 }

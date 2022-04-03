@@ -15,17 +15,6 @@ public abstract class Minigame : Interactable
 	private Vector3 initialLocalPosition;
 	private Quaternion initialLocalRotation;
 
-	//Checks whether the player is leaving the game
-	private void CheckLeave()
-	{
-		//Move player camera to cameraPoint
-		player.camera.transform.position = cameraPoint.position;
-		player.camera.transform.rotation = cameraPoint.rotation;
-
-		if (Input.GetKeyDown(KeyCode.Escape)) EndGame();
-	}
-
-
 	//Interact is called when the player clicks on this
 	public override InteractionInfo Interact(Player player)
 	{
@@ -41,6 +30,19 @@ public abstract class Minigame : Interactable
 		}
 
 		return info;
+	}
+
+	//CheckInteract to be filled by child
+	protected abstract InteractionInfo CheckRequirements(Player player);
+
+	//Checks whether the player is leaving the game
+	private void CheckLeave()
+	{
+		//Move player camera to cameraPoint
+		player.camera.transform.position = cameraPoint.position;
+		player.camera.transform.rotation = cameraPoint.rotation;
+
+		if (Input.GetKeyDown(KeyCode.Escape)) EndGame();
 	}
 
 	//Handles basic admin starting of game
@@ -97,8 +99,6 @@ public abstract class Minigame : Interactable
 		//Reset player var
 		player = null;
 	}
-
-	protected abstract InteractionInfo CheckRequirements(Player player);
 
 	// Update is called every frame
 	private void Update()

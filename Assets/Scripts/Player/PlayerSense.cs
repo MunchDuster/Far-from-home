@@ -29,7 +29,6 @@ public class PlayerSense : MonoBehaviour
 
 		GetCurrentHover();
 
-
 		UpdateHover();
 
 		CheckInteract();
@@ -66,8 +65,8 @@ public class PlayerSense : MonoBehaviour
 		if (OnHoverItem != null) OnHoverItem(curHover);
 
 		//Call functions
-		if (curHover != null) curHover.StartHover(hoverInfo);
 		if (lastHover != null) lastHover.EndHover(hoverInfo);
+		if (curHover != null) curHover.StartHover(hoverInfo);
 	}
 
 	private void CheckInteract()
@@ -97,7 +96,6 @@ public class PlayerSense : MonoBehaviour
 		{
 			Debug.DrawRay(raycastPoint.position, raycastPoint.forward * raycastDist, Color.green);
 			curHover = null;
-
 		}
 	}
 }
