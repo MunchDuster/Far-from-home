@@ -33,13 +33,13 @@ public class PlayerPickup : MonoBehaviour
 		item.transform.localPosition = Vector3.zero;
 		item.transform.localRotation = Quaternion.identity;
 	}
-	public void Drop()
+	public void Drop(bool enableRigidbody = true)
 	{
 		//Enable the rigibody on the item
-		if (rb != null) rb.isKinematic = false;
+		if (rb != null) rb.isKinematic = !enableRigidbody;
 
 		//Disable any cols on the item
-		if (col != null) col.enabled = true;
+		if (col != null) col.enabled = enableRigidbody;
 
 		//Reparent to the old transform
 		item.transform.SetParent(oldParent);

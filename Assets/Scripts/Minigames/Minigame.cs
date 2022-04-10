@@ -70,11 +70,11 @@ public abstract class Minigame : Interactable
 		OnGameUpdate += CheckLeave;
 
 		//Call delegate
-		OnPlayerJoin();
+		if (OnPlayerJoin != null) OnPlayerJoin();
 	}
 
 	//Handles basic admin of finishing a game
-	private void EndGame()
+	protected void EndGame()
 	{
 		//Reset camera
 		player.camera.transform.localPosition = initialLocalPosition;
