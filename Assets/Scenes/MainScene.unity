@@ -2401,8 +2401,8 @@ MonoBehaviour:
   gun: {fileID: 979998025}
   gunPoint: {fileID: 1204121610}
   plate: {fileID: 0}
-  weldDist: 0.2
-  heatPerSecond: 1
+  weldDist: 0.07
+  heatPerSecond: 20
   gunDistanceFromPlane: 1
   weldLayerMask:
     serializedVersion: 2
@@ -20208,8 +20208,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1213673197}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.03, y: 0, z: -25.6}
+  m_LocalRotation: {x: -0, y: 0.5222775, z: -0, w: 0.85277563}
+  m_LocalPosition: {x: 31.88, y: 0, z: -14.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -20221,7 +20221,7 @@ Transform:
   - {fileID: 1746280839}
   m_Father: {fileID: 0}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 62.97, z: 0}
 --- !u!114 &1213673199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36764,12 +36764,12 @@ MonoBehaviour:
   hoverInfoText: fix stuff
   hoverInfoPoint: {fileID: 2048896316}
   outline: {fileID: 2048896313}
-  burnGridDensity: 25
-  heatDispersionSpeed: 0.1
-  heatDeltaTime: 0.2
+  burnGridDensity: 30
+  heatDispersionSpeed: 1
+  heatDeltaTime: 0.1
   overHeat: 20
   weldHeat: 15
-  gridSize: {x: 20, y: 15}
+  gridSize: {x: 25, y: 18}
   tooBrightColor:
     serializedVersion: 2
     rgba: 4294967295
@@ -36805,7 +36805,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2048896312}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.6, y: 3.47, z: -23.09}
+  m_LocalPosition: {x: 27.39, y: 4.93, z: -18.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -38503,7 +38503,7 @@ PrefabInstance:
     - target: {fileID: 4459864850019384740, guid: 6bacecc4f3df9584198879c73a6b6c36,
         type: 3}
       propertyPath: jumpPower
-      value: 4
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 4459864850019384740, guid: 6bacecc4f3df9584198879c73a6b6c36,
         type: 3}

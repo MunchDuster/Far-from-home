@@ -28,6 +28,10 @@ public class Welder : MonoBehaviour
 			{
 				StartHeat();
 			}
+			else
+			{
+				ApplyHeat();
+			}
 
 			UpdateGunTargetPos();
 		}
@@ -45,14 +49,13 @@ public class Welder : MonoBehaviour
 	private void StartHeat()
 	{
 		isHeating = true;
-		plate.StartWelding();
+
 		OnTurnOn.Invoke();
 	}
 
 	private void EndHeat()
 	{
 		isHeating = false;
-		plate.StopWelding();
 		OnTurnOff.Invoke();
 	}
 
@@ -60,22 +63,10 @@ public class Welder : MonoBehaviour
 	{
 		Ray ray = new Ray(gunPoint.position, gunPoint.forward);
 
-		Vector3 point = plate.
+		plate.plane.Raycast(ray, out float intersect);
+		Vector3 point = ray.GetPoint(intersect);
 
-		if (Physics.Raycast(gun.position, gun.forward, out RaycastHit hit, weldDist, weldLayerMask))
-		{
-
-			bool isPlateGameObject = plate.transform.Find(hit.collider.gameObject.name);
-			if (isPlateGameObject == plate)
-			{
-				Debug.Log("Applying heat");
-				plate.AddHeat(hit.point, heatPerSecond * Time.deltaTime);
-			}
-			else
-			{
-				Debug.Log("Not overing over plate");
-			}
-		}
+		plate.AddHeat(point, heatPerSecond * Time.deltaTime);
 	}
 
 	Vector3 gunTargetPos;

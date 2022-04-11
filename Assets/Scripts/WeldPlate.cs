@@ -47,15 +47,17 @@ public class WeldPlate : Pickupable
 
 		Debug.Log("Adding heat to " + index);
 
+		if (index.x < 0 || index.x >= gridSize.x || index.y < 0 || index.y >= gridSize.y) return;
+
 		heatGrid[index.x, index.y] += heat;
+
+		Debug.Log("Now: " + heatGrid[index.x, index.y]);
 	}
 
 	private IEnumerator HeatUpdate()
 	{
 		while (true)
 		{
-			Debug.Log("HeatUpdate");
-
 			UpdateHeatMap();
 			yield return new WaitForSeconds(heatDeltaTime / 2);
 
@@ -67,26 +69,51 @@ public class WeldPlate : Pickupable
 	//Gets index of cell from position on plane
 	private Vector2Int GetIndex(Vector3 position)
 	{
-		Vector3 direction = position - normal.position;
-		Vector3 projectedDirection = Vector3.ProjectOnPlane(direction, normal.forward);
-		Vector2 planeDirection = new Vector2(projectedDirection.x, projectedDirection.y);
+		float vertical = gridSize.y / burnGridDensity;
+		float horizontal = gridSize.x / burnGridDensity;
 
-		Vector2Int indexFromCenter = new Vector2Int(
-			(int)(planeDirection.x / burnGridDensity),
-			(int)(planeDirection.y / burnGridDensity)
+		Vector3 top = normal.up * vertical;
+		Vector3 bottom = -normal.up * vertical;
+		Vector3 right = normal.right * horizontal;
+		Vector3 left = -normal.right * horizontal;
+
+		Vector3 horizontalProjection = Vector3.Project(position - normal.position, right - left);
+		float x = InverseLerp(left, right, horizontalProjection);
+
+
+		Vector3 verticalProjection = Vector3.Project(position - normal.position, bottom - top);
+		float y = InverseLerp(top, bottom, verticalProjection);
+
+		Debug.DrawRay(normal.position + bottom + left, horizontalProjection, Color.yellow);
+		Debug.DrawRay(normal.position + bottom + left, verticalProjection, Color.green);
+
+
+		Vector2Int index = new Vector2Int(
+			(int)(x * ((float)gridSize.x - 1f)),
+			(int)(y * ((float)gridSize.y - 1f))
 		);
+		// Vector3 direction = position - normal.position;
 
-		Vector2Int indexFromTopLeft = new Vector2Int(
-			indexFromCenter.x - gridSize.x / 2,
-			indexFromCenter.y - gridSize.y / 2
-		);
+		// Vector3 localDirection = normal.InverseTransformDirection(direction);
 
-		Vector2Int boundedIndex = new Vector2Int(
-			Mathf.Clamp(indexFromTopLeft.x, 0, gridSize.x),
-			Mathf.Clamp(indexFromTopLeft.y, 0, gridSize.y)
-		);
+		// Vector2 planeDirection = new Vector2(localDirection.x, localDirection.y);
 
-		return boundedIndex;
+		// Vector2 index = new Vector2(
+		// 	(planeDirection.x) * burnGridDensity + (float)gridSize.x / 2,
+		// 	(planeDirection.y) * burnGridDensity + (float)gridSize.y / 2
+		// );
+
+
+		return index;
+	}
+
+	private float InverseLerp(Vector3 A, Vector3 B, Vector3 C)
+	{
+		//Assumes all vectors are on a line and that C is between A and B
+
+		float C2B = (B - A).magnitude;
+		float C2A = (C - A).magnitude;
+		return C2B / C2A;
 	}
 
 	//Average out values on heat map, even out heat
@@ -131,6 +158,7 @@ public class WeldPlate : Pickupable
 
 				if (heatGrid[i, j] > overHeat)
 				{
+					Debug.Log("Bright!");
 					float bright2TooBright = (heatGrid[i, j] - weldHeat) / (overHeat - weldHeat);
 					pixels[index] = Color32.Lerp(darkColor, brightColor, bright2TooBright);
 				}

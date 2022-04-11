@@ -18,7 +18,7 @@ public class WeldPlace : Minigame
 	private void QuitGame()
 	{
 		OnGameUpdate -= welder.GameUpdate;
-		OnGameUpdate -= welder.GameUpdate;
+		plate.StopWelding();
 		Debug.Log("Leaving weld");
 	}
 
@@ -52,6 +52,8 @@ public class WeldPlace : Minigame
 				OnGameUpdate += welder.GameUpdate;
 
 				Debug.Log("Starting weld");
+
+				plate.StartWelding();
 
 				return InteractionInfo.Success();
 			}
