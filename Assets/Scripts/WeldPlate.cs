@@ -30,10 +30,13 @@ public class WeldPlate : Pickupable
 	private float[,] heatGrid;
 	private Coroutine heatUpdateCoroutine;
 
+	private Vector3 topLeft, topRight, bottomLeft, bottomRight;
+	Vector3 top, right;
 
 	public void StartWelding()
 	{
 		heatUpdateCoroutine = StartCoroutine(HeatUpdate());
+		UpdateCorners();
 	}
 
 	public void StopWelding()
@@ -45,13 +48,11 @@ public class WeldPlate : Pickupable
 	{
 		Vector2Int index = GetIndex(position);
 
-		Debug.Log("Adding heat to " + index);
-
 		if (index.x < 0 || index.x >= gridSize.x || index.y < 0 || index.y >= gridSize.y) return;
 
 		heatGrid[index.x, index.y] += heat;
 
-		Debug.Log("Now: " + heatGrid[index.x, index.y]);
+		Debug.Log("Adding heat to " + index);
 	}
 
 	private IEnumerator HeatUpdate()
@@ -69,69 +70,56 @@ public class WeldPlate : Pickupable
 	//Gets index of cell from position on plane
 	private Vector2Int GetIndex(Vector3 position)
 	{
-		float vertical = gridSize.y / burnGridDensity;
-		float horizontal = gridSize.x / burnGridDensity;
+		//Make the vector in line with topLeft and topRight
+		Vector3 horizontalProjection = Vector3.Project((position - topLeft), (topLeft - topRight).normalized);
+		float x = InverseLerp(topLeft, topRight, topLeft + horizontalProjection);
 
-		Vector3 top = normal.up * vertical;
-		Vector3 bottom = -normal.up * vertical;
-		Vector3 right = normal.right * horizontal;
-		Vector3 left = -normal.right * horizontal;
+		//Make the vector in line with topLeft and bottomLeft
+		Vector3 verticalProjection = Vector3.Project((position - topLeft), (bottomLeft - topLeft).normalized);
+		float y = InverseLerp(topLeft, bottomLeft, topLeft + verticalProjection);
 
-		Vector3 horizontalProjection = Vector3.Project(position - normal.position, right - left);
-		float x = InverseLerp(left, right, horizontalProjection);
+		Debug.DrawRay(topLeft + horizontalProjection, normal.forward, Color.grey);
+		Debug.DrawRay(topLeft + verticalProjection, normal.forward, Color.cyan);
 
-
-		Vector3 verticalProjection = Vector3.Project(position - normal.position, bottom - top);
-		float y = InverseLerp(top, bottom, verticalProjection);
-
-		Debug.DrawRay(normal.position + bottom + left, horizontalProjection, Color.yellow);
-		Debug.DrawRay(normal.position + bottom + left, verticalProjection, Color.green);
-
+		//Mirror
+		x = 1 - x;
+		y = 1 - y;
 
 		Vector2Int index = new Vector2Int(
 			(int)(x * ((float)gridSize.x - 1f)),
 			(int)(y * ((float)gridSize.y - 1f))
 		);
-		// Vector3 direction = position - normal.position;
-
-		// Vector3 localDirection = normal.InverseTransformDirection(direction);
-
-		// Vector2 planeDirection = new Vector2(localDirection.x, localDirection.y);
-
-		// Vector2 index = new Vector2(
-		// 	(planeDirection.x) * burnGridDensity + (float)gridSize.x / 2,
-		// 	(planeDirection.y) * burnGridDensity + (float)gridSize.y / 2
-		// );
-
 
 		return index;
 	}
 
+	//Assumes all points are on a line
 	private float InverseLerp(Vector3 A, Vector3 B, Vector3 C)
 	{
-		//Assumes all vectors are on a line and that C is between A and B
-
-		float C2B = (B - A).magnitude;
+		float A2B = (B - A).magnitude;
 		float C2A = (C - A).magnitude;
-		return C2B / C2A;
+		return C2A / A2B;
 	}
 
 	//Average out values on heat map, even out heat
 	private void UpdateHeatMap()
 	{
+		float[,] lastHeats = heatGrid.Clone() as float[,];
+
+		//Center grid
 		for (int i = 1; i < gridSize.x - 1; i++)
 		{
 			for (int j = 1; j < gridSize.y - 1; j++)
 			{
 				float[] sides = new float[] {
-					heatGrid[i + 0, j + 1], //Up
-					heatGrid[i + 0, j - 1], //Down
-					heatGrid[i + 1, j + 0], //Left
-					heatGrid[i - 1, j + 0], //Right
-					heatGrid[i + 1, j + 1], //Up - Left
-					heatGrid[i + 1, j - 1], //Up - Right
-					heatGrid[i - 1, j + 1], //Down - Left
-					heatGrid[i - 1, j - 1]  //Down - Right
+					lastHeats[i + 0, j + 1], //Up
+					lastHeats[i + 0, j - 1], //Down
+					lastHeats[i + 1, j + 0], //Left
+					lastHeats[i - 1, j + 0], //Right
+					lastHeats[i + 1, j + 1], //Up - Left
+					lastHeats[i + 1, j - 1], //Up - Right
+					lastHeats[i - 1, j + 1], //Down - Left
+					lastHeats[i - 1, j - 1]  //Down - Right
 				};
 
 				float sum = 0;
@@ -139,7 +127,7 @@ public class WeldPlate : Pickupable
 
 				float avg = sum / 8f;
 
-				heatGrid[i, j] = Mathf.Lerp(heatGrid[i, j], avg, heatDeltaTime * heatDispersionSpeed);
+				heatGrid[i, j] = Mathf.Lerp(lastHeats[i, j], avg, heatDeltaTime * heatDispersionSpeed);
 			}
 		}
 	}
@@ -156,11 +144,15 @@ public class WeldPlate : Pickupable
 			{
 				int index = j * gridSize.x + i;
 
-				if (heatGrid[i, j] > overHeat)
+				if (heatGrid[i, j] > weldHeat)
 				{
-					Debug.Log("Bright!");
 					float bright2TooBright = (heatGrid[i, j] - weldHeat) / (overHeat - weldHeat);
-					pixels[index] = Color32.Lerp(darkColor, brightColor, bright2TooBright);
+					pixels[index] = Color32.Lerp(brightColor, tooBrightColor, bright2TooBright);
+
+					if (heatGrid[i, j] > overHeat)
+					{
+						//Melt code here
+					}
 				}
 				else
 				{
@@ -172,6 +164,21 @@ public class WeldPlate : Pickupable
 
 		texture.SetPixels32(pixels);
 		texture.Apply();
+	}
+
+	//Update corners positions for calculations
+	private void UpdateCorners()
+	{
+		float vertical = gridSize.y / burnGridDensity;
+		float horizontal = gridSize.x / burnGridDensity;
+
+		top = normal.up * vertical;
+		right = normal.right * horizontal;
+
+		topLeft = normal.position + top - right;
+		topRight = normal.position + top + right;
+		bottomLeft = normal.position - top - right;
+		bottomRight = normal.position - top + right;
 	}
 
 	// Start is called before the first frame update
@@ -196,27 +203,25 @@ public class WeldPlate : Pickupable
 	private void OnDrawGizmosSelected()
 	{
 		DrawDebugGrid();
-		// DrawDebugHeatGrid();
+		DrawDebugCorners();
 	}
 
-	// private void DrawDebugHeatGrid()
-	// {
-	// 	float vertical = gridSize.y / burnGridDensity;
-	// 	float horizontal = gridSize.x / burnGridDensity;
+	//Draws corners
+	private void DrawDebugCorners()
+	{
+		Gizmos.color = Color.red;
+		Gizmos.DrawSphere(topLeft, 0.1f);
 
-	// 	Vector3 top = normal.up * vertical;
-	// 	Vector3 bottom = -normal.up * vertical;
-	// 	Vector3 right = normal.right * horizontal;
-	// 	Vector3 left = -normal.right * horizontal;
+		Gizmos.color = Color.yellow;
+		Gizmos.DrawSphere(bottomLeft, 0.1f);
 
-	// 	for (int i = 0; i < gridSize.x; i++)
-	// 	{
-	// 		for (int j = 0; j < gridSize.y; j++)
-	// 		{
-	// 			Gizmos.DrawSphere(point, 0.05f, texture.GetPixels());
-	// 		}
-	// 	}
-	// }
+		Gizmos.color = Color.blue;
+		Gizmos.DrawSphere(topRight, 0.1f);
+
+		Gizmos.color = Color.cyan;
+		Gizmos.DrawSphere(bottomRight, 0.1f);
+	}
+
 	private void DrawDebugGrid()
 	{
 		float vertical = gridSize.y / burnGridDensity;

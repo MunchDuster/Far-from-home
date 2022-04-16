@@ -21,7 +21,6 @@ public class Welder : MonoBehaviour
 	//Update is called every frame.
 	public void GameUpdate()
 	{
-		Debug.Log("Welder game update");
 		if (Input.GetMouseButton(0))
 		{
 			if (!isHeating)
@@ -83,14 +82,5 @@ public class Welder : MonoBehaviour
 	{
 		gun.rotation = Quaternion.LookRotation(plate.plane.normal) * Quaternion.Euler(-90, 0, 0);
 		gun.position = gunTargetPos;
-	}
-
-	// OnDrawGizmos is called every editor update
-	private void OnDrawGizmos()
-	{
-		if (gunTargetPos != null)
-		{
-			Gizmos.DrawSphere(gunTargetPos, 0.5f);
-		}
 	}
 }
