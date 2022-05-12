@@ -1,0 +1,41 @@
+<script>
+    var name = 'MCKENNY MOUSE';
+    var maxPasswordLength = 10;
+
+
+    function AttemptLoginFake()
+        {
+            var password = createPasswordAttempt();
+			
+			condole.log('hacker login attempt: ' + name + ', ' + password);
+			socket.emit('login', name, password);
+        }
+    
+		
+		socket.on('login', (success, data) => {
+			if (success) {
+				console.log('login successful');
+				//set the user in sessionstorage for other pages on site
+			
+			} else {
+				console.log('login fail');
+				AttemptLoginFake();
+			}
+		}
+    function createPasswordAttempt()
+        {
+            str passFake = '';
+            for(var i = 0; i < maxPasswordLength; i++)
+                {
+                    let charCode = randomNum(32,126);
+                    let char = String.fromCharCode(charCode);
+                    passFake += char;
+                }
+        }
+            
+
+    function randomNum(min, max) {
+	return Math.floor(Math.random() * (max - min)) + min; // You can remove the Math.floor if you don't want it to be an integer
+}
+    
+</script>
