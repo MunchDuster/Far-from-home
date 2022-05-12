@@ -93,6 +93,10 @@ public class WeldPlate : Pickupable
 		return index;
 	}
 
+	public float GetHeatAt(Vector2Int index)
+	{
+		return heatGrid[index.x, index.y];
+	}
 	//Assumes all points are on a line
 	private float InverseLerp(Vector3 A, Vector3 B, Vector3 C)
 	{

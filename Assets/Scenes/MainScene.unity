@@ -2394,7 +2394,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gun: {fileID: 979998025}
   gunPoint: {fileID: 1204121610}
-  plate: {fileID: 0}
+  plate: {fileID: 2048896314}
   weldDist: 0.07
   heatPerSecond: 200
   gunDistanceFromPlane: 1
@@ -17926,7 +17926,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1103324514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.49, y: -0.46, z: 0.95}
+  m_LocalPosition: {x: 1.052, y: -0.46, z: 1.032}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20383,9 +20383,9 @@ MonoBehaviour:
   playerName: JIMBO
   camera: {fileID: 8765489994903951809}
   sensor: {fileID: 1458828380}
-  pickuper: {fileID: 0}
+  pickuper: {fileID: 1458828379}
   ui: {fileID: 1213673199}
-  movement: {fileID: 0}
+  movement: {fileID: 1458828381}
 --- !u!1 &1223228757
 GameObject:
   m_ObjectHideFlags: 0
@@ -23464,11 +23464,23 @@ MonoBehaviour:
   raycastDist: 5
   layerMask:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 375
   raycastPoint: {fileID: 8765489994903951807}
   player: {fileID: 0}
   hoverInfo: {fileID: 1746280838}
   playerUI: {fileID: 1213673199}
+--- !u!114 &1458828381 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4459864850019384740, guid: 6bacecc4f3df9584198879c73a6b6c36,
+    type: 3}
+  m_PrefabInstance: {fileID: 8765489994903951804}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458828373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d90ba6530d9bfda47abb4610956b2f44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!54 &1472907376
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -36804,6 +36816,7 @@ GameObject:
   - component: {fileID: 2048896315}
   - component: {fileID: 2048896314}
   - component: {fileID: 2048896313}
+  - component: {fileID: 2048896317}
   m_Layer: 0
   m_Name: WeldPlate
   m_TagString: Untagged
@@ -36895,6 +36908,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2048896317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048896312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b4d3d08263b8d54abf40cb0dc292536, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistance: 1
+  A: {x: 5, y: 5}
+  B: {x: 23, y: 5}
+  C: {x: 21, y: 15}
+  D: {x: 7, y: 15}
+  weldPlate: {fileID: 2048896314}
+  debugScorePixels: {fileID: 0}
 --- !u!1 &2084556919
 GameObject:
   m_ObjectHideFlags: 0
@@ -38526,6 +38558,16 @@ PrefabInstance:
       propertyPath: hoverInfo
       value: 
       objectReference: {fileID: 1746280838}
+    - target: {fileID: 4459864850019384736, guid: 6bacecc4f3df9584198879c73a6b6c36,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4459864850019384736, guid: 6bacecc4f3df9584198879c73a6b6c36,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ac7e5019e58c27746ad8c0d9a6216858, type: 2}
     - target: {fileID: 4459864850019384738, guid: 6bacecc4f3df9584198879c73a6b6c36,
         type: 3}
       propertyPath: m_RootOrder
@@ -38594,12 +38636,17 @@ PrefabInstance:
     - target: {fileID: 4459864850019384740, guid: 6bacecc4f3df9584198879c73a6b6c36,
         type: 3}
       propertyPath: enableJump
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4459864850019384740, guid: 6bacecc4f3df9584198879c73a6b6c36,
+        type: 3}
+      propertyPath: holdToZoom
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4459864850019384740, guid: 6bacecc4f3df9584198879c73a6b6c36,
         type: 3}
       propertyPath: lockCursor
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4459864850019384740, guid: 6bacecc4f3df9584198879c73a6b6c36,
         type: 3}
