@@ -52,10 +52,40 @@ public class PlayerUI : MonoBehaviour
 	//Task management
 	private static List<Task> tasks = new List<Task>();
 
+	public void AddTask(string name)
+	{
+		Task task = new Task();
+		task.name = name;
+
+		AddTask(task);
+	}
 	public void AddTask(Task task)
 	{
 		tasks.Insert(0, task);
 		UpdateTasksText();
+	}
+
+	public void RemoveTask(string name)
+	{
+		Task task = tasks.Find((task) => task.name == name);
+
+		if (task == null)
+		{
+			Debug.LogError("RemoveTask error: Task not found (name\"" + name + "\")");
+			Debug.LogError(new System.Exception().StackTrace);
+		}
+		RemoveTask(task);
+	}
+	public void CompleteTask(string name)
+	{
+		Task task = tasks.Find((task) => task.name == name);
+
+		if (task == null)
+		{
+			Debug.LogError("CompleteTask error: Task not found (name\"" + name + "\")");
+			Debug.LogError(new System.Exception().StackTrace);
+		}
+		CompleteTask(task);
 	}
 	public void RemoveTask(Task task)
 	{
@@ -67,6 +97,7 @@ public class PlayerUI : MonoBehaviour
 		task.SetCompleted(true);
 		UpdateTasksText();
 	}
+
 
 	private void UpdateTasksText()
 	{

@@ -4,11 +4,11 @@ public abstract class Minigame : Interactable
 {
 	public Transform cameraPoint;
 
-	protected delegate void MinigameEvent();
-	protected event MinigameEvent OnPlayerJoin;
-	protected event MinigameEvent OnPlayerLeave;
-	protected event MinigameEvent OnGameUpdate;
-	protected event MinigameEvent OnGameFixedUpdate;
+	public delegate void MinigameEvent();
+	public event MinigameEvent OnPlayerJoin;
+	public event MinigameEvent OnPlayerLeave;
+	public event MinigameEvent OnGameUpdate;
+	public event MinigameEvent OnGameFixedUpdate;
 
 	protected Player player = null;
 

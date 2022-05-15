@@ -33,6 +33,8 @@ public class WeldPlate : Pickupable
 	private Vector3 topLeft, topRight, bottomLeft, bottomRight;
 	Vector3 top, right;
 
+	[HideInInspector] public Color32[] baseColors;
+
 	public void StartWelding()
 	{
 		heatUpdateCoroutine = StartCoroutine(HeatUpdate());
@@ -51,8 +53,6 @@ public class WeldPlate : Pickupable
 		if (index.x < 0 || index.x >= gridSize.x || index.y < 0 || index.y >= gridSize.y) return;
 
 		heatGrid[index.x, index.y] += heat;
-
-		Debug.Log("Adding heat to " + index);
 	}
 
 	private IEnumerator HeatUpdate()
@@ -161,7 +161,7 @@ public class WeldPlate : Pickupable
 				else
 				{
 					float dark2Bright = heatGrid[i, j] / weldHeat;
-					pixels[index] = Color32.Lerp(darkColor, brightColor, dark2Bright);
+					pixels[index] = Color32.Lerp(baseColors[index], brightColor, dark2Bright);
 				}
 			}
 		}
@@ -193,6 +193,7 @@ public class WeldPlate : Pickupable
 		heatGrid = new float[gridSize.x, gridSize.y];
 
 		texture = new Texture2D(gridSize.x, gridSize.y);
+		texture.filterMode = FilterMode.Point;
 
 		renderer.material.mainTexture = texture;
 	}

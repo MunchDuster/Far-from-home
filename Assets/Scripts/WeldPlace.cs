@@ -1,8 +1,12 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class WeldPlace : Minigame
 {
 	public Transform plateTransform;
+
+	public UnityEvent onStartGame;
+	public UnityEvent onStopGame;
 
 	public Welder welder;
 	public Pickupable welderPickup;
@@ -12,11 +16,18 @@ public class WeldPlace : Minigame
 	// Start is called before the first frame update
 	private void Start()
 	{
+		OnPlayerJoin += StartGame;
 		OnPlayerLeave += QuitGame;
+	}
+
+	private void StartGame()
+	{
+		onStartGame.Invoke();
 	}
 
 	private void QuitGame()
 	{
+		onStopGame.Invoke();
 		OnGameUpdate -= welder.GameUpdate;
 		plate.StopWelding();
 		Debug.Log("Leaving weld");

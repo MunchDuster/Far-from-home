@@ -1,10 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class WeldPlateScorer : MonoBehaviour
 {
 	public float maxDistance = 0.1f;
+
+	public WeldPlace weldPlace;
+
+	public UnityEvent OnCompleted;
+
+	public Slider completionSlider;
 
 	public Vector2Int A;
 	public Vector2Int B;
@@ -12,6 +20,7 @@ public class WeldPlateScorer : MonoBehaviour
 	public Vector2Int D;
 
 	public WeldPlate weldPlate;
+
 
 	private struct Line
 	{
@@ -41,32 +50,49 @@ public class WeldPlateScorer : MonoBehaviour
 	}
 
 	private Vector2Int[] scorePixels;
+	private List<Vector2Int> scorePixelsNotWelded;
 
 	// Start is called before the first frame update
 	private void Start()
 	{
 		scorePixels = GetScorePixels();
+		scorePixelsNotWelded = new List<Vector2Int>(scorePixels);
+
+		weldPlace.OnGameFixedUpdate += OnGameFixedUpdate;
 	}
 
+	bool hasCompleted = false;
+
 	// FixedUpdate is called every physics update
-	private void FixedUpdate()
+	public void OnGameFixedUpdate()
 	{
 		float score = CalculateScore();
-		Debug.Log("score " + score);
+		completionSlider.value = score;
+
+		if (score >= 1 && !hasCompleted)
+		{
+			hasCompleted = true;
+			OnCompleted.Invoke();
+		}
 	}
 
 	private float CalculateScore()
 	{
 		int totalPossibleScore = scorePixels.Length;
-		int totalScore = 0;
 
-		foreach (var pixel in scorePixels)
+		for (int i = 0; i < scorePixelsNotWelded.Count; i++)
 		{
+			Vector2Int pixel = scorePixelsNotWelded[i];
 			if (weldPlate.GetHeatAt(pixel) > weldPlate.weldHeat)
 			{
-				totalScore++;
+				int index = pixel.x + pixel.y * weldPlate.gridSize.x;
+				weldPlate.baseColors[index] = Color.red;
+				scorePixelsNotWelded.Remove(pixel);
+				i--;
 			}
 		}
+
+		int totalScore = totalPossibleScore - scorePixelsNotWelded.Count;
 
 		return (float)totalScore / (float)totalPossibleScore;
 	}
@@ -100,6 +126,10 @@ public class WeldPlateScorer : MonoBehaviour
 						{
 							scorePixels.Add(pixel);
 							hasAdded = true;
+
+							//pixels
+							int index = x + y * weldPlate.gridSize.x;
+							pixels[index] = Color.green;
 						}
 					}
 				}
@@ -109,6 +139,7 @@ public class WeldPlateScorer : MonoBehaviour
 		debugScorePixels = new Texture2D(weldPlate.gridSize.x, weldPlate.gridSize.y);
 		debugScorePixels.SetPixels32(pixels);
 		debugScorePixels.Apply();
+		weldPlate.baseColors = pixels;
 
 		return scorePixels.ToArray();
 	}
