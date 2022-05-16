@@ -63,6 +63,8 @@ public abstract class Minigame : Interactable
 		//Disable player movement
 		player.movement.enabled = false;
 
+		PlayerUI.ui.minigameText.text = "Press escape to exit.";
+
 		//Disable the player sense
 		player.sensor.TurnOff();
 
@@ -86,6 +88,8 @@ public abstract class Minigame : Interactable
 
 		//Enable player movement
 		player.movement.enabled = true;
+
+		PlayerUI.ui.minigameText.text = "";
 
 		//Eable the player sense
 		player.sensor.TurnOn();

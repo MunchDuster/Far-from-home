@@ -17,18 +17,19 @@ public class PlayerUI : MonoBehaviour
 		{
 			this.text = text;
 			this.talker = talker;
-			
+
 			lifeTime = text.Length * 0.3f;
 			makeTime = Time.timeSinceLevelLoad;
 		}
 	}
-	
+
 	public static PlayerUI ui;
-	
+
 	public TextMeshProUGUI areaText;
 	public TextMeshProUGUI errorText;
 	public TextMeshProUGUI tasksText;
 	public TextMeshProUGUI subtitleText;
+	public TextMeshProUGUI minigameText;
 
 	public float errorWaitTimePerChar = 0.15f;
 	public float errorWriteTimePerChar = 0.05f;
@@ -83,6 +84,7 @@ public class PlayerUI : MonoBehaviour
 			Debug.LogError(new System.Exception().StackTrace);
 		}
 		RemoveTask(task);
+
 	}
 	public void CompleteTask(string name)
 	{
@@ -105,7 +107,7 @@ public class PlayerUI : MonoBehaviour
 		task.SetCompleted(true);
 		UpdateTasksText();
 	}
-	
+
 	// Start is called before the first frame update
 	private void Start()
 	{
@@ -155,14 +157,15 @@ public class PlayerUI : MonoBehaviour
 	{
 		yield return new WaitForSeconds(subtitle.lifeTime);
 		subtitles.Remove(subtitle);
+		UpdateSubtitlesText();
 	}
 	private void UpdateSubtitlesText()
 	{
 		subtitleText.text = "";
 
 		StringBuilder stringBuilder = new StringBuilder();
-		
-		foreach(Subtitle subtitle in subtitles)
+
+		foreach (Subtitle subtitle in subtitles)
 		{
 			stringBuilder.Append(subtitle.talker);
 			stringBuilder.Append(": ");
