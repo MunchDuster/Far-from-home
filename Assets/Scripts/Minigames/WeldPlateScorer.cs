@@ -167,6 +167,4 @@ public class WeldPlateScorer : MonoBehaviour
 		float dist = Vector2.Distance(intersect, pixel);
 		return dist;
 	}
-
 }
-

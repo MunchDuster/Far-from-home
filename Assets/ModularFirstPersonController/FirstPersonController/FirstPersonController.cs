@@ -47,8 +47,6 @@ public class FirstPersonController : MonoBehaviour
 	public float zoomFOV = 30f;
 	public float zoomStepTime = 5f;
 
-	// Internal Variables
-	private bool isZoomed = false;
 
 	#endregion
 	#endregion
@@ -195,7 +193,6 @@ public class FirstPersonController : MonoBehaviour
 		{
 			if (isSprinting)
 			{
-				isZoomed = false;
 				playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, sprintFOV, sprintFOVStepTime * Time.deltaTime);
 
 				// Drain sprint remaining while sprinting

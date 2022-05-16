@@ -6,19 +6,41 @@ using System.Collections.Generic;
 
 public class PlayerUI : MonoBehaviour
 {
+	private struct Subtitle
+	{
+		public string talker;
+		public string text;
+		public float lifeTime;
+		public float makeTime;
+
+		public Subtitle(string text, string talker)
+		{
+			this.text = text;
+			this.talker = talker;
+			
+			lifeTime = text.Length * 0.3f;
+			makeTime = Time.timeSinceLevelLoad;
+		}
+	}
+	
+	public static PlayerUI ui;
+	
 	public TextMeshProUGUI areaText;
 	public TextMeshProUGUI errorText;
 	public TextMeshProUGUI tasksText;
+	public TextMeshProUGUI subtitleText;
 
 	public float errorWaitTimePerChar = 0.15f;
 	public float errorWriteTimePerChar = 0.05f;
+
+	private Coroutine errorCoroutine;
+	private List<Task> tasks = new List<Task>();
+	private List<Subtitle> subtitles = new List<Subtitle>();
 
 	public void SetArea(string area)
 	{
 		areaText.text = area;
 	}
-
-	private Coroutine errorCoroutine;
 	public void ShowError(string errorMsg)
 	{
 		if (errorCoroutine != null)
@@ -29,28 +51,15 @@ public class PlayerUI : MonoBehaviour
 
 		errorCoroutine = StartCoroutine(WriteError(errorMsg));
 	}
-
-	private IEnumerator WriteError(string errorMsg)
+	public void AddSubtitle(string text, string talker)
 	{
+		Subtitle newSubtitle = new Subtitle(text, talker);
+		subtitles.Add(newSubtitle);
 
-		for (int i = 0; i < errorMsg.Length; i++)
-		{
-			errorText.text = errorMsg.Substring(0, i + 1);
-			yield return new WaitForSeconds(errorWriteTimePerChar);
-		}
+		UpdateSubtitlesText();
 
-		errorCoroutine = StartCoroutine(ClearError(errorMsg));
+		StartCoroutine(HideSubtitle(newSubtitle));
 	}
-
-	private IEnumerator ClearError(string errorMsg)
-	{
-		yield return new WaitForSeconds(errorWaitTimePerChar * errorMsg.Length);
-		errorText.text = "";
-		errorCoroutine = null;
-	}
-
-	//Task management
-	private static List<Task> tasks = new List<Task>();
 
 	public void AddTask(string name)
 	{
@@ -64,7 +73,6 @@ public class PlayerUI : MonoBehaviour
 		tasks.Insert(0, task);
 		UpdateTasksText();
 	}
-
 	public void RemoveTask(string name)
 	{
 		Task task = tasks.Find((task) => task.name == name);
@@ -97,8 +105,12 @@ public class PlayerUI : MonoBehaviour
 		task.SetCompleted(true);
 		UpdateTasksText();
 	}
-
-
+	
+	// Start is called before the first frame update
+	private void Start()
+	{
+		ui = this;
+	}
 	private void UpdateTasksText()
 	{
 		StringBuilder text = new StringBuilder();
@@ -122,5 +134,42 @@ public class PlayerUI : MonoBehaviour
 
 		tasksText.text = text.ToString();
 	}
+	private IEnumerator WriteError(string errorMsg)
+	{
 
+		for (int i = 0; i < errorMsg.Length; i++)
+		{
+			errorText.text = errorMsg.Substring(0, i + 1);
+			yield return new WaitForSeconds(errorWriteTimePerChar);
+		}
+
+		errorCoroutine = StartCoroutine(ClearError(errorMsg));
+	}
+	private IEnumerator ClearError(string errorMsg)
+	{
+		yield return new WaitForSeconds(errorWaitTimePerChar * errorMsg.Length);
+		errorText.text = "";
+		errorCoroutine = null;
+	}
+	private IEnumerator HideSubtitle(Subtitle subtitle)
+	{
+		yield return new WaitForSeconds(subtitle.lifeTime);
+		subtitles.Remove(subtitle);
+	}
+	private void UpdateSubtitlesText()
+	{
+		subtitleText.text = "";
+
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		foreach(Subtitle subtitle in subtitles)
+		{
+			stringBuilder.Append(subtitle.talker);
+			stringBuilder.Append(": ");
+			stringBuilder.Append(subtitle.text);
+			stringBuilder.Append("\n");
+		}
+
+		subtitleText.text = stringBuilder.ToString();
+	}
 }

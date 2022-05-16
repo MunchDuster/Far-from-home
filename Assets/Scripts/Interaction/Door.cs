@@ -6,7 +6,7 @@ public class Door : Interactable
 	public RequirementList openRequirements;
 
 	//Main vars, controlled internally
-	private bool open;
+	[SerializeField] private bool open;
 	public bool unlocked { get { return openRequirements == null || openRequirements.completed; } }
 
 	//UnityEvents triggering chain events
@@ -27,6 +27,8 @@ public class Door : Interactable
 
 		openRequirements.onCompleted += UpdateLocked;
 		openRequirements.onUncompleted += UpdateLocked;
+
+		SetOpen(open);
 	}
 
 	//Called by UnityEvents to chage hover info
