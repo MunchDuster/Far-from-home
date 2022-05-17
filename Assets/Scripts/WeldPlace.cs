@@ -9,6 +9,7 @@ public class WeldPlace : Minigame
 	public UnityEvent onStopGame;
 
 	public Welder welder;
+	public Transform welderPoint;
 	public Pickupable welderPickup;
 
 	[HideInInspector] public WeldPlate plate;
@@ -22,6 +23,7 @@ public class WeldPlace : Minigame
 
 	private void StartGame()
 	{
+		welder.welderBase.position = welderPoint.position;
 		onStartGame.Invoke();
 	}
 

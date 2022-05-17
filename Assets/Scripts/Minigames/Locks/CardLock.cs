@@ -94,8 +94,6 @@ public class CardLock : Lock
 	//Main update while user is playing
 	private void GameUpdate()
 	{
-		Debug.Log("Game update.");
-
 		if (player.pickuper.item == null) return;
 
 		//If the user is holding left mouse down

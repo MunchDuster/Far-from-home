@@ -30,6 +30,7 @@ public class PlayerUI : MonoBehaviour
 	public TextMeshProUGUI tasksText;
 	public TextMeshProUGUI subtitleText;
 	public TextMeshProUGUI minigameText;
+	public TextMeshProUGUI itemText;
 
 	public float errorWaitTimePerChar = 0.15f;
 	public float errorWriteTimePerChar = 0.05f;

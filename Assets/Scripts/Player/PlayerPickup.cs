@@ -11,20 +11,25 @@ public class PlayerPickup : MonoBehaviour
 	//Vars to switch back when dropping
 	private Transform oldParent;
 	private Rigidbody rb;
-	private Collider col;
+	private Collider[] cols;
 
 	//Main functions
 	public void Pickup(Pickupable pickupable)
 	{
 		item = pickupable;
+		
+		PlayerUI.ui.itemText.text = "Right click to drop item.";
 
 		//Disable the rigibody on the item
 		rb = item.gameObject.GetComponent<Rigidbody>();
 		if (rb != null) rb.isKinematic = true;
-
-		//Enable any cols on the item
-		col = item.gameObject.GetComponent<Collider>();
-		if (col != null) col.enabled = false;
+		
+		//Disable any colliders on the item
+		cols = item.gameObject.GetComponentsInChildren<Collider>();
+		foreach(Collider col in cols)
+		{
+			if (col != null) col.enabled = false;
+		}
 
 		//Reparent to the transform
 		item.transform.SetParent(itemParent);
@@ -35,11 +40,16 @@ public class PlayerPickup : MonoBehaviour
 	}
 	public void Drop(bool enableRigidbody = true)
 	{
+		PlayerUI.ui.itemText.text = "";
+		
 		//Enable the rigibody on the item
 		if (rb != null) rb.isKinematic = !enableRigidbody;
 
 		//Disable any cols on the item
-		if (col != null) col.enabled = enableRigidbody;
+		foreach(Collider col in cols)
+		{
+			if (col != null) col.enabled = enableRigidbody;
+		}
 
 		//Reparent to the old transform
 		item.transform.SetParent(oldParent);

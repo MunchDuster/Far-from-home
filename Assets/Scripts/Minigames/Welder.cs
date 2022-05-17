@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class Welder : MonoBehaviour
 {
 	public Transform gun;
+	public Transform welderBase;
 	public Transform gunPoint;
 	public WeldPlate plate;
 

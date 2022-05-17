@@ -61,7 +61,9 @@ public abstract class Minigame : Interactable
 		Cursor.visible = true;
 
 		//Disable player movement
-		player.movement.enabled = false;
+		player.movement.playerCanMove = false;
+		player.movement.cameraCanMove = false;
+		player.movement.enableHeadBob = false;
 
 		PlayerUI.ui.minigameText.text = "Press escape to exit.";
 
@@ -87,8 +89,10 @@ public abstract class Minigame : Interactable
 		Cursor.visible = false;
 
 		//Enable player movement
-		player.movement.enabled = true;
-
+		player.movement.playerCanMove = true;
+		player.movement.cameraCanMove = true;
+		player.movement.enableHeadBob = true;
+		
 		PlayerUI.ui.minigameText.text = "";
 
 		//Eable the player sense
