@@ -10,7 +10,12 @@ public class Detector : MonoBehaviour
 	{
 		if (otherCollider.gameObject.tag == "Player")
 		{
-			if (OnDetected != null) OnDetected.Invoke();
+			Trigger();
 		}
+	}
+
+	public void Trigger()
+	{
+		if (OnDetected != null) OnDetected.Invoke();
 	}
 }

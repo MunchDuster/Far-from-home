@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
 
 public class Door : Interactable
 {
@@ -97,5 +98,16 @@ public class Door : Interactable
 	public void OpenNow()
 	{
 		SetOpen(true);
+	}
+
+	public void OpenAfter(float time)
+	{
+		StartCoroutine(SetOpenAfter(time, true));
+	}
+
+	private IEnumerator SetOpenAfter(float time, bool open)
+	{
+		yield return new WaitForSeconds(time);
+		SetOpen(open);
 	}
 }
