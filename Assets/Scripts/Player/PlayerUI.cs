@@ -13,17 +13,18 @@ public class PlayerUI : MonoBehaviour
 		public float lifeTime;
 		public float makeTime;
 
-		public Subtitle(string text, string talker)
+		public Subtitle(string text, string talker, float subtitleCharLifetime)
 		{
 			this.text = text;
 			this.talker = talker;
 
-			lifeTime = text.Length * 0.3f;
+			lifeTime = text.Length * subtitleCharLifetime;
 			makeTime = Time.timeSinceLevelLoad;
 		}
 	}
 
 	public static PlayerUI ui;
+	
 
 	public TextMeshProUGUI areaText;
 	public TextMeshProUGUI errorText;
@@ -34,6 +35,7 @@ public class PlayerUI : MonoBehaviour
 
 	public float errorWaitTimePerChar = 0.15f;
 	public float errorWriteTimePerChar = 0.05f;
+	public float subtitleCharLifetime = 0.12f;
 
 	private Coroutine errorCoroutine;
 	private List<Task> tasks = new List<Task>();
@@ -55,7 +57,7 @@ public class PlayerUI : MonoBehaviour
 	}
 	public void AddSubtitle(string text, string talker)
 	{
-		Subtitle newSubtitle = new Subtitle(text, talker);
+		Subtitle newSubtitle = new Subtitle(text, talker, subtitleCharLifetime);
 		subtitles.Add(newSubtitle);
 
 		UpdateSubtitlesText();

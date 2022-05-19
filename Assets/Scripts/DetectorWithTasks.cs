@@ -9,10 +9,34 @@ public class DetectorWithTasks : MonoBehaviour
     {
         public int id;
         public UnityEvent OnDetected;
+
+		private bool hasFired;
+		public void Fire(bool firesOnce)
+        {
+           if(!firesOnce)
+           {
+				ActuallyFire();
+			}
+           else
+           {
+                if(!hasFired)
+                {
+				    ActuallyFire();
+			    }
+           }
+        }
+        
+        private void ActuallyFire()
+        {
+            if(OnDetected != null) OnDetected.Invoke();
+			hasFired = true;
+		} 
     }
-    public Task[] tasks;
     
-    public DetectionWithCriteria[] detections;
+    public Task[] tasks;
+	public bool firesOnce;
+
+	public DetectionWithCriteria[] detections;
 
 	// On Trigger Enter is called when the collider of another GameObject begins colliding with the collider of this GameObject (while this collider is trigger)
 	private void OnTriggerEnter(Collider otherCollider)
@@ -27,10 +51,10 @@ public class DetectorWithTasks : MonoBehaviour
         int id = GetIdByTasks();
         DetectionWithCriteria detection = GetDetectionbyId(id);
             
-        if(detection != null && detection.OnDetected != null)
+        if(detection != null)
         {
-            detection.OnDetected.Invoke();
-        }
+			detection.Fire(firesOnce);
+		}
     }
     
     public void CompleteTask(int index)

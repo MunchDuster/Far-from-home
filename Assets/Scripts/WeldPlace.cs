@@ -50,7 +50,7 @@ public class WeldPlace : Minigame
 
 				plate.MakeUndetectable();
 
-				return InteractionInfo.Fail("");
+				return InteractionInfo.Fail("Has put plate here.");
 			}
 			else
 			{

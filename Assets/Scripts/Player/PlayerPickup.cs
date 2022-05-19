@@ -5,6 +5,8 @@ public class PlayerPickup : MonoBehaviour
 	public PlayerSense sensor;
 	public Transform itemParent;
 
+	[HideInInspector] public bool isAllowedToDropItem = true;
+
 	[HideInInspector] public Player player;
 	[HideInInspector] public Pickupable item;
 
@@ -63,7 +65,10 @@ public class PlayerPickup : MonoBehaviour
 		//Check if wants to drop
 		if (Input.GetMouseButtonDown(1) && item != null)
 		{
-			Drop();
+			if(isAllowedToDropItem)
+			{
+				Drop();
+			}
 		}
 	}
 }

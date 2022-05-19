@@ -159,9 +159,6 @@ public class FirstPersonController : MonoBehaviour
 
 			transform.localEulerAngles = new Vector3(0, yaw, 0);
 			playerCamera.transform.localEulerAngles = new Vector3(pitch, 0, 0);
-
-			Debug.Log("playerCamera: " + playerCamera.transform.eulerAngles.x);
-
 		}
 		#endregion
 

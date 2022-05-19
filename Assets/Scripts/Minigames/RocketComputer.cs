@@ -33,6 +33,7 @@ public class RocketComputer : MonoBehaviour
 	public float bootTime = 3;
 	public float blinkSpeed = 0.7f;
 	public string systemColour = "green";
+	public float launchTime = 10;
 
 	[Header("Control")]
 	public bool enginesAreFuelled = false;
@@ -42,6 +43,7 @@ public class RocketComputer : MonoBehaviour
 	public UnityEvent OnTurnOn;
 	public UnityEvent OnTurnOff;
 	public UnityEvent OnLaunch;
+	public UnityEvent OnAfterLaunched;
 
 	private delegate void OnEvent();
 	private OnEvent onGui;
@@ -114,7 +116,7 @@ public class RocketComputer : MonoBehaviour
 	{
 		OnTurnOff.Invoke();
 	}
-
+	public void EnginesAreFuelled() { enginesAreFuelled = true; }
 	//Commands
 	private void ClearConsole()
 	{
@@ -154,6 +156,7 @@ public class RocketComputer : MonoBehaviour
 		{
 			loadingLine.text += SystemText(" Error.", 2);
 			new Line(SystemText("Engines Fuelled: " + cross, 2));
+			PlayerUI.ui.AddTask("Fuel Engines x4");
 		}
 
 		OnFinishedCommand();
@@ -180,6 +183,10 @@ public class RocketComputer : MonoBehaviour
 			countdownLine.text = SystemText("Launching!", 1);
 
 			OnLaunch.Invoke();
+
+			yield return new WaitForSeconds(launchTime);
+			
+			OnAfterLaunched.Invoke();
 		}
 		else
 		{
@@ -189,7 +196,11 @@ public class RocketComputer : MonoBehaviour
 
 			OnFinishedCommand();
 		}
-
+	}
+	
+	private void OnDestroy() 
+	{
+		StopAllCoroutines();
 	}
 	private void ListCommands()
 	{

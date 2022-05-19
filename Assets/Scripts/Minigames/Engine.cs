@@ -67,6 +67,8 @@ public class Engine : Minigame
 
 		fuelFlow.fuelPoint = fuelPoint;
 		fuelFlow.engine = this;
+		
+		player.pickuper.isAllowedToDropItem = false;
 
 		//Reset pickup position
 		fuelCan.transform.position = targetPos;
@@ -110,6 +112,7 @@ public class Engine : Minigame
 	{
 		OnStop.Invoke();
 
+
 		rb.isKinematic = true;
 
 		fullnessSliderImage.color = sliderStopColor;
@@ -118,6 +121,8 @@ public class Engine : Minigame
 		//Reset pickup position
 		fuelCan.transform.localPosition = Vector3.zero;
 		fuelCan.transform.localRotation = Quaternion.identity;
+
+		player.pickuper.isAllowedToDropItem = true;
 	}
 
 	private Vector3 GetItemTargetPosition(Vector2 screenPos)
