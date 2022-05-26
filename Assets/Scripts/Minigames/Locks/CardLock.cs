@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class CardLock : Lock
 {
@@ -16,6 +17,10 @@ public class CardLock : Lock
 	[Space(10)]
 	public float targetSpeed = 4;
 	public float targetSpeedRange = 0.2f;
+
+	public float lowFrameRateBoundary = 20;
+	public float lowFrameRatetargetSpeed = 4;
+	public float lowFrameRatetargetSpeedRange = 0.2f;
 
 	//Holds y value of item
 	private float y;
@@ -116,6 +121,7 @@ public class CardLock : Lock
 			lastY = y;
 		}
 	}
+	private Coroutine textDisplayCoroutine;
 
 	//The actual scan code
 	private void Scan()
@@ -124,27 +130,35 @@ public class CardLock : Lock
 		{
 			float speed = Mathf.Abs((y - lastY) / Time.deltaTime);
 
-			Debug.Log("speed: " + speed);
+			if (textDisplayCoroutine != null) StopCoroutine(textDisplayCoroutine);
+
 			if (speed > maxSpeed)
 			{
-				text.text = "<color=\"red\">Error: Too fast.</color>";
+				textDisplayCoroutine = StartCoroutine(ShowText("<color=\"red\">Error: Too fast.</color>", 2));
 				if (OnFail != null) OnFail.Invoke();
 			}
 			else if (speed < minSpeed)
 			{
-				text.text = "<color=\"red\">Error: Too slow.</color>";
+				textDisplayCoroutine = StartCoroutine(ShowText("<color=\"red\">Error: Too slow.</color>", 2));
 				if (OnFail != null) OnFail.Invoke();
 			}
 			else
 			{
+				textDisplayCoroutine = StartCoroutine(ShowText("Validation Success", 2));
 				if (OnUnlock != null) OnUnlock.Invoke();
-				text.text = "Validation success.";
 			}
 		}
 		else
 		{
-			text.text = "<color=\"red\">Error: Uniditentified item.</color>";
+			textDisplayCoroutine = StartCoroutine(ShowText("<color=\"red\">Error: Uniditentified item</color>", 2));
 			if (OnFail != null) OnFail.Invoke();
 		}
+	}
+
+	private IEnumerator ShowText(string str, float time)
+	{
+		text.text = str;
+		yield return new WaitForSeconds(time);
+		text.text = "";
 	}
 }

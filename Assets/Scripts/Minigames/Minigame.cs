@@ -92,7 +92,7 @@ public abstract class Minigame : Interactable
 		player.movement.playerCanMove = true;
 		player.movement.cameraCanMove = true;
 		player.movement.enableHeadBob = true;
-		
+
 		PlayerUI.ui.minigameText.text = "";
 
 		//Eable the player sense
@@ -102,10 +102,14 @@ public abstract class Minigame : Interactable
 		OnGameUpdate -= CheckLeave;
 
 		//Call delegate
-		OnPlayerLeave();
+		if (OnPlayerLeave != null) OnPlayerLeave();
 
 		//Reset player var
 		player = null;
+	}
+	public void StopPlayerFromLeaving()
+	{
+		OnGameUpdate -= CheckLeave;
 	}
 
 	// Update is called every frame

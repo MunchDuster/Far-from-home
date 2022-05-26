@@ -15,9 +15,21 @@ public class EnterableInteractable : Minigame
 		OnPlayerLeave += () => { if (OnLeave != null) OnLeave.Invoke(); };
 	}
 
+	public void CompleteRequirement(int no)
+	{
+		enterRequirements.requirements[no].SetCompleted(true);
+	}
+
+	public void UnCompleteRequirement(int no)
+	{
+		enterRequirements.requirements[no].SetCompleted(false);
+	}
+
 	protected override InteractionInfo CheckRequirements(Player player)
 	{
 		if (enterRequirements.completed) return InteractionInfo.Success();
 		else return InteractionInfo.Fail(enterRequirements.GetIncompleteTask().description);
 	}
+
+	
 }

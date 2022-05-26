@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerPickup : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class PlayerPickup : MonoBehaviour
 	[HideInInspector] public Player player;
 	[HideInInspector] public Pickupable item;
 
+	[Space(10)]
+	public UnityEvent OnPickupItem;
+	public UnityEvent OnDropItem;
+
 	//Vars to switch back when dropping
 	private Transform oldParent;
 	private Rigidbody rb;
@@ -18,17 +23,19 @@ public class PlayerPickup : MonoBehaviour
 	//Main functions
 	public void Pickup(Pickupable pickupable)
 	{
+		OnPickupItem.Invoke();
+
 		item = pickupable;
-		
+
 		PlayerUI.ui.itemText.text = "Right click to drop item.";
 
 		//Disable the rigibody on the item
 		rb = item.gameObject.GetComponent<Rigidbody>();
 		if (rb != null) rb.isKinematic = true;
-		
+
 		//Disable any colliders on the item
 		cols = item.gameObject.GetComponentsInChildren<Collider>();
-		foreach(Collider col in cols)
+		foreach (Collider col in cols)
 		{
 			if (col != null) col.enabled = false;
 		}
@@ -42,13 +49,15 @@ public class PlayerPickup : MonoBehaviour
 	}
 	public void Drop(bool enableRigidbody = true)
 	{
+		OnDropItem.Invoke();
+
 		PlayerUI.ui.itemText.text = "";
-		
+
 		//Enable the rigibody on the item
 		if (rb != null) rb.isKinematic = !enableRigidbody;
 
 		//Disable any cols on the item
-		foreach(Collider col in cols)
+		foreach (Collider col in cols)
 		{
 			if (col != null) col.enabled = enableRigidbody;
 		}
@@ -65,7 +74,7 @@ public class PlayerPickup : MonoBehaviour
 		//Check if wants to drop
 		if (Input.GetMouseButtonDown(1) && item != null)
 		{
-			if(isAllowedToDropItem)
+			if (isAllowedToDropItem)
 			{
 				Drop();
 			}

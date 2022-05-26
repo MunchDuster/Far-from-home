@@ -185,7 +185,7 @@ public class RocketComputer : MonoBehaviour
 			OnLaunch.Invoke();
 
 			yield return new WaitForSeconds(launchTime);
-			
+
 			OnAfterLaunched.Invoke();
 		}
 		else
@@ -197,8 +197,8 @@ public class RocketComputer : MonoBehaviour
 			OnFinishedCommand();
 		}
 	}
-	
-	private void OnDestroy() 
+
+	private void OnDestroy()
 	{
 		StopAllCoroutines();
 	}
@@ -207,6 +207,7 @@ public class RocketComputer : MonoBehaviour
 		new Line(SystemText("help: See list of commands."));
 		new Line(SystemText("clear: Clear console."));
 		new Line(SystemText("diagnostics: Run flight checks."));
+		new Line(SystemText("launch: Luanch rocket."));
 
 		OnFinishedCommand();
 	}

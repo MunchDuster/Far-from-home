@@ -73,6 +73,7 @@ public class FirstPersonController : MonoBehaviour
 
 	// Internal Variables
 	private bool isGrounded = false;
+	public bool IsGrounded() { return isGrounded; }
 
 	#endregion
 

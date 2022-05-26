@@ -6,17 +6,21 @@ public class MovementListener : MonoBehaviour
 	public UnityEvent OnMoveStart;
 	public UnityEvent OnMoveStop;
 
+	public FirstPersonController controller;
 	private bool wasMoving = false;
 
 	// Update is called once per frame
 	void Update()
 	{
-		bool isMoving = CheckIsMoving();
+		if (controller.IsGrounded())
+		{
+			bool isMoving = CheckIsMoving();
 
-		if (isMoving && !wasMoving && OnMoveStart != null) OnMoveStart.Invoke();
-		if (!isMoving && wasMoving && OnMoveStop != null) OnMoveStop.Invoke();
+			if (isMoving && !wasMoving && OnMoveStart != null) OnMoveStart.Invoke();
+			if (!isMoving && wasMoving && OnMoveStop != null) OnMoveStop.Invoke();
 
-		wasMoving = isMoving;
+			wasMoving = isMoving;
+		}
 	}
 
 	bool CheckIsMoving()

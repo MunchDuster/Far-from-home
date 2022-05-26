@@ -64,4 +64,9 @@ public class Timer : MonoBehaviour
 		timeLeft += time;
 		Debug.Log("Time added: " + time);
 	}
+
+	public void Stop()
+	{
+		running = false;
+	}
 }
