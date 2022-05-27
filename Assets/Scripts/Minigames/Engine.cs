@@ -73,7 +73,7 @@ public class Engine : Minigame
 		//Reset pickup position
 		fuelCan.transform.position = targetPos;
 
-		fullnessSlider.value = 0;
+		fullnessSlider.value = fuel / maxFuel;
 
 		fullnessSliderImage.color = sliderStartColor;
 	}
