@@ -121,8 +121,8 @@ public class WeldPlate : Pickupable
 					lastHeats[i + 1, j + 0], //Left
 					lastHeats[i - 1, j + 0], //Right
 					lastHeats[i + 1, j + 1], //Up - Left
-					lastHeats[i + 1, j - 1], //Up - Right
-					lastHeats[i - 1, j + 1], //Down - Left
+					lastHeats[i + 1, j - 1], //Down - Left
+					lastHeats[i - 1, j + 1], //Up - Right
 					lastHeats[i - 1, j - 1]  //Down - Right
 				};
 
@@ -134,6 +134,90 @@ public class WeldPlate : Pickupable
 				heatGrid[i, j] = Mathf.Lerp(lastHeats[i, j], avg, heatDeltaTime * heatDispersionSpeed);
 			}
 		}
+
+		//Bottom (y = maxY, no down)
+		for (int i = 1; i < gridSize.x - 1; i++)
+			{
+				int j = gridSize.y - 1;
+				
+				float[] sides = new float[] {
+					lastHeats[i + 0, j + 1], //Up
+					lastHeats[i + 1, j + 0], //Left
+					lastHeats[i - 1, j + 0], //Right
+					lastHeats[i + 1, j + 1], //Up - Left
+					lastHeats[i - 1, j + 1], //Up - Right
+				};
+
+				float sum = 0;
+				System.Array.ForEach<float>(sides, delegate (float i) { sum += i; });
+
+				float avg = sum / 5;
+
+				heatGrid[i, j] = Mathf.Lerp(lastHeats[i, j], avg, heatDeltaTime * heatDispersionSpeed);
+			}
+
+		//Top (y = 0, no up)
+		for (int i = 1; i < gridSize.x - 1; i++)
+			{
+				int j = 0;
+				
+				float[] sides = new float[] {
+					lastHeats[i + 0, j - 1], //Down
+					lastHeats[i + 1, j + 0], //Left
+					lastHeats[i - 1, j + 0], //Right
+					lastHeats[i + 1, j - 1], //Down - Left
+					lastHeats[i - 1, j - 1]  //Down - Right
+				};
+
+				float sum = 0;
+				System.Array.ForEach<float>(sides, delegate (float i) { sum += i; });
+
+				float avg = sum / 5;
+
+				heatGrid[i, j] = Mathf.Lerp(lastHeats[i, j], avg, heatDeltaTime * heatDispersionSpeed);
+			}
+
+		//Right (x = 0, no right)
+		for (int j = 1; j < gridSize.y - 1; j++)
+			{
+				int i = 0;
+				
+				float[] sides = new float[] {
+					lastHeats[i + 0, j + 1], //Up
+					lastHeats[i + 0, j - 1], //Down
+					lastHeats[i + 1, j + 0], //Left
+					lastHeats[i + 1, j + 1], //Up - Left
+					lastHeats[i + 1, j - 1], //Down - Left
+				};
+
+				float sum = 0;
+				System.Array.ForEach<float>(sides, delegate (float i) { sum += i; });
+
+				float avg = sum / 5;
+
+				heatGrid[i, j] = Mathf.Lerp(lastHeats[i, j], avg, heatDeltaTime * heatDispersionSpeed);
+			}
+
+			//Left (x = maxX, no left)
+			for (int j = 1; j < gridSize.y - 1; j++)
+			{
+				int i = gridSize.x - 1;
+				
+				float[] sides = new float[] {
+					lastHeats[i + 0, j + 1], //Up
+					lastHeats[i + 0, j - 1], //Down
+					lastHeats[i - 1, j + 0], //Right
+					lastHeats[i - 1, j + 1], //Up - Right
+					lastHeats[i - 1, j - 1]  //Down - Right
+				};
+
+				float sum = 0;
+				System.Array.ForEach<float>(sides, delegate (float i) { sum += i; });
+
+				float avg = sum / 5;
+
+				heatGrid[i, j] = Mathf.Lerp(lastHeats[i, j], avg, heatDeltaTime * heatDispersionSpeed);
+			}
 	}
 
 	//Update the texture to match heat map

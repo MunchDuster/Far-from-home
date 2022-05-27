@@ -20826,7 +20826,7 @@ MonoBehaviour:
   - name: Fuel engine 4
     description: 
     _completed: 0
-  firesOnce: 0
+  firesOnce: 1
   detections:
   - id: 1111
     OnDetected:
@@ -29022,7 +29022,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverName: Engine
-  hoverInfoText: Needs fuel to fly, duh.
+  hoverInfoText: Fire hot ooga booga
   hoverInfoPoint: {fileID: 854114220}
   outline: {fileID: 854114223}
   cameraPoint: {fileID: 839360688}
@@ -29683,7 +29683,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverName: Engine
-  hoverInfoText: Needs fuel to fly, duh.
+  hoverInfoText: Fire hot ooga booga
   hoverInfoPoint: {fileID: 925426619}
   outline: {fileID: 925426622}
   cameraPoint: {fileID: 147009550}
@@ -37786,7 +37786,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverName: Engine
-  hoverInfoText: Needs fuel to fly, duh.
+  hoverInfoText: Fire hot ooga booga
   hoverInfoPoint: {fileID: 1000770009}
   outline: {fileID: 1000770012}
   cameraPoint: {fileID: 641372179}
@@ -44756,7 +44756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverName: Rocket
-  hoverInfoText: Rocket go weeee.
+  hoverInfoText: Because you're a rocket mannn
   hoverInfoPoint: {fileID: 465782356}
   outline: {fileID: 1498797358}
   cameraPoint: {fileID: 995997702}
@@ -45385,7 +45385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverName: Engine
-  hoverInfoText: Needs fuel to fly, duh.
+  hoverInfoText: Fire hot ooga booga
   hoverInfoPoint: {fileID: 1532241185}
   outline: {fileID: 1532241188}
   cameraPoint: {fileID: 225935363}
