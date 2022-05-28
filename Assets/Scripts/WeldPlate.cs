@@ -26,7 +26,7 @@ public class WeldPlate : Pickupable
 
 	[HideInInspector] public Plane plane;
 
-	private Texture2D texture;
+	[SerializeField]private Texture2D texture;
 	private float[,] heatGrid;
 	private Coroutine heatUpdateCoroutine;
 
@@ -118,12 +118,12 @@ public class WeldPlate : Pickupable
 				float[] sides = new float[] {
 					lastHeats[i + 0, j + 1], //Up
 					lastHeats[i + 0, j - 1], //Down
-					lastHeats[i + 1, j + 0], //Left
-					lastHeats[i - 1, j + 0], //Right
-					lastHeats[i + 1, j + 1], //Up - Left
-					lastHeats[i + 1, j - 1], //Down - Left
-					lastHeats[i - 1, j + 1], //Up - Right
-					lastHeats[i - 1, j - 1]  //Down - Right
+					lastHeats[i + 1, j + 0], //Right
+					lastHeats[i - 1, j + 0], //Left
+					lastHeats[i + 1, j + 1], //Up - Right
+					lastHeats[i + 1, j - 1], //Down - Right
+					lastHeats[i - 1, j + 1], //Up - Left
+					lastHeats[i - 1, j - 1]  //Down - Left
 				};
 
 				float sum = 0;
@@ -133,40 +133,19 @@ public class WeldPlate : Pickupable
 
 				heatGrid[i, j] = Mathf.Lerp(lastHeats[i, j], avg, heatDeltaTime * heatDispersionSpeed);
 			}
-		}
-
-		//Bottom (y = maxY, no down)
-		for (int i = 1; i < gridSize.x - 1; i++)
-			{
-				int j = gridSize.y - 1;
-				
-				float[] sides = new float[] {
-					lastHeats[i + 0, j + 1], //Up
-					lastHeats[i + 1, j + 0], //Left
-					lastHeats[i - 1, j + 0], //Right
-					lastHeats[i + 1, j + 1], //Up - Left
-					lastHeats[i - 1, j + 1], //Up - Right
-				};
-
-				float sum = 0;
-				System.Array.ForEach<float>(sides, delegate (float i) { sum += i; });
-
-				float avg = sum / 5;
-
-				heatGrid[i, j] = Mathf.Lerp(lastHeats[i, j], avg, heatDeltaTime * heatDispersionSpeed);
-			}
-
-		//Top (y = 0, no up)
+		}	
+		
+		//Bottom (y = 0, no down)
 		for (int i = 1; i < gridSize.x - 1; i++)
 			{
 				int j = 0;
 				
 				float[] sides = new float[] {
-					lastHeats[i + 0, j - 1], //Down
-					lastHeats[i + 1, j + 0], //Left
-					lastHeats[i - 1, j + 0], //Right
-					lastHeats[i + 1, j - 1], //Down - Left
-					lastHeats[i - 1, j - 1]  //Down - Right
+					lastHeats[i + 0, j + 1], //Up
+					lastHeats[i + 1, j + 0], //Right
+					lastHeats[i - 1, j + 0], //Left
+					lastHeats[i + 1, j + 1], //Up - Right
+					lastHeats[i - 1, j + 1], //Up - Left
 				};
 
 				float sum = 0;
@@ -177,7 +156,28 @@ public class WeldPlate : Pickupable
 				heatGrid[i, j] = Mathf.Lerp(lastHeats[i, j], avg, heatDeltaTime * heatDispersionSpeed);
 			}
 
-		//Right (x = 0, no right)
+		//Top (y = maxY, no up)
+		for (int i = 1; i < gridSize.x - 1; i++)
+			{
+				int j = gridSize.y - 1;
+				
+				float[] sides = new float[] {
+					lastHeats[i + 0, j - 1], //Down
+					lastHeats[i + 1, j + 0], //Left
+					lastHeats[i - 1, j + 0], //Right
+					lastHeats[i + 1, j - 1], //Down - Right
+					lastHeats[i - 1, j - 1]  //Down - Left
+				};
+
+				float sum = 0;
+				System.Array.ForEach<float>(sides, delegate (float i) { sum += i; });
+
+				float avg = sum / 5;
+
+				heatGrid[i, j] = Mathf.Lerp(lastHeats[i, j], avg, heatDeltaTime * heatDispersionSpeed);
+			}
+
+		//Let (x = 0, no left)
 		for (int j = 1; j < gridSize.y - 1; j++)
 			{
 				int i = 0;
@@ -185,9 +185,9 @@ public class WeldPlate : Pickupable
 				float[] sides = new float[] {
 					lastHeats[i + 0, j + 1], //Up
 					lastHeats[i + 0, j - 1], //Down
-					lastHeats[i + 1, j + 0], //Left
-					lastHeats[i + 1, j + 1], //Up - Left
-					lastHeats[i + 1, j - 1], //Down - Left
+					lastHeats[i + 1, j + 0], //Right
+					lastHeats[i + 1, j + 1], //Up - Right
+					lastHeats[i + 1, j - 1], //Down - Right
 				};
 
 				float sum = 0;
@@ -198,7 +198,7 @@ public class WeldPlate : Pickupable
 				heatGrid[i, j] = Mathf.Lerp(lastHeats[i, j], avg, heatDeltaTime * heatDispersionSpeed);
 			}
 
-			//Left (x = maxX, no left)
+			//Right (x = maxX, no right)
 			for (int j = 1; j < gridSize.y - 1; j++)
 			{
 				int i = gridSize.x - 1;
@@ -206,9 +206,9 @@ public class WeldPlate : Pickupable
 				float[] sides = new float[] {
 					lastHeats[i + 0, j + 1], //Up
 					lastHeats[i + 0, j - 1], //Down
-					lastHeats[i - 1, j + 0], //Right
-					lastHeats[i - 1, j + 1], //Up - Right
-					lastHeats[i - 1, j - 1]  //Down - Right
+					lastHeats[i - 1, j + 0], //Left
+					lastHeats[i - 1, j + 1], //Up - Left
+					lastHeats[i - 1, j - 1]  //Down - Left
 				};
 
 				float sum = 0;
@@ -218,6 +218,7 @@ public class WeldPlate : Pickupable
 
 				heatGrid[i, j] = Mathf.Lerp(lastHeats[i, j], avg, heatDeltaTime * heatDispersionSpeed);
 			}
+			
 	}
 
 	//Update the texture to match heat map
@@ -286,54 +287,5 @@ public class WeldPlate : Pickupable
 	private void Update()
 	{
 		plane.SetNormalAndPosition(normal.forward, normal.position);
-	}
-
-	// OnDrawGizmosSelect is called every editor update when the gameObject is selected
-	private void OnDrawGizmosSelected()
-	{
-		DrawDebugGrid();
-		DrawDebugCorners();
-	}
-
-	//Draws corners
-	private void DrawDebugCorners()
-	{
-		Gizmos.color = Color.red;
-		Gizmos.DrawSphere(topLeft, 0.1f);
-
-		Gizmos.color = Color.yellow;
-		Gizmos.DrawSphere(bottomLeft, 0.1f);
-
-		Gizmos.color = Color.blue;
-		Gizmos.DrawSphere(topRight, 0.1f);
-
-		Gizmos.color = Color.cyan;
-		Gizmos.DrawSphere(bottomRight, 0.1f);
-	}
-
-	private void DrawDebugGrid()
-	{
-		float vertical = gridSize.y / burnGridDensity;
-		float horizontal = gridSize.x / burnGridDensity;
-
-		Vector3 top = normal.up * vertical;
-		Vector3 bottom = -normal.up * vertical;
-		Vector3 right = normal.right * horizontal;
-		Vector3 left = -normal.right * horizontal;
-
-		for (int i = 0; i <= gridSize.x; i++)
-		{
-			float lerp = (float)i / (float)gridSize.x;
-			Vector3 topLerp = normal.position + Vector3.Lerp(top + left, top + right, lerp);
-			Vector3 bottomLerp = normal.position + Vector3.Lerp(bottom + left, bottom + right, lerp);
-			Debug.DrawLine(topLerp, bottomLerp, Color.red);
-		}
-		for (int j = 0; j <= gridSize.y; j++)
-		{
-			float lerp = (float)j / (float)gridSize.y;
-			Vector3 leftLerp = normal.position + Vector3.Lerp(left + top, left + bottom, lerp);
-			Vector3 rightLerp = normal.position + Vector3.Lerp(right + top, right + bottom, lerp);
-			Debug.DrawLine(leftLerp, rightLerp, Color.blue);
-		}
 	}
 }

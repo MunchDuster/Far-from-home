@@ -168,6 +168,7 @@ public class PlayerUI : MonoBehaviour
 
 		StringBuilder stringBuilder = new StringBuilder();
 
+		stringBuilder.Append("<mark=#202020A0>");
 		foreach (Subtitle subtitle in subtitles)
 		{
 			stringBuilder.Append(subtitle.talker);
@@ -175,6 +176,8 @@ public class PlayerUI : MonoBehaviour
 			stringBuilder.Append(subtitle.text);
 			stringBuilder.Append("\n");
 		}
+		stringBuilder.Append("</mark>");
+
 
 		subtitleText.text = stringBuilder.ToString();
 	}

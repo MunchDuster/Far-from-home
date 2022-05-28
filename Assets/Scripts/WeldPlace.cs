@@ -39,7 +39,11 @@ public class WeldPlace : Minigame
 	{
 		if (plate == null)
 		{
-			if (player.pickuper.item.GetType() == typeof(WeldPlate))
+			if(player.pickuper.item == null)
+			{
+				return InteractionInfo.Fail("Need something to cover it");
+			}
+			else if (player.pickuper.item.GetType() == typeof(WeldPlate))
 			{
 				plate = player.pickuper.item as WeldPlate;
 				plate.transform.position = plateTransform.position;
@@ -50,7 +54,7 @@ public class WeldPlace : Minigame
 
 				plate.MakeUndetectable();
 
-				return InteractionInfo.Fail("Has put plate here.");
+				return InteractionInfo.Fail("");
 			}
 			else
 			{

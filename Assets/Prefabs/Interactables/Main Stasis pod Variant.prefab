@@ -320,6 +320,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2859109400176981367, guid: b59e3ebd610b00e46b7b84d15632fde4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 930654ebb95712746a0786d58c4f3553, type: 2}
     - target: {fileID: -1950733119399844177, guid: b59e3ebd610b00e46b7b84d15632fde4,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -364,8 +369,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2781410738928257789, guid: b59e3ebd610b00e46b7b84d15632fde4,
-        type: 3}
+      objectReference: {fileID: 2100000, guid: 930654ebb95712746a0786d58c4f3553, type: 2}
     - target: {fileID: 919132149155446097, guid: b59e3ebd610b00e46b7b84d15632fde4,
         type: 3}
       propertyPath: m_Name
@@ -433,7 +437,6 @@ MonoBehaviour:
   openRequirements:
     requirements: []
     completed: 0
-  open: 0
   OnOpen:
     m_PersistentCalls:
       m_Calls:
@@ -470,6 +473,7 @@ MonoBehaviour:
   OnLock:
     m_PersistentCalls:
       m_Calls: []
+  open: 0
   animator: {fileID: 1138567042}
 --- !u!114 &1138567041
 MonoBehaviour:

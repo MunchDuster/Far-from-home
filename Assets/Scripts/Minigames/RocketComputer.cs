@@ -207,7 +207,7 @@ public class RocketComputer : MonoBehaviour
 		new Line(SystemText("help: See list of commands."));
 		new Line(SystemText("clear: Clear console."));
 		new Line(SystemText("diagnostics: Run flight checks."));
-		new Line(SystemText("launch: Luanch rocket."));
+		new Line(SystemText("launch: Launch rocket."));
 
 		OnFinishedCommand();
 	}
