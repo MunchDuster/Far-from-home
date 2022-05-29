@@ -6,39 +6,58 @@ using TMPro;
 
 public class PlayerBoundary : MonoBehaviour
 {
+	public void SetActive(bool active)
+	{
+		_active = true;
+	}
+	private bool _active = false;
+
 	public float countdownTime;
 	public TextMeshProUGUI countdownText;
 	public UnityEvent OnPlayerLeaveBoundary;
 	public UnityEvent OnPlayerEnterBoundary;
 	public UnityEvent OnPlayerDieOutsideBoundary;
 
+	// Start is called before the first frame update
+	private void Start()
+	{
+		countdown = Countdown();
+	}
+
     private void OnTriggerEnter(Collider collider)
 	{
+		if(!_active || collider.gameObject.tag != "Player") return;
+
+
 		Player player = collider.GetComponentInParent<Player>();
 
 		if(player != null)
 		{
-			if(countdown != null) StopCoroutine(countdown);
+			StopCoroutine(countdown);
 			OnPlayerEnterBoundary.Invoke();
 		}
 	}
-	private void OnTriggerLeave(Collider collider)
+	private void OnTriggerExit(Collider collider)
 	{
+		if(!_active || collider.gameObject.tag != "Player") return;
+
+
 		Player player = collider.GetComponentInParent<Player>();
 
 		if(player != null)
 		{
-			countdown = StartCoroutine(Countdown());
 			OnPlayerLeaveBoundary.Invoke();
+			 timeLeft = countdownTime;
+
+			StartCoroutine(countdown);
 		}
 	}
 
-	private Coroutine countdown;
+	private IEnumerator  countdown;
+	private float timeLeft;
 
 	private IEnumerator Countdown()
 	{
-		float timeLeft = countdownTime;
-
 		while(timeLeft > 0)
 		{
 			timeLeft -= 0.1f;

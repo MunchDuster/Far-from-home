@@ -38,7 +38,7 @@ public class CardLock : Lock
 	private void Start()
 	{
 		OnPlayerJoin += StartPlaying;
-		OnPlayerLeave += StartPlaying;
+		OnPlayerLeave += StopPlaying;
 		OnGameUpdate += GameUpdate;
 	}
 

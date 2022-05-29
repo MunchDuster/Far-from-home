@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 	public new Camera camera;
 	public PlayerSense sensor;
 	public PlayerPickup pickuper;
-	public FirstPersonController movement;
+	public PlayerMovement movement;
 
 	// Start is called before the first frame update
 	private void Start()
