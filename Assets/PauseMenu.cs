@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -26,7 +25,7 @@ public class PauseMenu : Menu
 
 	public void SetBrightness(float value)
 	{
-		Color color = Color.Lerp(Color.black, Color.white, value);
+		Color color = Color.LerpUnclamped(Color.black, Color.white, value);
 		ColorParameter colorParameter = colorAdjustments.colorFilter;
 		colorParameter.value = color;
 		colorAdjustments.colorFilter = colorParameter;
@@ -49,12 +48,15 @@ public class PauseMenu : Menu
 	}
 
 	public GameObject pausePanel;
+	public UnityEvent<bool> OnToggleShown;
 
 	private bool paused = false;
 
-	private void ToggleShown()
+	public void ToggleShown()
 	{
 		paused = !paused;
+		
+		if(OnToggleShown != null) OnToggleShown.Invoke(!paused);
 
 		if(paused)
 		{
@@ -64,7 +66,7 @@ public class PauseMenu : Menu
 		else
 		{
 			pausePanel.SetActive(false);
-			Time.timeScale = 0;
+			Time.timeScale = 1;
 		}
 	}
 }

@@ -282,7 +282,7 @@ public class PlayerMovement : MonoBehaviour
 
 			bool wantsToMove = moveInput.x != 0 || moveInput.z != 0;			
 			isWalking = wantsToMove && isGrounded;
-			isSprinting = isWalking && enableSprint;
+			isSprinting = isWalking && enableSprint && sprintPressed;
 
 			if(isWalking && !wasWalking)
 			{
@@ -294,7 +294,7 @@ public class PlayerMovement : MonoBehaviour
 			}
 
 			bool canSprint = sprintRemaining > 0f && !isSprintCooldown;
-			if (enableSprint && sprintPressed && canSprint)
+			if (isSprinting && canSprint)
 			{
 				ApplyMoveForce(sprintSpeed);
 			}
