@@ -4,6 +4,8 @@ public abstract class Minigame : Interactable
 {
 	public Transform cameraPoint;
 
+	public string playerTip;
+
 	public delegate void MinigameEvent();
 	public event MinigameEvent OnPlayerJoin;
 	public event MinigameEvent OnPlayerLeave;
@@ -42,7 +44,7 @@ public abstract class Minigame : Interactable
 		player.camera.transform.position = cameraPoint.position;
 		player.camera.transform.rotation = cameraPoint.rotation;
 
-		if (Input.GetKeyDown(KeyCode.Escape)) EndGame();
+		if (Input.GetKeyDown(KeyCode.Q)) EndGame();
 	}
 
 	//Handles basic admin starting of game
@@ -65,7 +67,9 @@ public abstract class Minigame : Interactable
 		player.movement.cameraCanMove = false;
 		player.movement.enableHeadBob = false;
 
-		PlayerUI.ui.minigameText.text = "Press escape to exit.";
+		PlayerUI.ui.minigameText.text = "<mark=#202020A0>Press Q to exit.</mark>";
+		if(playerTip != null)
+			PlayerUI.ui.minigameTip.text = "<mark=#202020A0>Tip: " + playerTip + "</mark>";
 
 		//Disable the player sense
 		player.sensor.TurnOff();
@@ -94,6 +98,8 @@ public abstract class Minigame : Interactable
 		player.movement.enableHeadBob = true;
 
 		PlayerUI.ui.minigameText.text = "";
+		PlayerUI.ui.minigameTip.text = "";
+
 
 		//Eable the player sense
 		player.sensor.TurnOn();

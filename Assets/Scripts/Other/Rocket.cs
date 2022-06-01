@@ -30,7 +30,6 @@ public class Rocket : MonoBehaviour
 
 	[Header("Refs")]
 	public Animator animator;
-	public Transform spinSkyboxCamera;
 	public Transform[] shakePartTransforms;
 
 	private float speed, y;
@@ -91,8 +90,6 @@ public class Rocket : MonoBehaviour
 				shakePart.part.localPosition = AddShake(shakePart.localPosition);
 			}
 
-			//Make stars scroll by
-			spinSkyboxCamera.Rotate(Vector3.right * (speed / targetSpeed) * skyboxSpinSpeed * 360 * Time.deltaTime);
 		}
 	}
 

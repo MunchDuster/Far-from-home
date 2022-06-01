@@ -101,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
 		playerCamera.fieldOfView = fov;
 		originalScale = transform.localScale;
 		jointOriginalPos = joint.localPosition;
+
 	}
 	private void OnEnable()
 	{
@@ -279,10 +280,11 @@ public class PlayerMovement : MonoBehaviour
 		if (playerCanMove)
 		{
 			bool wasWalking = isWalking;
+			bool wantsToMove = moveInput.x != 0 || moveInput.z != 0;
+			bool canSprint = sprintRemaining > 0f && !isSprintCooldown;
 
-			bool wantsToMove = moveInput.x != 0 || moveInput.z != 0;			
-			isWalking = wantsToMove && isGrounded;
-			isSprinting = isWalking && enableSprint && sprintPressed;
+			isWalking = wantsToMove && playerCanMove && isGrounded;
+			isSprinting = isWalking && enableSprint && sprintPressed && canSprint;
 
 			if(isWalking && !wasWalking)
 			{
@@ -293,8 +295,7 @@ public class PlayerMovement : MonoBehaviour
 				OnMoveStop.Invoke();
 			}
 
-			bool canSprint = sprintRemaining > 0f && !isSprintCooldown;
-			if (isSprinting && canSprint)
+			if (isSprinting)
 			{
 				ApplyMoveForce(sprintSpeed);
 			}

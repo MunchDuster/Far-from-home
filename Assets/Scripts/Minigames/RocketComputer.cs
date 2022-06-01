@@ -7,15 +7,23 @@ using System.Text;
 
 public class RocketComputer : MonoBehaviour
 {
+	public int maxLines =10;
+
 	private class Line
 	{
 		public static List<Line> lines;
+		public static int maxLines;
 
 		public string text;
 
 		public Line()
 		{
 			lines.Add(this);
+
+			if(lines.Count >= maxLines)
+			{
+				lines.RemoveAt(0);
+			}
 		}
 		public Line(string text)
 		{
@@ -34,6 +42,7 @@ public class RocketComputer : MonoBehaviour
 	public float blinkSpeed = 0.7f;
 	public string systemColour = "green";
 	public float launchTime = 10;
+	public string[] credits;
 
 	[Header("Control")]
 	public bool enginesAreFuelled = false;
@@ -64,6 +73,7 @@ public class RocketComputer : MonoBehaviour
 		commands.Add("launch", () => { StartCoroutine(Launch()); });
 
 		Line.lines = new List<Line>();
+		Line.maxLines = maxLines;
 	}
 
 	//Events
@@ -116,7 +126,27 @@ public class RocketComputer : MonoBehaviour
 	{
 		OnTurnOff.Invoke();
 	}
-	public void EnginesAreFuelled() { enginesAreFuelled = true; }
+	public void EnginesAreFuelled() 
+	{ 
+		enginesAreFuelled = true; 
+	}
+	public void StartRollingCredits()
+	{
+		Line.lines.Clear();
+		StartCoroutine(RollCredits());
+	}
+	private IEnumerator RollCredits()
+	{
+		new Line("<u>Credits</u>");
+
+		int i = 0;
+		while(true)
+		{
+			yield return new WaitForSeconds(2);
+			new Line(credits[i]);
+			i = (i + 1) % Line.lines.Count;
+		}
+	}
 	//Commands
 	private void ClearConsole()
 	{

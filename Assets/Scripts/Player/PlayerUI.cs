@@ -32,6 +32,7 @@ public class PlayerUI : MonoBehaviour
 	public TextMeshProUGUI subtitleText;
 	public TextMeshProUGUI minigameText;
 	public TextMeshProUGUI itemText;
+	public TextMeshProUGUI minigameTip;
 
 	public float errorWaitTimePerChar = 0.15f;
 	public float errorWriteTimePerChar = 0.05f;
@@ -81,11 +82,8 @@ public class PlayerUI : MonoBehaviour
 	{
 		Task task = tasks.Find((task) => task.name == name);
 
-		if (task == null)
-		{
-			Debug.LogError("RemoveTask error: Task not found (name\"" + name + "\")");
-			Debug.LogError(new System.Exception().StackTrace);
-		}
+		if (task == null) return;
+
 		RemoveTask(task);
 
 	}
@@ -93,11 +91,8 @@ public class PlayerUI : MonoBehaviour
 	{
 		Task task = tasks.Find((task) => task.name == name);
 
-		if (task == null)
-		{
-			Debug.LogError("CompleteTask error: Task not found (name\"" + name + "\")");
-			Debug.LogError(new System.Exception().StackTrace);
-		}
+		if (task == null) return;
+	
 		CompleteTask(task);
 	}
 	public void RemoveTask(Task task)

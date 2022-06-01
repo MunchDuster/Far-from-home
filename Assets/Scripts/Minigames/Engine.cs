@@ -74,8 +74,10 @@ public class Engine : Minigame
 		fuelCan.transform.position = targetPos;
 
 		fullnessSlider.value = fuel / maxFuel;
+		
+		
+		fullnessSliderImage.color = (fuel < maxFuel) ? sliderStartColor : sliderStopColor;
 
-		fullnessSliderImage.color = sliderStartColor;
 	}
 
 	private Vector3 targetPos;

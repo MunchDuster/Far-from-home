@@ -15,6 +15,8 @@ public class SimpleVoiceLine : VoiceLine
 		StartCoroutine(Delay());
 	}
 
+	public void MakeRedundant() { isRedundant = true; }
+
 	private IEnumerator Delay()
 	{
 		yield return new WaitForSeconds(delay);

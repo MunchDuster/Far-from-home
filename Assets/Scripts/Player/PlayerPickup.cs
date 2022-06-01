@@ -27,7 +27,7 @@ public class PlayerPickup : MonoBehaviour
 
 		item = pickupable;
 
-		PlayerUI.ui.itemText.text = "Right click to drop item.";
+		PlayerUI.ui.itemText.text = "<mark=#202020A0>Right click to drop item.</mark>";
 
 		//Disable the rigibody on the item
 		rb = item.gameObject.GetComponent<Rigidbody>();
@@ -44,7 +44,7 @@ public class PlayerPickup : MonoBehaviour
 		item.transform.SetParent(itemParent);
 
 		//Reset the local transform of the item
-		item.transform.localPosition = Vector3.zero;
+		item.transform.localPosition = item.offset;
 		item.transform.localRotation = Quaternion.identity;
 	}
 	public void Drop(bool enableRigidbody = true)

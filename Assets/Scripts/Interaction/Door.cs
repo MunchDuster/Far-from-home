@@ -30,7 +30,7 @@ public class Door : Interactable
 		openRequirements.onCompleted += UpdateLocked;
 		openRequirements.onUncompleted += UpdateLocked;
 
-		SetOpen(open);
+		//SetOpen(open);
 		UpdateLocked();
 	}
 
