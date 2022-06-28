@@ -11,8 +11,18 @@ public class EnterableInteractable : Minigame
 	protected void Start()
 	{
 		enterRequirements.Start();
-		OnPlayerJoin += () => { if (OnJoin != null) OnJoin.Invoke(); };
-		OnPlayerLeave += () => { if (OnLeave != null) OnLeave.Invoke(); };
+		OnPlayerJoin += PlayerJoin;
+	}
+	protected void PlayerJoin(bool on)
+	{
+		if(on)
+		{
+			if (OnJoin != null) OnJoin.Invoke();
+		}
+		else
+		{
+			if (OnLeave != null) OnLeave.Invoke();
+		}
 	}
 
 	public void CompleteRequirement(int no)

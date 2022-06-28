@@ -5,9 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-public class RocketComputer : MonoBehaviour
+public class RocketComputer : Computer
 {
-	public int maxLines =10;
+	public int maxLines = 10;
 
 	private class Line
 	{
@@ -49,12 +49,9 @@ public class RocketComputer : MonoBehaviour
 	public bool flightPathCreated = false;
 
 	[Header("Events")]
-	public UnityEvent OnTurnOn;
-	public UnityEvent OnTurnOff;
 	public UnityEvent OnLaunch;
 	public UnityEvent OnAfterLaunched;
 
-	private delegate void OnEvent();
 	private OnEvent onGui;
 	private delegate void OnSetText(string text);
 	private Dictionary<string, OnEvent> commands = new Dictionary<string, OnEvent>();
@@ -77,19 +74,19 @@ public class RocketComputer : MonoBehaviour
 	}
 
 	//Events
-	private void OnFinishedTurningOn()
+	protected override void PoweredOn()
 	{
 		loadingText.text = "";
 
 		//Get things going
-		OnTurnOn.Invoke();
+		OnPowerOn.Invoke(true);
 
 		new Line(SystemText("Enter \"help\" for a list of commands."));
 		inputLine = new Line();
 
 		UpdateConsole();
 
-		onGui += CommandInput;
+		onGui += UpdateInput;
 		onGui += UpdateConsole;
 	}
 	private void OnFinishedCommand()
@@ -107,31 +104,43 @@ public class RocketComputer : MonoBehaviour
 		else if (type == 2) return "<color=\"red\">" + text + "</color>";
 		else throw new System.ArgumentException("Invalid type for SystemText: " + type);
 	}
-	private string InputChar()
+	private string GetCaretBlinkChar()
 	{
 		return (Time.time % blinkSpeed < blinkSpeed / 2) ? "\u2588" : "";
 	}
 
 	//Main public functions
-	public void TurnOn()
+	public override void PowerOn(bool on)
 	{
-		consoleText.text = "";
-		Line.lines.Clear();
+		if(on)
+		{
+			consoleText.text = "";
+			Line.lines.Clear();
 
-		takingInput = true;
+			takingInput = true;
 
-		StartCoroutine(LoadText(
-			"Booting", 
-			bootTime, 
-			(string text) => { loadingText.text = text; }, 
-			OnFinishedTurningOn
-		));
+			
+			StartCoroutine(PowerUp());
+		}
+		else
+		{
+			onGui = null;
+			OnPowerOn.Invoke(false);
+			takingInput = false;
+		}
 	}
-	public void TurnOff()
+
+	protected override IEnumerator PowerUp()
 	{
-		onGui = null;
-		OnTurnOff.Invoke();
+		yield return StartCoroutine(LoadText(
+				"Booting", 
+				bootTime, 
+				(string text) => { loadingText.text = text; }, 
+				OnPoweredOn
+			)
+		);
 	}
+
 	public void EnginesAreFuelled() 
 	{ 
 		enginesAreFuelled = true; 
@@ -249,7 +258,7 @@ public class RocketComputer : MonoBehaviour
 	}
 
 	//Private functions
-	private IEnumerator LoadText(string text, float time, OnSetText setter, OnEvent callback)
+	private IEnumerator LoadText(string text, float time, OnSetText setter, OnEvent callback = null)
 	{
 		int noOfDots = -1;
 
@@ -267,70 +276,22 @@ public class RocketComputer : MonoBehaviour
 			yield return new WaitForSeconds(dotsDelta);
 		}
 
-		callback();
+		if(callback != null) callback();
 	}
-	private IEnumerator LoadText(string text, float time, OnSetText setter)
+	private void UpdateInput()
 	{
-		int noOfDots = -1;
+		char input = GetKeyInput();
 
-		for (float t = 0; t < time; t += dotsDelta)
+		if(input != null)
 		{
-			//Loop from 0 to 3 dots
-			noOfDots = ++noOfDots % 4;
-
-			//Put that many dots onto string
-			string dots = "";
-			for (int i = 0; i < noOfDots; i++) dots += ".";
-
-			setter(SystemText(text + dots));
-
-			yield return new WaitForSeconds(dotsDelta);
-		}
-	}
-
-	private void OnGUI()
-	{
-		if (onGui != null) onGui();
-	}
-	private void CommandInput()
-	{
-		Event e = Event.current;
-		if (e.isKey && takingInput)
-		{
-			switch (e.keyCode)
-			{
-				case KeyCode.None:
-
-					if (e.character == '\n') break;
-					//Add character
-					inputText += (e.shift) ? e.character.ToString().ToUpper() : e.character;
-					break;
-
-				case KeyCode.Return:
-
-					if (e.type == EventType.KeyDown)
-					{
-						//Enter command
-						CheckCommand();
-					}
-					break;
-				case KeyCode.Backspace:
-					if (e.type == EventType.KeyDown)
-					{
-						//Implement backspace
-						if (inputText.Length > 0) inputText = inputText.Substring(0, inputText.Length - 1);
-					}
-					break;
-				default:
-
-					break;
-			}
+			if (input == '\n') CheckCommand();
+			else if (input == '\b') ApplyBackspace(ref inputText);
+			else inputText += input;
 		}
 	}
 	private void UpdateConsole()
 	{
-		if (takingInput) inputLine.text = SystemText("Input: ") + inputText + InputChar();
-
+		if (takingInput) inputLine.text = SystemText("Input: ") + inputText + GetCaretBlinkChar();
 
 		StringBuilder log = new StringBuilder();
 		foreach (Line line in Line.lines)

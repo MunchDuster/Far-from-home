@@ -6,11 +6,12 @@ public abstract class Minigame : Interactable
 
 	public string playerTip;
 
-	public delegate void MinigameEvent();
-	public event MinigameEvent OnPlayerJoin;
-	public event MinigameEvent OnPlayerLeave;
-	public event MinigameEvent OnGameUpdate;
-	public event MinigameEvent OnGameFixedUpdate;
+	public delegate void OnBoolEvent(bool aBool);
+	public event OnBoolEvent OnPlayerJoin;
+
+	public delegate void OnEvent();
+	public event OnEvent OnGameUpdate;
+	public event OnEvent OnGameFixedUpdate;
 
 	protected Player player = null;
 
@@ -78,7 +79,7 @@ public abstract class Minigame : Interactable
 		OnGameUpdate += CheckLeave;
 
 		//Call delegate
-		if (OnPlayerJoin != null) OnPlayerJoin();
+		if (OnPlayerJoin != null) OnPlayerJoin(true);
 	}
 
 	//Handles basic admin of finishing a game
@@ -108,7 +109,7 @@ public abstract class Minigame : Interactable
 		OnGameUpdate -= CheckLeave;
 
 		//Call delegate
-		if (OnPlayerLeave != null) OnPlayerLeave();
+		if (OnPlayerJoin != null) OnPlayerJoin(false);
 
 		//Reset player var
 		player = null;

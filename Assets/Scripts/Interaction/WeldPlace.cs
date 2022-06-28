@@ -17,22 +17,23 @@ public class WeldPlace : Minigame
 	// Start is called before the first frame update
 	private void Start()
 	{
-		OnPlayerJoin += StartGame;
-		OnPlayerLeave += QuitGame;
+		OnPlayerJoin += PlayerJoin;
 	}
 
-	private void StartGame()
+	private void PlayerJoin(bool on)
 	{
-		welder.welderBase.position = welderPoint.position;
-		onStartGame.Invoke();
-	}
-
-	private void QuitGame()
-	{
-		onStopGame.Invoke();
-		OnGameUpdate -= welder.GameUpdate;
-		plate.StopWelding();
-		Debug.Log("Leaving weld");
+		if(on)
+		{
+			welder.welderBase.position = welderPoint.position;
+			onStartGame.Invoke();
+		}
+		else
+		{
+			onStopGame.Invoke();
+			OnGameUpdate -= welder.GameUpdate;
+			plate.StopWelding();
+			Debug.Log("Leaving weld");
+		}
 	}
 
 	protected override InteractionInfo CheckRequirements(Player player)

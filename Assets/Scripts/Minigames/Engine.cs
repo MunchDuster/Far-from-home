@@ -15,6 +15,7 @@ public class Engine : Minigame
 	public Color sliderStartColor;
 	public Color sliderStopColor;
 
+	[Space(10)]
 	public Transform itemPlane;
 	public Transform fuelPoint;
 	public Transform fuelHandle;
@@ -29,16 +30,15 @@ public class Engine : Minigame
 	public UnityEvent OnStop;
 	public UnityEvent OnFuelled;
 
+	private Vector3 targetPos;
+	private Rigidbody rb;
 	private Plane plane;
-
 	private float fuel;
-
 
 	// Start is called before the first frame update
 	protected void Start()
 	{
-		OnPlayerJoin += StartGame;
-		OnPlayerLeave += StopGame;
+		OnPlayerJoin += PlayerJoin;
 		OnGameUpdate += UpdateInput;
 		OnGameFixedUpdate += GameUpdate;
 
@@ -51,36 +51,46 @@ public class Engine : Minigame
 		else return InteractionInfo.Success();
 	}
 
-	private Rigidbody rb;
-
-	private void StartGame()
+	private void PlayerJoin(bool on)
 	{
-		OnStart.Invoke();
-
+		if(on)
+		{
+			OnStart.Invoke();
+			targetPos = GetItemTargetPosition(new Vector2(Screen.width / 2, Screen.height / 2));
+			SetupPlayer();
+			SetupFuelCan();
+			SetupSlider();
+		}
+		else
+		{
+			OnStop.Invoke();
+			rb.isKinematic = true;
+			fullnessSliderImage.color = sliderStopColor;
+			player.pickuper.isAllowedToDropItem = true;
+			//Reset pickup position
+			fuelCan.transform.localPosition = Vector3.zero;
+			fuelCan.transform.localRotation = Quaternion.identity;
+		}
+	}
+	private void SetupSlider()
+	{
+		fullnessSlider.value = fuel / maxFuel;
+		fullnessSliderImage.color = (fuel < maxFuel) ? sliderStartColor : sliderStopColor;
+	}
+	private void SetupPlayer()
+	{
 		rb = player.pickuper.item.GetComponentInChildren<Rigidbody>();
-
 		rb.isKinematic = false;
-
-		fuelCan.GetComponent<Collider>().enabled = true;
-
-		targetPos = GetItemTargetPosition(new Vector2(Screen.width / 2, Screen.height / 2));
-
+		player.pickuper.isAllowedToDropItem = false;
+	}
+	private void SetupFuelCan()
+	{
 		fuelFlow.fuelPoint = fuelPoint;
 		fuelFlow.engine = this;
 		
-		player.pickuper.isAllowedToDropItem = false;
-
-		//Reset pickup position
+		fuelCan.GetComponent<Collider>().enabled = true;
 		fuelCan.transform.position = targetPos;
-
-		fullnessSlider.value = fuel / maxFuel;
-		
-		
-		fullnessSliderImage.color = (fuel < maxFuel) ? sliderStartColor : sliderStopColor;
-
 	}
-
-	private Vector3 targetPos;
 
 	private void UpdateInput()
 	{
@@ -109,22 +119,6 @@ public class Engine : Minigame
 		Vector3 alignmentForce = (rbOnPlane - rb.position) * (distance) * alignmentStiffness;
 		Debug.DrawRay(rb.position, alignmentForce, Color.blue);
 		rb.AddForce(alignmentForce);
-	}
-	private void StopGame()
-	{
-		OnStop.Invoke();
-
-
-		rb.isKinematic = true;
-
-		fullnessSliderImage.color = sliderStopColor;
-
-
-		//Reset pickup position
-		fuelCan.transform.localPosition = Vector3.zero;
-		fuelCan.transform.localRotation = Quaternion.identity;
-
-		player.pickuper.isAllowedToDropItem = true;
 	}
 
 	private Vector3 GetItemTargetPosition(Vector2 screenPos)
