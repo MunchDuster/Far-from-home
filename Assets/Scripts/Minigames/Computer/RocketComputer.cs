@@ -120,10 +120,16 @@ public class RocketComputer : MonoBehaviour
 
 		takingInput = true;
 
-		StartCoroutine(LoadText("Booting", bootTime, (string text) => { loadingText.text = text; }, OnFinishedTurningOn));
+		StartCoroutine(LoadText(
+			"Booting", 
+			bootTime, 
+			(string text) => { loadingText.text = text; }, 
+			OnFinishedTurningOn
+		));
 	}
 	public void TurnOff()
 	{
+		onGui = null;
 		OnTurnOff.Invoke();
 	}
 	public void EnginesAreFuelled() 
@@ -313,13 +319,6 @@ public class RocketComputer : MonoBehaviour
 					{
 						//Implement backspace
 						if (inputText.Length > 0) inputText = inputText.Substring(0, inputText.Length - 1);
-					}
-					break;
-				case KeyCode.Escape:
-					if (e.type == EventType.KeyDown)
-					{
-						//Stop inputting
-						onGui -= CommandInput;
 					}
 					break;
 				default:
