@@ -37,28 +37,30 @@ public class CardLock : Lock
 	// Start is called before the first frame update
 	private void Start()
 	{
-		OnPlayerJoin += StartPlaying;
-		OnPlayerLeave += StopPlaying;
+		OnPlayerJoin += PlayerJoin;
 		OnGameUpdate += GameUpdate;
 	}
 
-	private void StartPlaying()
+	private void PlayerJoin(bool on)
 	{
-		//Set item position and rotation
-		player.pickuper.item.transform.position = slideStart.position;
-		player.pickuper.item.transform.rotation = slideStart.rotation * Quaternion.Euler(cardRotationOffset);
-
-		//Init vars
-		y = slideStart.position.y;
-		lastY = y;
-		dist = (player.camera.transform.position - transform.position).magnitude;
-	}
-	private void StopPlaying()
-	{
-		if (player.pickuper.item != null)
+		if(on)
 		{
-			player.pickuper.item.transform.localPosition = Vector3.zero;
-			player.pickuper.item.transform.localRotation = Quaternion.identity;
+			//Set item position and rotation
+			player.pickuper.item.transform.position = slideStart.position;
+			player.pickuper.item.transform.rotation = slideStart.rotation * Quaternion.Euler(cardRotationOffset);
+
+			//Init vars
+			y = slideStart.position.y;
+			lastY = y;
+			dist = (player.camera.transform.position - transform.position).magnitude;
+		}
+		else
+		{
+			if (player.pickuper.item != null)
+			{
+				player.pickuper.item.transform.localPosition = Vector3.zero;
+				player.pickuper.item.transform.localRotation = Quaternion.identity;
+			}
 		}
 	}
 

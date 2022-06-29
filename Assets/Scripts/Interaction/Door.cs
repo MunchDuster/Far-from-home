@@ -9,10 +9,8 @@ public class Door : Interactable
 	public bool unlocked { get { return openRequirements == null || openRequirements.completed; } }
 
 	//UnityEvents triggering chain events
-	public UnityEvent OnOpen;
-	public UnityEvent OnClose;
-	public UnityEvent OnUnlock;
-	public UnityEvent OnLock;
+	public UnityEvent<bool> OnOpen;
+	public UnityEvent<bool> OnUnlock;
 
 	[SerializeField] private bool open;
 
@@ -28,10 +26,9 @@ public class Door : Interactable
 		openRequirements.Start();
 
 		openRequirements.onCompleted += UpdateLocked;
-		openRequirements.onUncompleted += UpdateLocked;
 
 		//SetOpen(open);
-		UpdateLocked();
+		UpdateLocked(unlocked);
 	}
 
 	//Called by UnityEvents to chage hover info
@@ -45,7 +42,7 @@ public class Door : Interactable
 	{
 		Task incompleteTask = openRequirements.GetIncompleteTask();
 
-		if (incompleteTask != null) return InteractionInfo.Fail(incompleteTask.description);
+		if (!unlocked) return InteractionInfo.Fail(incompleteTask.description);
 
 
 		SetOpen(!open);
@@ -59,28 +56,13 @@ public class Door : Interactable
 		this.open = open;
 		animator.SetBool("open", open);
 
-		if (open)
-		{
-			if (OnOpen != null) OnOpen.Invoke();
-		}
-		else
-		{
-			if (OnClose != null) OnClose.Invoke();
-		}
-
+		if (OnOpen != null) OnOpen.Invoke(open);
 	}
 
 	//Call UnLock event when all requirements are met
-	private void UpdateLocked()
+	private void UpdateLocked(bool unlocked)
 	{
-		if (unlocked)
-		{
-			if (OnUnlock != null) OnUnlock.Invoke();
-		}
-		else
-		{
-			if (OnLock != null) OnLock.Invoke();
-		}
+		if (OnUnlock != null) OnUnlock.Invoke(unlocked);
 	}
 
 	//Allow for unityEvents to set task completed

@@ -6,9 +6,8 @@ public class RequirementList
 	public Task[] requirements;
 	[HideInInspector] public bool completed;
 
-	public delegate void OnEvent();
-	public OnEvent onCompleted;
-	public OnEvent onUncompleted;
+	public delegate void OnBoolEvent(bool aBool);
+	public OnBoolEvent onCompleted;
 
 	//Called before first frame update
 	public void Start()
@@ -22,29 +21,19 @@ public class RequirementList
 		foreach (Task task in requirements)
 		{
 			task.OnCompleted += UpdateCompleted;
-			task.OnUncompleted += UpdateCompleted;
 		}
-		UpdateCompleted();
+		UpdateCompleted(false);
 	}
 
 	//Checks whether requirements are met, if so then OnCompleted is called
-	private void UpdateCompleted()
+	private void UpdateCompleted(bool on)
 	{
+		if(!on) completed = false;
+
 		Task incompleteTask = GetIncompleteTask();
-		if (incompleteTask == null)
-		{
-			//must set completed before calling events
-			bool wasCompleted = completed;
-			completed = true;
-			if (!wasCompleted && onCompleted != null) onCompleted();
-		}
-		else
-		{
-			//must set completed before calling events
-			bool wasCompleted = completed;
-			completed = false;
-			if (wasCompleted && onUncompleted != null) onUncompleted();
-		}
+		
+		if (onCompleted != null) onCompleted(completed);
+		completed = incompleteTask != null;
 	}
 
 	//Finds an incompleted task, returns null if all completed

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class Engine : Minigame
 {
@@ -26,8 +27,7 @@ public class Engine : Minigame
 	public Image fullnessSliderImage;
 
 	[Space(10)]
-	public UnityEvent OnStart;
-	public UnityEvent OnStop;
+	public UnityEvent<bool> OnPlayerJoined;
 	public UnityEvent OnFuelled;
 
 	private Vector3 targetPos;
@@ -55,7 +55,7 @@ public class Engine : Minigame
 	{
 		if(on)
 		{
-			OnStart.Invoke();
+			OnPlayerJoined.Invoke(true);
 			targetPos = GetItemTargetPosition(new Vector2(Screen.width / 2, Screen.height / 2));
 			SetupPlayer();
 			SetupFuelCan();
@@ -63,7 +63,7 @@ public class Engine : Minigame
 		}
 		else
 		{
-			OnStop.Invoke();
+			OnPlayerJoined.Invoke(false);
 			rb.isKinematic = true;
 			fullnessSliderImage.color = sliderStopColor;
 			player.pickuper.isAllowedToDropItem = true;
