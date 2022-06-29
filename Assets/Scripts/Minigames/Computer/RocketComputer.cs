@@ -136,7 +136,7 @@ public class RocketComputer : Computer
 				"Booting", 
 				bootTime, 
 				(string text) => { loadingText.text = text; }, 
-				OnPoweredOn
+				PoweredOn
 			)
 		);
 	}

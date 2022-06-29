@@ -11,12 +11,13 @@ public class LockedComputer : Computer
 		}
 		else
 		{
-			OnPoweredOn.Invoke(false);
+			OnPowerOn.Invoke(false);
 		}
 	}
 
 	protected override IEnumerator PowerUp()
 	{
+		yield return new WaitForSeconds(1);
 		//do stuff
 		PoweredOn();
 	}
@@ -24,9 +25,7 @@ public class LockedComputer : Computer
 	protected override void PoweredOn()
 	{
 		//Show lock screen
-		OnPoweredOn.Invoke(true);
-
-
+		OnPowerOn.Invoke(true);
 	}
 
 	protected virtual void OnUnlocked() {}
