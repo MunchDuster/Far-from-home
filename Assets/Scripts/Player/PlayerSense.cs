@@ -27,10 +27,8 @@ public class PlayerSense : MonoBehaviour
 	{
 		if (!isOn) return;
 
-		GetCurrentHover();
-
-		UpdateHover();
-
+		GetCurrentHoverItem();
+		UpdateHoverInfo();
 		CheckInteract();
 
 		lastHover = curHover;
@@ -49,14 +47,16 @@ public class PlayerSense : MonoBehaviour
 		Debug.Log("Turning off");
 
 		isOn = false;
+
 		if (curHover != null) curHover.EndHover(hoverInfo);
+
 		lastHover = curHover;
 		lastHoverObject = curHover.gameObject;
 
 		curHover = null;
 	}
 
-	private void UpdateHover()
+	private void UpdateHoverInfo()
 	{
 		//Skip hover hasn't changed
 		if (curHover == lastHover) return;
@@ -81,7 +81,7 @@ public class PlayerSense : MonoBehaviour
 		}
 	}
 
-	private void GetCurrentHover()
+	private void GetCurrentHoverItem()
 	{
 		if (Physics.Raycast(raycastPoint.position, raycastPoint.forward, out RaycastHit hit, raycastDist, layerMask))
 		{

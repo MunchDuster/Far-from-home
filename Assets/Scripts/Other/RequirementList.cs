@@ -22,18 +22,23 @@ public class RequirementList
 		{
 			task.OnCompleted += UpdateCompleted;
 		}
-		UpdateCompleted(false);
+		UpdateCompleted(true); //Init completed
 	}
 
 	//Checks whether requirements are met, if so then OnCompleted is called
-	private void UpdateCompleted(bool on)
+	private void UpdateCompleted(bool completedTask)
 	{
-		if(!on) completed = false;
+		//Task not complete, complete is false
+		if(!completedTask)
+		{
+			completed = false;
+			return;
+		}
 
+		//Task is true, check for ay other incomplete task
 		Task incompleteTask = GetIncompleteTask();
-		
+		completed = incompleteTask == null;
 		if (onCompleted != null) onCompleted(completed);
-		completed = incompleteTask != null;
 	}
 
 	//Finds an incompleted task, returns null if all completed

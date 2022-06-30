@@ -282,7 +282,7 @@ public class RocketComputer : Computer
 	{
 		char input = GetKeyInput();
 
-		if(input != null)
+		if(input != '\0')
 		{
 			if (input == '\n') CheckCommand();
 			else if (input == '\b') ApplyBackspace(ref inputText);

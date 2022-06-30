@@ -70,6 +70,11 @@ public class Door : Interactable
 	{
 		openRequirements.SetTaskCompleted(name, complete);
 	}
+	public void CompleteOpenRequirement(string name)
+	{
+		openRequirements.SetTaskCompleted(name, true);
+	}
+
 
 	public void OpenAfter(float time)
 	{

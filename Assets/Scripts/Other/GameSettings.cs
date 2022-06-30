@@ -29,6 +29,13 @@ public class GameSettings : MonoBehaviour
 		Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
 	}
 
+	public void SetTargetFramerate(float floatFramerate)
+	{
+		int framerate = (int)floatFramerate;
+		if(framerate <= 0 || framerate >= 200) framerate = -1;
+		Application.targetFrameRate = framerate;
+	}
+
 	// Start is called before the first frame update
 	private void Start()
 	{

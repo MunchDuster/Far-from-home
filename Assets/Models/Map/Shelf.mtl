@@ -1,0 +1,10 @@
+newmtl Default_-_Prop_-_Sec
+map_Kd Default.png
+Kd 0.7289935 1 0.7215686
+d 1
+
+newmtl Default_-_Prop
+map_Kd Default.png
+Kd 1 0.9940638 0.7216981
+d 1
+
