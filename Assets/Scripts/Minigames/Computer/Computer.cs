@@ -5,8 +5,11 @@ using System.Collections.Generic;
 
 public abstract class Computer : MonoBehaviour
 {
+	public float turnOnTime = 2;
+	
 	public UnityEvent<bool> OnUserEnter;
 	public UnityEvent<bool> OnPowerOn;
+	public UnityEvent OnPowerOnStart;
 
 	protected delegate void OnEvent();
 	

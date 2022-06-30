@@ -1,8 +1,11 @@
 using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 
 public class LockedComputer : Computer
 {
+	public UnityEvent OnUnlock;
+	
 	public override void PowerOn(bool on)
 	{
 		if(on)
@@ -17,16 +20,18 @@ public class LockedComputer : Computer
 
 	protected override IEnumerator PowerUp()
 	{
-		yield return new WaitForSeconds(1);
-		//do stuff
+		OnPowerOnStart.Invoke();
+		yield return new WaitForSeconds(turnOnTime);
 		PoweredOn();
 	}
 
 	protected override void PoweredOn()
 	{
-		//Show lock screen
 		OnPowerOn.Invoke(true);
 	}
 
-	protected virtual void OnUnlocked() {}
+	public virtual void Unlock() 
+	{
+		OnUnlock.Invoke();
+	}
 }

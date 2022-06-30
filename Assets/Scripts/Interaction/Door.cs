@@ -51,7 +51,7 @@ public class Door : Interactable
 	}
 
 	//Main opening/closing door function
-	private void SetOpen(bool open)
+	public void SetOpen(bool open)
 	{
 		this.open = open;
 		animator.SetBool("open", open);
@@ -66,21 +66,9 @@ public class Door : Interactable
 	}
 
 	//Allow for unityEvents to set task completed
-	public void CompleteOpenRequirement(string name)
+	public void CompleteOpenRequirement(bool complete, string name)
 	{
-		openRequirements.SetTaskCompleted(name, true);
-	}
-	public void UncompleteOpenRequirement(string name)
-	{
-		openRequirements.SetTaskCompleted(name, false);
-	}
-	public void CloseNow()
-	{
-		SetOpen(false);
-	}
-	public void OpenNow()
-	{
-		SetOpen(true);
+		openRequirements.SetTaskCompleted(name, complete);
 	}
 
 	public void OpenAfter(float time)
