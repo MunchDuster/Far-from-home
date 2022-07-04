@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class EnterableInteractable : Minigame
 {
 	public RequirementList enterRequirements;
 
-	public UnityEvent OnJoin;
-	public UnityEvent OnLeave;
+	public UnityEvent<bool> OnJoin;
 
 	protected void Start()
 	{
@@ -15,14 +15,7 @@ public class EnterableInteractable : Minigame
 	}
 	protected void PlayerJoin(bool on)
 	{
-		if(on)
-		{
-			if (OnJoin != null) OnJoin.Invoke();
-		}
-		else
-		{
-			if (OnLeave != null) OnLeave.Invoke();
-		}
+		if (OnJoin != null) OnJoin.Invoke(on);
 	}
 
 	public void CompleteRequirement(int no)

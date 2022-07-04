@@ -1,37 +1,27 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 
 public class LockedComputer : Computer
 {
+	public string password;
 	public UnityEvent OnUnlock;
-	
-	public override void PowerOn(bool on)
-	{
-		if(on)
-		{
-			StartCoroutine(PowerUp());
-		}
-		else
-		{
-			OnPowerOn.Invoke(false);
-		}
-	}
-
-	protected override IEnumerator PowerUp()
-	{
-		OnPowerOnStart.Invoke();
-		yield return new WaitForSeconds(turnOnTime);
-		PoweredOn();
-	}
+	public TextMeshProUGUI passwordText;
 
 	protected override void PoweredOn()
 	{
-		OnPowerOn.Invoke(true);
-	}
+		OnPowerOnFinish.Invoke();
+		OnUpdate += CheckInput;
+	}	
 
 	public virtual void Unlock() 
 	{
 		OnUnlock.Invoke();
+	}
+
+	protected override void OnCommandEntered()
+	{
+		passwordText.text = line;
 	}
 }

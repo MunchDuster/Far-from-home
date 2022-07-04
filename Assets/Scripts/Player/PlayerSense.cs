@@ -38,14 +38,10 @@ public class PlayerSense : MonoBehaviour
 	//To disable/enable sensing and also disable hover over any curent ineractable."
 	public void TurnOn()
 	{
-		Debug.Log("Turning on");
-
 		isOn = true;
 	}
 	public void TurnOff()
 	{
-		Debug.Log("Turning off");
-
 		isOn = false;
 
 		if (curHover != null) curHover.EndHover(hoverInfo);

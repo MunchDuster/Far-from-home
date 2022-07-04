@@ -2231,8 +2231,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.480428, y: 1.6713272, z: 1}
-  m_Center: {x: -0.49642313, y: 0.9573001, z: 0}
+  m_Size: {x: 3.480428, y: 1.0130134, z: 1}
+  m_Center: {x: -0.49642313, y: 0.6281432, z: 0}
 --- !u!1 &5849681357918436325
 GameObject:
   m_ObjectHideFlags: 0
@@ -2478,6 +2478,11 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 8895515884446047582}
     m_Modifications:
+    - target: {fileID: 2110430230853963914, guid: 9b3ff644c3b9cf64aacbb65f390f8587,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2427738048309342308, guid: 9b3ff644c3b9cf64aacbb65f390f8587,
         type: 3}
       propertyPath: m_RootOrder
@@ -2769,6 +2774,11 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 8895515884446047582}
     m_Modifications:
+    - target: {fileID: 2110430230853963914, guid: 9b3ff644c3b9cf64aacbb65f390f8587,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2427738048309342308, guid: 9b3ff644c3b9cf64aacbb65f390f8587,
         type: 3}
       propertyPath: m_RootOrder
@@ -2953,6 +2963,11 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 8895515884446047582}
     m_Modifications:
+    - target: {fileID: 2110430230853963914, guid: 9b3ff644c3b9cf64aacbb65f390f8587,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2427738048309342308, guid: 9b3ff644c3b9cf64aacbb65f390f8587,
         type: 3}
       propertyPath: m_RootOrder

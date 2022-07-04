@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,9 +10,10 @@ public abstract class Computer : MonoBehaviour
 	
 	public UnityEvent<bool> OnUserEnter;
 	public UnityEvent<bool> OnPowerOn;
-	public UnityEvent OnPowerOnStart;
+	public UnityEvent OnPowerOnFinish;
 
 	protected delegate void OnEvent();
+	protected event OnEvent OnUpdate;
 	
 	protected delegate void OnBoolEvent(bool aBool);
 	protected OnBoolEvent SetOn;
@@ -19,15 +21,26 @@ public abstract class Computer : MonoBehaviour
 	protected delegate void OnStringEvent(string aString);
 	protected OnStringEvent OnKeyPressed;
 	
-	public abstract void PowerOn(bool turnOn);
+	public virtual void PowerOn(bool on)
+	{
+		if(on)
+		{
+			StartCoroutine(PowerUp());
+		}
+		else
+		{
+			OnPowerOn.Invoke(false);
+			OnUpdate -= CheckInput;
+		}
+	}
 
 	protected abstract void PoweredOn();
-	protected abstract IEnumerator PowerUp();
 	
+	//Input
 	protected char GetKeyInput()
 	{
 		Event e = Event.current;
-		if (e.isKey && e.type == EventType.KeyDown)
+		if (e != null && e.isKey && e.type == EventType.KeyDown)
 		{
 			if(e.keyCode == KeyCode.None)
 			{
@@ -41,9 +54,58 @@ public abstract class Computer : MonoBehaviour
 		return '\0';
 	}
 
+	protected string line = "";
+	
+	protected void CheckInput()
+	{
+		char input = GetKeyInput();
+
+		if(input == '\n')
+		{
+			OnCommandEntered();
+			line = "";
+		}
+		else if(input == '\b')
+		{
+			ApplyBackspace(ref line);
+		}
+		else if(input != '\0')
+		{
+			OnCharEntered();
+			line += input;
+		}
+	}
+
+	protected virtual void OnCommandEntered() {}
+	protected virtual void OnCharEntered() {}
+
 	protected void ApplyBackspace(ref string text)
 	{
 		if(text == null || text.Length == 0) return;
 		text = text.Substring(0, text.Length - 1);
+	}
+
+	private void Update()
+	{
+		if(OnUpdate != null) OnUpdate.Invoke();
+	}
+
+	//Booting
+	public Slider startupSlider;
+	
+	protected virtual IEnumerator PowerUp()
+	{
+		OnPowerOn.Invoke(true);
+		
+		float timeSoFar = 0;
+		while(timeSoFar < turnOnTime)
+		{
+			startupSlider.value = timeSoFar / turnOnTime;
+			yield return new WaitForEndOfFrame();
+			timeSoFar += Time.deltaTime;
+		}
+		
+		OnPowerOnFinish.Invoke();
+		PoweredOn();
 	}
 }

@@ -59,7 +59,6 @@ public class RequirementList
 		if (task != null)
 		{
 			task.SetCompleted(completed);
-			Debug.Log("Task " + name + ", set completed " + completed);
 		}
 		else Debug.LogError("Requirement List CompleteTask by name, task not found: " + name);
 	}
