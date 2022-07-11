@@ -37,7 +37,7 @@ public class RocketComputer : Computer
 	public Animator animator;
 
 	[Header("Settings")]
-	public float dotsDelta = 0.25f;
+	
 	public float bootTime = 3;
 	public float blinkSpeed = 0.7f;
 	public string systemColour = "green";
@@ -53,7 +53,6 @@ public class RocketComputer : Computer
 	public UnityEvent OnAfterLaunched;
 
 	private OnEvent onGui;
-	private delegate void OnSetText(string text);
 	private Dictionary<string, OnEvent> commands = new Dictionary<string, OnEvent>();
 
 	//Console logs
@@ -135,7 +134,7 @@ public class RocketComputer : Computer
 		yield return StartCoroutine(LoadText(
 				"Booting", 
 				bootTime, 
-				(string text) => { loadingText.text = text; }, 
+				(string text) => { loadingText.text = SystemText(text); }, 
 				PoweredOn
 			)
 		);
@@ -144,6 +143,10 @@ public class RocketComputer : Computer
 	public void EnginesAreFuelled() 
 	{ 
 		enginesAreFuelled = true; 
+	}
+	public void PathIsCalculated()
+	{
+		flightPathCreated = true;
 	}
 	public void StartRollingCredits()
 	{
@@ -243,6 +246,7 @@ public class RocketComputer : Computer
 		}
 	}
 
+
 	private void OnDestroy()
 	{
 		StopAllCoroutines();
@@ -257,27 +261,6 @@ public class RocketComputer : Computer
 		OnFinishedCommand();
 	}
 
-	//Private functions
-	private IEnumerator LoadText(string text, float time, OnSetText setter, OnEvent callback = null)
-	{
-		int noOfDots = -1;
-
-		for (float t = 0; t < time; t += dotsDelta)
-		{
-			//Loop from 0 to 3 dots
-			noOfDots = ++noOfDots % 4;
-
-			//Put that many dots onto string
-			string dots = "";
-			for (int i = 0; i < noOfDots; i++) dots += ".";
-
-			setter(SystemText(text + dots));
-
-			yield return new WaitForSeconds(dotsDelta);
-		}
-
-		if(callback != null) callback();
-	}
 	private void UpdateInput()
 	{
 		char input = GetKeyInput();

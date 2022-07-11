@@ -7,30 +7,42 @@ using System.Collections.Generic;
 public abstract class Computer : MonoBehaviour
 {
 	public float turnOnTime = 2;
+	public float maxInputLength = 15;
 	
 	public UnityEvent<bool> OnUserEnter;
 	public UnityEvent<bool> OnPowerOn;
 	public UnityEvent OnPowerOnFinish;
+	public UnityEvent<bool> OnTooManyChars;
 
 	protected delegate void OnEvent();
 	protected event OnEvent OnUpdate;
+	protected event OnEvent OnGUIUpdate;
 	
 	protected delegate void OnBoolEvent(bool aBool);
 	protected OnBoolEvent SetOn;
 	
 	protected delegate void OnStringEvent(string aString);
 	protected OnStringEvent OnKeyPressed;
+
+	protected CoroutineBundle tooManyCharsBundle;
+	
+	// Awake is called when the gameObject is activated
+	protected virtual void Awake()
+	{
+		tooManyCharsBundle = new ErrorBundle(OnTooManyChars, 3);
+	}
 	
 	public virtual void PowerOn(bool on)
 	{
 		if(on)
 		{
 			StartCoroutine(PowerUp());
+			OnGUIUpdate += CheckInput;
 		}
 		else
 		{
 			OnPowerOn.Invoke(false);
-			OnUpdate -= CheckInput;
+			OnGUIUpdate -= CheckInput;
 		}
 	}
 
@@ -40,6 +52,7 @@ public abstract class Computer : MonoBehaviour
 	protected char GetKeyInput()
 	{
 		Event e = Event.current;
+
 		if (e != null && e.isKey && e.type == EventType.KeyDown)
 		{
 			if(e.keyCode == KeyCode.None)
@@ -64,15 +77,18 @@ public abstract class Computer : MonoBehaviour
 		{
 			OnCommandEntered();
 			line = "";
+			OnCharEntered();
 		}
 		else if(input == '\b')
 		{
 			ApplyBackspace(ref line);
+			OnCharEntered();
 		}
 		else if(input != '\0')
 		{
+			if(line.Length < maxInputLength) line += input;
+			else tooManyCharsBundle.Call();
 			OnCharEntered();
-			line += input;
 		}
 	}
 
@@ -88,6 +104,11 @@ public abstract class Computer : MonoBehaviour
 	private void Update()
 	{
 		if(OnUpdate != null) OnUpdate.Invoke();
+	}
+
+	private void OnGUI()
+	{
+		if(OnGUIUpdate != null) OnGUIUpdate.Invoke();
 	}
 
 	//Booting
@@ -107,5 +128,29 @@ public abstract class Computer : MonoBehaviour
 		
 		OnPowerOnFinish.Invoke();
 		PoweredOn();
+	}
+
+	//Loading
+	private float dotsDelta = 0.25f;
+	protected delegate void OnSetText(string text);
+	protected IEnumerator LoadText(string text, float time, OnSetText setter, OnEvent callback = null)
+	{
+		int noOfDots = -1;
+
+		for (float t = 0; t < time; t += dotsDelta)
+		{
+			//Loop from 0 to 3 dots
+			noOfDots = ++noOfDots % 4;
+
+			//Put that many dots onto string
+			string dots = "";
+			for (int i = 0; i < noOfDots; i++) dots += ".";
+
+			setter(text + dots);
+
+			yield return new WaitForSeconds(dotsDelta);
+		}
+
+		if(callback != null) callback();
 	}
 }
