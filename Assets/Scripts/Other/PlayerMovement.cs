@@ -178,7 +178,7 @@ public class PlayerMovement : MonoBehaviour
 		// Clamp pitch between lookAngle
 		pitch = Mathf.Clamp(pitch, -maxLookAngle, maxLookAngle);
 		transform.localEulerAngles = new Vector3(0, yaw, 0);
-		playerCamera.transform.localEulerAngles = new Vector3(pitch, 0, 0);
+		joint.transform.localEulerAngles = new Vector3(pitch, 0, 0);
 	}
 	private void UpdateSprint()
 	{

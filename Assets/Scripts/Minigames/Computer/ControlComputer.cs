@@ -14,19 +14,49 @@ public class ControlComputer: LockedComputer
 
 	public bool hasCalculatedFlightPath = false;
 
-	protected ErrorBundle cantUploadBundle;
 	public UnityEvent<bool> CantUploadError;
+
+	public Texture2D customCursorTexture;
+	public Vector2 customCursorOffset;
+
+	public UnityEvent<bool> OnDataEnterError;
+
+	protected ErrorBundle cantUploadBundle;
+	protected ErrorBundle dataInputErrorBundle;
+
+	public string targetCoordinates;
+	public string rocketModel;
+	public string rocketMass;
+
+	public bool enteredTC, enteredRMa, enteredRMo;
 
 	// Awake is called when the gameObject is activated
 	protected override void Awake()
 	{
-		cantUploadBundle = new ErrorBundle(CantUploadError, 3);
+		cantUploadBundle = gameObject.AddComponent<ErrorBundle>();
+		cantUploadBundle.Setup(CantUploadError, 3);
+		dataInputErrorBundle = gameObject.AddComponent<ErrorBundle>();
+		dataInputErrorBundle.Setup(OnDataEnterError, 3);
+
 		base.Awake();
 	}
 
+	public void UseCustomCursor(bool useCustomCursor)
+	{
+		if(useCustomCursor)
+			Cursor.SetCursor(customCursorTexture, customCursorOffset, CursorMode.Auto);
+		else
+			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+	}
 
 	public void CalculateFlightPath()
 	{
+		if(!enteredTC || !enteredRMo || !enteredRMa)
+		{
+			dataInputErrorBundle.Call();
+			return;
+		}
+
 		float loadTime = 3;
 		StartCoroutine(LoadBar(loadSlider, loadTime));
 		StartCoroutine(LoadText(
@@ -40,6 +70,42 @@ public class ControlComputer: LockedComputer
 		));
 	}
 
+	public void OnEnterTargetCoordinates(string text)
+	{
+		if(text != targetCoordinates)
+		{
+			dataInputErrorBundle.Call();
+		}
+		else
+		{
+			enteredTC = true;
+		}
+	}
+
+	public void OnEnterRocketModel(string text)
+	{
+		if(text != rocketModel)
+		{
+			dataInputErrorBundle.Call();
+		}
+		else
+		{
+			enteredRMo = true;
+		}
+	}
+
+	public void OnEterRocketMass(string text)
+	{
+		if(text != rocketMass)
+		{
+			dataInputErrorBundle.Call();
+		}
+		else
+		{
+			enteredRMa = true;
+		}
+	}
+
 	public void UploadFlightPath()
 	{
 
@@ -48,7 +114,6 @@ public class ControlComputer: LockedComputer
 			cantUploadBundle.Call();
 			return;
 		}
-
 		
 		float loadTime = 3;
 		StartCoroutine(LoadBar(loadSlider, loadTime));

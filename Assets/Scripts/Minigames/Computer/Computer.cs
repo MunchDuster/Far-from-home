@@ -24,12 +24,13 @@ public abstract class Computer : MonoBehaviour
 	protected delegate void OnStringEvent(string aString);
 	protected OnStringEvent OnKeyPressed;
 
-	protected CoroutineBundle tooManyCharsBundle;
+	protected ErrorBundle tooManyCharsBundle;
 	
 	// Awake is called when the gameObject is activated
 	protected virtual void Awake()
 	{
-		tooManyCharsBundle = new ErrorBundle(OnTooManyChars, 3);
+		tooManyCharsBundle = gameObject.AddComponent<ErrorBundle>();
+		tooManyCharsBundle.Setup(OnTooManyChars, 3);
 	}
 	
 	public virtual void PowerOn(bool on)
