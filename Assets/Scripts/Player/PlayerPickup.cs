@@ -45,7 +45,7 @@ public class PlayerPickup : MonoBehaviour
 
 		//Reset the local transform of the item
 		item.transform.localPosition = item.offset;
-		item.transform.localRotation = Quaternion.identity;
+		item.transform.localRotation = Quaternion.Euler(item.offsetRotation);
 	}
 	public void Drop(bool enableRigidbody = true)
 	{

@@ -263,8 +263,6 @@ public class PlayerMovement : MonoBehaviour
 	}
 	private void Jump()
 	{
-
-		Debug.Log("Jumping");
 		awaitingJump = true;
 		
 		// Uncrouch for a jump

@@ -58,6 +58,8 @@ public class WeldPlateScorer : MonoBehaviour
 		scorePixels = GetScorePixels();
 		scorePixelsNotWelded = new List<Vector2Int>(scorePixels);
 
+		if(weldPlace == null) Debug.LogError("Weld Plate has no Weld Place!");
+
 		weldPlace.OnGameFixedUpdate += OnGameFixedUpdate;
 	}
 

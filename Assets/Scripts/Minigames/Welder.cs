@@ -49,7 +49,6 @@ public class Welder : MonoBehaviour
 	private void StartHeat()
 	{
 		isHeating = true;
-
 		OnTurnOn.Invoke();
 	}
 
@@ -76,12 +75,12 @@ public class Welder : MonoBehaviour
 
 		plate.plane.Raycast(ray, out float distance);
 
-		gunTargetPos = ray.GetPoint(distance) + plate.plane.normal * gunDistanceFromPlane;
+		gunTargetPos = ray.GetPoint(distance) - plate.plane.normal * gunDistanceFromPlane;
 	}
 
 	private void UpdateGunPos()
 	{
-		gun.rotation = Quaternion.LookRotation(plate.plane.normal) * Quaternion.Euler(-90, 0, 0);
 		gun.position = gunTargetPos;
+		gun.rotation = Quaternion.LookRotation(plate.plane.normal) * Quaternion.Euler(90, 0, 0);
 	}
 }

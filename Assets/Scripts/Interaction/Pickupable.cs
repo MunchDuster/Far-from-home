@@ -4,7 +4,8 @@ using UnityEngine.Events;
 public class Pickupable : Interactable
 {
 	public UnityEvent OnPickup;
-	public Vector3 offset; 
+	public Vector3 offset;
+	public Vector3 offsetRotation;
 	public override InteractionInfo Interact(Player player)
 	{
 		if (player.pickuper.item == null)
