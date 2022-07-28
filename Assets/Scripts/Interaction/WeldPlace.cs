@@ -50,6 +50,7 @@ public class WeldPlace : Minigame
 				plate.transform.position = plateTransform.position;
 				plate.transform.rotation = plateTransform.rotation;
 				plate.transform.parent = transform;
+				plate.RecalculatePlane();
 
 				player.pickuper.Drop(false);
 
@@ -66,12 +67,12 @@ public class WeldPlace : Minigame
 		{
 			if (player.pickuper.item == welderPickup)
 			{
+				plate.StartWelding();
 				welder.plate = plate;
 				OnGameUpdate += welder.GameUpdate;
 
 				Debug.Log("Starting weld");
 
-				plate.StartWelding();
 
 				return InteractionInfo.Success();
 			}

@@ -173,6 +173,7 @@ public class RocketComputer : Computer
 
 		OnFinishedCommand();
 	}
+	
 	private IEnumerator RunDiagnostics()
 	{
 		Line loadingLine = new Line("");
@@ -184,6 +185,7 @@ public class RocketComputer : Computer
 
 		if (enginesAreFuelled)
 		{
+			//Yes fuel
 			new Line(SystemText("Engines Fuelled: " + tick));
 
 			yield return StartCoroutine(LoadText("Checking", 2, (string text) => { loadingLine.text = text; }));
@@ -196,12 +198,15 @@ public class RocketComputer : Computer
 			}
 			else
 			{
+				//No flight path
 				loadingLine.text += SystemText(" Error.", 2);
 				new Line(SystemText("Flight path: " + cross, 2));
+				PlayerUI.ui.AddTask("Calculate flight path");
 			}
 		}
 		else
 		{
+			//No fuel
 			loadingLine.text += SystemText(" Error.", 2);
 			new Line(SystemText("Engines Fuelled: " + cross, 2));
 			PlayerUI.ui.AddTask("Fuel Engines x4");
@@ -209,6 +214,7 @@ public class RocketComputer : Computer
 
 		OnFinishedCommand();
 	}
+	
 	private IEnumerator Launch()
 	{
 		Line initLine = new Line();
@@ -245,7 +251,6 @@ public class RocketComputer : Computer
 			OnFinishedCommand();
 		}
 	}
-
 
 	private void OnDestroy()
 	{

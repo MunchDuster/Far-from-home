@@ -58,14 +58,17 @@ public class Welder : MonoBehaviour
 		OnTurnOff.Invoke();
 	}
 
+	Vector3 heatPoint;
+	Ray heatRay;
+
 	private void ApplyHeat()
 	{
-		Ray ray = new Ray(gunPoint.position, gunPoint.forward);
+		heatRay = new Ray(gunPoint.position, gunPoint.forward);
 
-		plate.plane.Raycast(ray, out float intersect);
-		Vector3 point = ray.GetPoint(intersect);
+		plate.plane.Raycast(heatRay, out float intersect);
+		heatPoint = heatRay.GetPoint(intersect);
 
-		plate.AddHeat(point, heatPerSecond * Time.deltaTime);
+		plate.AddHeat(heatPoint, heatPerSecond * Time.deltaTime);
 	}
 
 	Vector3 gunTargetPos;
@@ -75,12 +78,38 @@ public class Welder : MonoBehaviour
 
 		plate.plane.Raycast(ray, out float distance);
 
-		gunTargetPos = ray.GetPoint(distance) - plate.plane.normal * gunDistanceFromPlane;
+		gunTargetPos = ray.GetPoint(distance) + plate.plane.normal * gunDistanceFromPlane;
 	}
 
 	private void UpdateGunPos()
 	{
 		gun.position = gunTargetPos;
-		gun.rotation = Quaternion.LookRotation(plate.plane.normal) * Quaternion.Euler(90, 0, 0);
+		gun.rotation = Quaternion.LookRotation(plate.plane.normal) * Quaternion.Euler(-90, 0, 0);
+	}
+
+	// OnDrawGizmos is called every editor update
+	private void OnDrawGizmos()
+	{
+		if(gunTargetPos != null)
+		{
+			Gizmos.color = Color.green;
+			Gizmos.DrawWireSphere(gunTargetPos, 0.1f);
+
+			if(heatPoint != null)
+			{
+				Gizmos.color = Color.cyan;
+				Gizmos.DrawWireSphere(heatPoint, 0.1f);
+				Gizmos.color = Color.red;
+				Gizmos.DrawRay(heatRay.origin, heatRay.direction);
+			}
+			Gizmos.color = Color.red;
+			Gizmos.DrawWireSphere(plate.topLeft, 0.1f);
+			Gizmos.DrawWireSphere(plate.topRight, 0.1f);
+			Gizmos.DrawWireSphere(plate.bottomLeft, 0.1f);
+			Gizmos.DrawWireSphere(plate.bottomRight, 0.1f);
+			Gizmos.color = Color.blue;
+			Gizmos.DrawRay(plate.normal.position, plate.normal.forward);
+		}
+
 	}
 }

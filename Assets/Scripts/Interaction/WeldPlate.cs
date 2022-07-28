@@ -33,7 +33,7 @@ public class WeldPlate : Pickupable
 	private float[,] heatGrid;
 	private Coroutine heatUpdateCoroutine;
 
-	private Vector3 topLeft, topRight, bottomLeft, bottomRight;
+	public Vector3 topLeft, topRight, bottomLeft, bottomRight;
 	Vector3 top, right;
 
 	[HideInInspector] public Color32[] baseColors;
@@ -140,7 +140,7 @@ public class WeldPlate : Pickupable
 		};
 
 		
-// float[] sides = new float[] {
+			// float[] sides = new float[] {
 				// 	lastHeats[i + 0, j + 1], //Up
 				// 	lastHeats[i + 0, j - 1], //Down
 				// 	lastHeats[i + 1, j + 0], //Right
@@ -256,6 +256,11 @@ public class WeldPlate : Pickupable
 		bottomRight = normal.position - top + right;
 	}
 
+	public void RecalculatePlane()
+	{
+		plane = new Plane(normal.forward, normal.position);
+	}
+
 	// Start is called before the first frame update
 	private void Start()
 	{
@@ -267,11 +272,5 @@ public class WeldPlate : Pickupable
 		texture.filterMode = FilterMode.Point;
 
 		renderer.material.mainTexture = texture;
-	}
-
-	// Update is called every frame
-	private void Update()
-	{
-		plane.SetNormalAndPosition(normal.forward, normal.position);
 	}
 }
