@@ -66,9 +66,14 @@ public class Door : Interactable
 	}
 
 	//Allow for unityEvents to set task completed
-	public void CompleteOpenRequirement(bool complete, string name)
+	public void CompleteOpenRequirement(string name, bool complete)
 	{
 		openRequirements.SetTaskCompleted(name, complete);
+	}
+	public string autoCompleteTaskName;
+	public void CompleteOpenRequirement(bool complete)
+	{
+		openRequirements.SetTaskCompleted(autoCompleteTaskName, complete);
 	}
 	public void CompleteOpenRequirement(string name)
 	{

@@ -140,6 +140,19 @@ public class RocketComputer : Computer
 		);
 	}
 
+	public float engines = 3;
+	private int enginesFuelled;
+
+	public void EngineFuelled() 
+	{
+		enginesFuelled++;
+		if(enginesFuelled == engines) 
+		{
+			PlayerUI.ui.CompleteTask("Fuel Engines x3");
+			enginesAreFuelled = true;
+		}
+	}
+
 	public void EnginesAreFuelled() 
 	{ 
 		enginesAreFuelled = true; 
@@ -209,7 +222,7 @@ public class RocketComputer : Computer
 			//No fuel
 			loadingLine.text += SystemText(" Error.", 2);
 			new Line(SystemText("Engines Fuelled: " + cross, 2));
-			PlayerUI.ui.AddTask("Fuel Engines x4");
+			PlayerUI.ui.AddTask("Fuel Engines x3");
 		}
 
 		OnFinishedCommand();

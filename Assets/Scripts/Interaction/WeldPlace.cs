@@ -1,19 +1,25 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class WeldPlace : Minigame
 {
+	public static WeldPlace current;
+
 	public Transform plateTransform;
 
-	public UnityEvent onStartGame;
-	public UnityEvent onStopGame;
-
+	public UnityEvent<bool> onStartGame;
 	public Welder welder;
 	public Transform welderPoint;
 	public Pickupable welderPickup;
 
 	[HideInInspector] public WeldPlate plate;
 
+	// Awake is called when the gameObject is activated
+	private void Awake()
+	{
+		current = this;
+	}
 	// Start is called before the first frame update
 	private void Start()
 	{
@@ -22,14 +28,13 @@ public class WeldPlace : Minigame
 
 	private void PlayerJoin(bool on)
 	{
+		onStartGame.Invoke(on);
 		if(on)
 		{
 			welder.welderBase.position = welderPoint.position;
-			onStartGame.Invoke();
 		}
 		else
 		{
-			onStopGame.Invoke();
 			OnGameUpdate -= welder.GameUpdate;
 			plate.StopWelding();
 			Debug.Log("Leaving weld");

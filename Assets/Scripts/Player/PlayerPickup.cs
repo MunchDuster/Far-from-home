@@ -18,7 +18,6 @@ public class PlayerPickup : MonoBehaviour
 	//Vars to switch back when dropping
 	private Transform oldParent;
 	private Rigidbody rb;
-	private Collider[] cols;
 
 	//Main functions
 	public void Pickup(Pickupable pickupable)
@@ -32,13 +31,6 @@ public class PlayerPickup : MonoBehaviour
 		//Disable the rigibody on the item
 		rb = item.gameObject.GetComponent<Rigidbody>();
 		if (rb != null) rb.isKinematic = true;
-
-		//Disable any colliders on the item
-		cols = item.gameObject.GetComponentsInChildren<Collider>();
-		foreach (Collider col in cols)
-		{
-			if (col != null) col.enabled = false;
-		}
 
 		//Reparent to the transform
 		item.transform.SetParent(itemParent);
@@ -55,12 +47,6 @@ public class PlayerPickup : MonoBehaviour
 
 		//Enable the rigibody on the item
 		if (rb != null) rb.isKinematic = !enableRigidbody;
-
-		//Disable any cols on the item
-		foreach (Collider col in cols)
-		{
-			if (col != null) col.enabled = enableRigidbody;
-		}
 
 		//Reparent to the old transform
 		item.transform.SetParent(oldParent);

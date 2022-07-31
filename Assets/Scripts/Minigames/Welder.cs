@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class Welder : MonoBehaviour
 {
@@ -15,8 +16,7 @@ public class Welder : MonoBehaviour
 	public LayerMask weldLayerMask;
 
 	[Space(10)]
-	public UnityEvent OnTurnOn;
-	public UnityEvent OnTurnOff;
+	public UnityEvent<bool> OnTurnOn;
 	private bool isHeating;
 
 	//Update is called every frame.
@@ -43,19 +43,21 @@ public class Welder : MonoBehaviour
 			}
 		}
 
+		ApplyHeat(); //TEMP
+
 		UpdateGunPos();
 	}
 
 	private void StartHeat()
 	{
 		isHeating = true;
-		OnTurnOn.Invoke();
+		OnTurnOn.Invoke(true);
 	}
 
 	private void EndHeat()
 	{
 		isHeating = false;
-		OnTurnOff.Invoke();
+		OnTurnOn.Invoke(false);
 	}
 
 	Vector3 heatPoint;
@@ -67,7 +69,6 @@ public class Welder : MonoBehaviour
 
 		plate.plane.Raycast(heatRay, out float intersect);
 		heatPoint = heatRay.GetPoint(intersect);
-
 		plate.AddHeat(heatPoint, heatPerSecond * Time.deltaTime);
 	}
 
@@ -101,12 +102,9 @@ public class Welder : MonoBehaviour
 				Gizmos.DrawWireSphere(heatPoint, 0.1f);
 				Gizmos.color = Color.red;
 				Gizmos.DrawRay(heatRay.origin, heatRay.direction);
+				Gizmos.color = Color.yellow;
+				Gizmos.DrawRay(gunPoint.position, gunPoint.forward);
 			}
-			Gizmos.color = Color.red;
-			Gizmos.DrawWireSphere(plate.topLeft, 0.1f);
-			Gizmos.DrawWireSphere(plate.topRight, 0.1f);
-			Gizmos.DrawWireSphere(plate.bottomLeft, 0.1f);
-			Gizmos.DrawWireSphere(plate.bottomRight, 0.1f);
 			Gizmos.color = Color.blue;
 			Gizmos.DrawRay(plate.normal.position, plate.normal.forward);
 		}

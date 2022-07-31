@@ -11,20 +11,13 @@ public class Engine : Minigame
 	public float maxFuel = 40;
 
 	[Space(10)]
-	public Pickupable fuelCan;
-	public Flow fuelFlow;
+	public FuelCan fuelCan;
 	public Color sliderStartColor;
 	public Color sliderStopColor;
 
 	[Space(10)]
 	public Transform itemPlane;
 	public Transform fuelPoint;
-	public Transform fuelHandle;
-	public Transform fuelNozzle;
-
-	[Space(10)]
-	public Slider fullnessSlider;
-	public Image fullnessSliderImage;
 
 	[Space(10)]
 	public UnityEvent<bool> OnPlayerJoined;
@@ -35,6 +28,8 @@ public class Engine : Minigame
 	private Plane plane;
 	private float fuel;
 
+
+
 	// Start is called before the first frame update
 	protected void Start()
 	{
@@ -42,7 +37,7 @@ public class Engine : Minigame
 		OnGameUpdate += UpdateInput;
 		OnGameFixedUpdate += GameUpdate;
 
-		plane = new Plane(itemPlane.forward, itemPlane.position);
+		plane = new Plane(itemPlane.right, itemPlane.position);
 	}
 
 	protected override InteractionInfo CheckRequirements(Player player)
@@ -65,7 +60,7 @@ public class Engine : Minigame
 		{
 			OnPlayerJoined.Invoke(false);
 			rb.isKinematic = true;
-			fullnessSliderImage.color = sliderStopColor;
+			fuelCan.fullnessSliderFillImage.color = sliderStopColor;
 			player.pickuper.isAllowedToDropItem = true;
 			//Reset pickup position
 			fuelCan.transform.localPosition = Vector3.zero;
@@ -74,8 +69,8 @@ public class Engine : Minigame
 	}
 	private void SetupSlider()
 	{
-		fullnessSlider.value = fuel / maxFuel;
-		fullnessSliderImage.color = (fuel < maxFuel) ? sliderStartColor : sliderStopColor;
+		fuelCan.fullnessSlider.value = fuel / maxFuel;
+		fuelCan.fullnessSliderFillImage.color = (fuel < maxFuel) ? sliderStartColor : sliderStopColor;
 	}
 	private void SetupPlayer()
 	{
@@ -85,8 +80,8 @@ public class Engine : Minigame
 	}
 	private void SetupFuelCan()
 	{
-		fuelFlow.fuelPoint = fuelPoint;
-		fuelFlow.engine = this;
+		fuelCan.flow.fuelPoint = fuelPoint;
+		fuelCan.flow.engine = this;
 		
 		fuelCan.GetComponent<Collider>().enabled = true;
 		fuelCan.transform.position = targetPos;
@@ -101,18 +96,18 @@ public class Engine : Minigame
 	}
 	private void GameUpdate()
 	{
-		Vector3 fuelHandleOnPlane = plane.ClosestPointOnPlane(fuelHandle.position);
+		Vector3 fuelHandleOnPlane = plane.ClosestPointOnPlane(fuelCan.handle.position);
 
 
 		//Go to mouse position
 		Vector3 handleDirection = targetPos - fuelHandleOnPlane;
-		Debug.DrawRay(fuelHandle.position, handleDirection, Color.red);
-		rb.AddForceAtPosition(handleDirection.normalized * bodyStiffness * Time.fixedDeltaTime * handleDirection.magnitude, fuelHandle.position);
+		Debug.DrawRay(fuelCan.handle.position, handleDirection, Color.red);
+		rb.AddForceAtPosition(handleDirection.normalized * bodyStiffness * Time.fixedDeltaTime * handleDirection.magnitude, fuelCan.handle.position);
 
 		//Point towards feulPoint
-		Vector3 nozzleDirection = fuelPoint.position - fuelNozzle.position;
-		Debug.DrawRay(fuelNozzle.position, nozzleDirection, Color.green);
-		rb.AddForceAtPosition(nozzleDirection.normalized * nozzleStiffness * Time.fixedDeltaTime, fuelNozzle.position);
+		Vector3 nozzleDirection = fuelPoint.position - fuelCan.nozzle.position;
+		Debug.DrawRay(fuelCan.nozzle.position, nozzleDirection, Color.green);
+		rb.AddForceAtPosition(nozzleDirection.normalized * nozzleStiffness * Time.fixedDeltaTime, fuelCan.nozzle.position);
 
 		Vector3 rbOnPlane = plane.ClosestPointOnPlane(rb.position);
 		float distance = (rbOnPlane - rb.position).magnitude;
@@ -145,13 +140,13 @@ public class Engine : Minigame
 		if (fuel >= maxFuel)
 		{
 			Debug.Log("Full!");
-			fullnessSlider.value = 1;
-			fullnessSliderImage.color = sliderStopColor;
+			fuelCan.fullnessSlider.value = 1;
+			fuelCan.fullnessSliderFillImage.color = sliderStopColor;
 			OnFuelled.Invoke();
 		}
 		else
 		{
-			fullnessSlider.value = fuel / maxFuel;
+			fuelCan.fullnessSlider.value = fuel / maxFuel;
 		}
 	}
 }

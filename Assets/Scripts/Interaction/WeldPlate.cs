@@ -273,4 +273,15 @@ public class WeldPlate : Pickupable
 
 		renderer.material.mainTexture = texture;
 	}
+
+	// OnDrawGizmos is called every editor update
+	private void OnDrawGizmosSelected()
+	{
+		UpdateCorners();
+		Gizmos.color = Color.red;
+			Gizmos.DrawWireSphere(topLeft, 0.1f);
+			Gizmos.DrawWireSphere(topRight, 0.1f);
+			Gizmos.DrawWireSphere(bottomLeft, 0.1f);
+			Gizmos.DrawWireSphere(bottomRight, 0.1f);
+	}
 }

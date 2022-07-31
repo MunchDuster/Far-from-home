@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(WeldPlate))]
 public class WeldPlateScorer : MonoBehaviour
 {
 	public float maxDistance = 0.1f;
 
-	public WeldPlace weldPlace;
+	private WeldPlace weldPlace;
 
 	public UnityEvent OnCompleted;
 
@@ -19,8 +20,7 @@ public class WeldPlateScorer : MonoBehaviour
 	public Vector2Int C;
 	public Vector2Int D;
 
-	public WeldPlate weldPlate;
-
+	private WeldPlate weldPlate;
 
 	private struct Line
 	{
@@ -55,12 +55,12 @@ public class WeldPlateScorer : MonoBehaviour
 	// Start is called before the first frame update
 	private void Start()
 	{
+		weldPlate = GetComponent<WeldPlate>();
+		weldPlace = WeldPlace.current;
+		weldPlace.OnGameFixedUpdate += OnGameFixedUpdate;
+
 		scorePixels = GetScorePixels();
 		scorePixelsNotWelded = new List<Vector2Int>(scorePixels);
-
-		if(weldPlace == null) Debug.LogError("Weld Plate has no Weld Place!");
-
-		weldPlace.OnGameFixedUpdate += OnGameFixedUpdate;
 	}
 
 	bool hasCompleted = false;
