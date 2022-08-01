@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour
 {
 	//Refs
-	private Rigidbody rb;
+	[HideInInspector] public Rigidbody rb;
 	public Transform joint;
 	public Camera playerCamera;
 

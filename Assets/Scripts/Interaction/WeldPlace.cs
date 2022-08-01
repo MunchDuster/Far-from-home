@@ -6,7 +6,7 @@ public class WeldPlace : Minigame
 {
 	public static WeldPlace current;
 
-	public Transform plateTransform;
+	public Transform platePlace;
 
 	public UnityEvent<bool> onStartGame;
 	public Welder welder;
@@ -52,8 +52,8 @@ public class WeldPlace : Minigame
 			else if (player.pickuper.item.GetType() == typeof(WeldPlate))
 			{
 				plate = player.pickuper.item as WeldPlate;
-				plate.transform.position = plateTransform.position;
-				plate.transform.rotation = plateTransform.rotation;
+				plate.transform.position = platePlace.position;
+				plate.transform.rotation = platePlace.rotation;
 				plate.transform.parent = transform;
 				plate.RecalculatePlane();
 

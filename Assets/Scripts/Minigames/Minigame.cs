@@ -29,6 +29,7 @@ public abstract class Minigame : Interactable
 		if (info.success)
 		{
 			this.player = player;
+			player.movement.rb.isKinematic = true;
 			StartGame();
 		}
 
@@ -97,6 +98,8 @@ public abstract class Minigame : Interactable
 		player.movement.playerCanMove = true;
 		player.movement.cameraCanMove = true;
 		player.movement.enableHeadBob = true;
+
+		player.movement.rb.isKinematic = false;
 
 		PlayerUI.ui.minigameText.text = "";
 		PlayerUI.ui.minigameTip.text = "";

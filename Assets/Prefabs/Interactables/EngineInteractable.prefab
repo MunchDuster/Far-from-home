@@ -4856,7 +4856,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8299786931802995318}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: -0.052999903, y: 0.70901537, z: 1.781672}
+  m_LocalPosition: {x: -0.053, y: 0.742, z: 1.592}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4931,9 +4931,9 @@ MonoBehaviour:
   outline: {fileID: 0}
   cameraPoint: {fileID: 8299786933706236846}
   playerTip: Hold mouse to set target point
-  bodyStiffness: 3
-  nozzleStiffness: 3
-  alignmentStiffness: 3
+  bodyStiffness: 15
+  nozzleStiffness: 15
+  alignmentStiffness: 15
   maxFuel: 40
   fuelCan: {fileID: 0}
   sliderStartColor: {r: 0, g: 0, b: 0, a: 0}
@@ -4946,6 +4946,9 @@ MonoBehaviour:
   OnFuelled:
     m_PersistentCalls:
       m_Calls: []
+  handleDampingStiffness: 0.2
+  nozzleDampingStiffness: 0.2
+  alignmentDampingStiffness: 0.2
 --- !u!1 &8299786933706236847
 GameObject:
   m_ObjectHideFlags: 0

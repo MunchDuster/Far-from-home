@@ -94,26 +94,34 @@ public class Engine : Minigame
 			targetPos = GetItemTargetPosition(Input.mousePosition);
 		}
 	}
+	private Vector3 GetSpringForce(Vector3 damping, Vector3 force)
+	{
+		return (force - damping) * Time.fixedDeltaTime;
+	}
+
+	[Space(10)]
+	public float handleDampingStiffness = 1;
+	public float nozzleDampingStiffness = 1;
+	public float alignmentDampingStiffness = 1;
 	private void GameUpdate()
 	{
-		Vector3 fuelHandleOnPlane = plane.ClosestPointOnPlane(fuelCan.handle.position);
-
-
 		//Go to mouse position
-		Vector3 handleDirection = targetPos - fuelHandleOnPlane;
-		Debug.DrawRay(fuelCan.handle.position, handleDirection, Color.red);
-		rb.AddForceAtPosition(handleDirection.normalized * bodyStiffness * Time.fixedDeltaTime * handleDirection.magnitude, fuelCan.handle.position);
+		Vector3 handleForce = (targetPos - plane.ClosestPointOnPlane(fuelCan.handle.position)) * bodyStiffness;
+		Vector3 handleDamping = handleDampingStiffness * rb.GetPointVelocity(fuelCan.handle.position);
+		Debug.DrawRay(fuelCan.handle.position, handleForce, Color.red);
+		rb.AddForceAtPosition(GetSpringForce(handleDamping, handleForce), fuelCan.handle.position);
 
 		//Point towards feulPoint
-		Vector3 nozzleDirection = fuelPoint.position - fuelCan.nozzle.position;
-		Debug.DrawRay(fuelCan.nozzle.position, nozzleDirection, Color.green);
-		rb.AddForceAtPosition(nozzleDirection.normalized * nozzleStiffness * Time.fixedDeltaTime, fuelCan.nozzle.position);
+		Vector3 nozzleForce = (fuelPoint.position - fuelCan.nozzle.position).normalized * nozzleStiffness;
+		Vector3 nozzleDamping = nozzleDampingStiffness * rb.GetPointVelocity(fuelCan.nozzle.position);
+		Debug.DrawRay(fuelCan.nozzle.position, nozzleForce, Color.green);
+		rb.AddForceAtPosition(GetSpringForce(nozzleDamping, nozzleForce), fuelCan.nozzle.position);
 
-		Vector3 rbOnPlane = plane.ClosestPointOnPlane(rb.position);
-		float distance = (rbOnPlane - rb.position).magnitude;
-		Vector3 alignmentForce = (rbOnPlane - rb.position) * (distance) * alignmentStiffness;
+		//Keep on plane
+		Vector3 alignmentForce = (plane.ClosestPointOnPlane(rb.position) - rb.position) * alignmentStiffness;
+		Vector3 alignmentDamping = alignmentDampingStiffness * Vector3.Project(rb.velocity, plane.normal);
 		Debug.DrawRay(rb.position, alignmentForce, Color.blue);
-		rb.AddForce(alignmentForce);
+		rb.AddForce(GetSpringForce(alignmentDamping, alignmentForce));
 	}
 
 	private Vector3 GetItemTargetPosition(Vector2 screenPos)
