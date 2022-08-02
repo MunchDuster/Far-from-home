@@ -72,16 +72,10 @@ public class Rocket : MonoBehaviour
 				speed = Mathf.Min(speed + deltaSpeed, targetSpeed);
 			}
 
-			Debug.Log("Speed: " + speed);
-
 			y += speed * Time.deltaTime;
 			normalPos = new Vector3(normalPos.x, y, normalPos.z);
 
-			Debug.Log("Y: " + y);
-
 			Vector3 shakedPos = AddShake(normalPos);
-
-			Debug.Log("shake Y: " + shakedPos.y);
 
 			transform.position = shakedPos;
 

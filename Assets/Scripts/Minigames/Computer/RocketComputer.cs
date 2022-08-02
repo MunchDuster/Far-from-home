@@ -37,7 +37,7 @@ public class RocketComputer : Computer
 	public Animator animator;
 
 	[Header("Settings")]
-	
+	public float maxPreferredHeight = 100;
 	public float bootTime = 3;
 	public float blinkSpeed = 0.7f;
 	public string systemColour = "green";
@@ -52,12 +52,10 @@ public class RocketComputer : Computer
 	public UnityEvent OnLaunch;
 	public UnityEvent OnAfterLaunched;
 
-	private OnEvent onGui;
 	private Dictionary<string, OnEvent> commands = new Dictionary<string, OnEvent>();
 
 	//Console logs
 	private Line inputLine;
-	private string inputText;
 	private bool takingInput;
 
 	// Start is called before the first frame update
@@ -83,15 +81,12 @@ public class RocketComputer : Computer
 		new Line(SystemText("Enter \"help\" for a list of commands."));
 		inputLine = new Line();
 
-		UpdateConsole();
-
-		onGui += UpdateInput;
-		onGui += UpdateConsole;
+		OnCharEntered();
+		caretBlinker = StartCoroutine(BlinkCaret());
 	}
 	private void OnFinishedCommand()
 	{
 		inputLine = new Line();
-		inputText = "";
 		takingInput = true;
 	}
 
@@ -107,26 +102,25 @@ public class RocketComputer : Computer
 	{
 		return (Time.time % blinkSpeed < blinkSpeed / 2) ? "\u2588" : "";
 	}
+	private Coroutine caretBlinker;
 
 	//Main public functions
 	public override void PowerOn(bool on)
 	{
+		takingInput = on;
+
 		if(on)
 		{
 			consoleText.text = "";
-			Line.lines.Clear();
-
-			takingInput = true;
-
-			
-			StartCoroutine(PowerUp());
+			Line.lines.Clear();			
 		}
 		else
 		{
-			onGui = null;
-			OnPowerOn.Invoke(false);
 			takingInput = false;
+			if(caretBlinker != null) StopCoroutine(caretBlinker);
 		}
+
+		base.PowerOn(on);
 	}
 
 	protected override IEnumerator PowerUp()
@@ -159,6 +153,7 @@ public class RocketComputer : Computer
 	}
 	public void PathIsCalculated()
 	{
+		PlayerUI.ui.CompleteTask("Calculate flight path");
 		flightPathCreated = true;
 	}
 	public void StartRollingCredits()
@@ -168,14 +163,17 @@ public class RocketComputer : Computer
 	}
 	private IEnumerator RollCredits()
 	{
+		Debug.Log("Rolling Credits");
 		new Line("<u>Credits</u>");
+		UpdateConsole();
 
 		int i = 0;
 		while(true)
 		{
 			yield return new WaitForSeconds(2);
-			new Line(credits[i]);
-			i = (i + 1) % Line.lines.Count;
+			if(i < credits.Length) new Line(SystemText(credits[i++]));
+			else new Line("");
+			UpdateConsole();
 		}
 	}
 	//Commands
@@ -191,7 +189,7 @@ public class RocketComputer : Computer
 	{
 		Line loadingLine = new Line("");
 
-		yield return StartCoroutine(LoadText("Checking", 2, (string text) => { loadingLine.text = text; }));
+		yield return StartCoroutine(LoadText("Checking", 2, (string text) => { loadingLine.text = text; UpdateConsole();}));
 
 		string tick = "<sprite name=\"tick\" color=\"#00FF00\">";
 		string cross = "<sprite name=\"cross\" color=\"#FF0000\">";
@@ -200,8 +198,9 @@ public class RocketComputer : Computer
 		{
 			//Yes fuel
 			new Line(SystemText("Engines Fuelled: " + tick));
+			
 
-			yield return StartCoroutine(LoadText("Checking", 2, (string text) => { loadingLine.text = text; }));
+			yield return StartCoroutine(LoadText("Checking", 2, (string text) => { loadingLine.text = text; UpdateConsole();}));
 
 			if (flightPathCreated)
 			{
@@ -232,7 +231,7 @@ public class RocketComputer : Computer
 	{
 		Line initLine = new Line();
 
-		yield return StartCoroutine(LoadText(SystemText("Initializing launch sequence", 1), 2, (string text) => { initLine.text = text; }));
+		yield return StartCoroutine(LoadText(SystemText("Initializing launch sequence", 1), 2, (string text) => { initLine.text = text; UpdateConsole();}));
 
 		if (enginesAreFuelled && flightPathCreated)
 		{
@@ -244,10 +243,12 @@ public class RocketComputer : Computer
 			for (int i = 10; i > 0; i--)
 			{
 				countdownLine.text = SystemText("Launching in... " + i, 1);
+				UpdateConsole();
 				yield return new WaitForSeconds(1);
 			}
 
 			countdownLine.text = SystemText("Launching!", 1);
+			UpdateConsole();
 
 			OnLaunch.Invoke();
 
@@ -260,6 +261,7 @@ public class RocketComputer : Computer
 			initLine.text += SystemText(" Error!", 2);
 
 			new Line(SystemText("Error: systems not ready to launch, check diagnostics for more info.", 2));
+			UpdateConsole();
 
 			OnFinishedCommand();
 		}
@@ -279,35 +281,54 @@ public class RocketComputer : Computer
 		OnFinishedCommand();
 	}
 
-	private void UpdateInput()
-	{
-		char input = GetKeyInput();
 
-		if(input != '\0')
+	private IEnumerator BlinkCaret()
+	{
+		while (true)
 		{
-			if (input == '\n') CheckCommand();
-			else if (input == '\b') ApplyBackspace(ref inputText);
-			else inputText += input;
+			if (takingInput)
+			{
+				Debug.Log("Running");
+				inputLine.text = SystemText("Input: ") + line + GetCaretBlinkChar();
+				UpdateConsole();
+			}
+			yield return new WaitForEndOfFrame();
+
 		}
 	}
+	protected override void OnCharEntered()
+	{
+		if (takingInput)
+		{
+			inputLine.text = SystemText("Input: ") + line + GetCaretBlinkChar();
+
+			UpdateConsole();
+		}
+	}
+
 	private void UpdateConsole()
 	{
-		if (takingInput) inputLine.text = SystemText("Input: ") + inputText + GetCaretBlinkChar();
-
-		StringBuilder log = new StringBuilder();
-		foreach (Line line in Line.lines)
+		if(consoleText.preferredHeight > maxPreferredHeight)
 		{
-			log.Append(line.text);
+			//Remove oldest log
+			Line.lines.RemoveAt(0);
+		}
+		StringBuilder log = new StringBuilder();
+		
+		foreach (Line logline in Line.lines)
+		{
+			log.Append(logline.text);
 			log.Append('\n');
 		}
 
-		consoleText.text = log.ToString();
+		consoleText.text = log.ToString();		
 	}
-	private void CheckCommand()
+	
+	protected override void OnCommandEntered()
 	{
-		inputLine.text = SystemText("Input: ") + inputText;
+		inputLine.text = SystemText("Input: ") + line;
 
-		string[] words = inputText.Split(" ");
+		string[] words = line.Split(" ");
 
 		if (commands.ContainsKey(words[0]))
 		{
