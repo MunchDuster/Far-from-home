@@ -5,6 +5,7 @@ public class PlayerPickup : MonoBehaviour
 {
 	public PlayerSense sensor;
 	public Transform itemParent;
+	public Transform itemTarget;
 
 	[HideInInspector] public bool isAllowedToDropItem = true;
 
@@ -33,7 +34,7 @@ public class PlayerPickup : MonoBehaviour
 		if (rb != null) rb.isKinematic = true;
 
 		//Reparent to the transform
-		item.transform.SetParent(itemParent);
+		//item.transform.SetParent(itemParent);
 
 		//Reset the local transform of the item
 		item.transform.localPosition = item.offset;
@@ -49,10 +50,19 @@ public class PlayerPickup : MonoBehaviour
 		if (rb != null) rb.isKinematic = !enableRigidbody;
 
 		//Reparent to the old transform
-		item.transform.SetParent(oldParent);
+		//item.transform.SetParent(oldParent);
 
 		item = null;
 	}
+
+	// void FixedUpdate()
+    // {
+    //     if(rb != null)
+	// 	{
+	// 		Vector3 force = (target.position - rb.position) * lerp - rb.velocity * damping;
+    //     	rb.AddForce(force, ForceMode.VelocityChange);
+	// 	}
+    // }
 
 	// Update is called every frame
 	private void Update()

@@ -349,7 +349,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: b59e3ebd610b00e46b7b84d15632fde4,
         type: 3}
       propertyPath: m_RootOrder
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b59e3ebd610b00e46b7b84d15632fde4,
         type: 3}
@@ -542,7 +542,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   open: 0
-  animator: {fileID: 1138567042}
+  animators:
+  - {fileID: 1138567042}
   autoCompleteTaskName: 
 --- !u!114 &1138567041
 MonoBehaviour:
