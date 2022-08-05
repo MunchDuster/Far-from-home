@@ -31,14 +31,16 @@ public class PlayerPickup : MonoBehaviour
 
 		//Disable the rigibody on the item
 		rb = item.gameObject.GetComponent<Rigidbody>();
-		if (rb != null) rb.isKinematic = true;
+		//if (rb != null) rb.isKinematic = true;
 
 		//Reparent to the transform
 		//item.transform.SetParent(itemParent);
 
 		//Reset the local transform of the item
-		item.transform.localPosition = item.offset;
-		item.transform.localRotation = Quaternion.Euler(item.offsetRotation);
+			rb.position = itemTarget.position;
+
+		//item.transform.localPosition = item.offset;
+		//item.transform.localRotation = Quaternion.Euler(item.offsetRotation);
 	}
 	public void Drop(bool enableRigidbody = true)
 	{
@@ -47,7 +49,8 @@ public class PlayerPickup : MonoBehaviour
 		PlayerUI.ui.itemText.text = "";
 
 		//Enable the rigibody on the item
-		if (rb != null) rb.isKinematic = !enableRigidbody;
+		//if (rb != null) rb.isKinematic = !enableRigidbody;
+		rb = null;
 
 		//Reparent to the old transform
 		//item.transform.SetParent(oldParent);
@@ -55,14 +58,45 @@ public class PlayerPickup : MonoBehaviour
 		item = null;
 	}
 
-	// void FixedUpdate()
-    // {
-    //     if(rb != null)
-	// 	{
-	// 		Vector3 force = (target.position - rb.position) * lerp - rb.velocity * damping;
-    //     	rb.AddForce(force, ForceMode.VelocityChange);
-	// 	}
-    // }
+	[Space(10)]
+	public float matchForce = 40;
+	public float matchForceDamping = 0.5f;
+	public float matchTorque = 10;
+	public float matchTorqueDamping = 0.5f;
+
+	public bool updateRigidbody = true;
+
+	public void SetControllingItem(bool control)
+	{
+		updateRigidbody = control;
+		rb.isKinematic = !control;
+
+		if(control)
+		{
+			//Move item to target (less chance of gettig stuck behind something)
+			rb.position = itemTarget.position;
+		}
+	}
+
+	void FixedUpdate()
+    {
+        if(rb != null && updateRigidbody)
+		{
+			Vector3 force = (itemTarget.position - rb.position) * matchForce - rb.velocity * matchForceDamping;
+        	rb.AddForce(force, ForceMode.VelocityChange);
+			
+			Vector3 deltaEulers = Quaternion.FromToRotation(rb.transform.forward, transform.forward).eulerAngles;
+			Vector3 turnOffset = new Vector3(
+				deltaEulers.x > 180f ? deltaEulers.x - 360f : deltaEulers.x,
+				deltaEulers.y > 180f ? deltaEulers.y - 360f : deltaEulers.y,
+				deltaEulers.z > 180f ? deltaEulers.z - 360f : deltaEulers.z
+			);
+
+			Vector3 torque = turnOffset * matchTorque - rb.angularVelocity * matchTorqueDamping;
+
+			rb.AddTorque(torque);
+		}
+    }
 
 	// Update is called every frame
 	private void Update()

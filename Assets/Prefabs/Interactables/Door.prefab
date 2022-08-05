@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 1226594891040913742}
   - component: {fileID: 1226594891040913740}
   - component: {fileID: 2143441672077292369}
+  - component: {fileID: 1935385077309742004}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -167,7 +168,7 @@ MonoBehaviour:
   hoverName: Door
   hoverInfoText: Goes to control room.
   hoverInfoPoint: {fileID: 1226594888996701768}
-  outline: {fileID: 5410412697799670920}
+  outline: {fileID: 1935385077309742004}
   openRequirements:
     requirements: []
     completed: 0
@@ -290,6 +291,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1935385077309742004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226594891040913741}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1853736575181222196
 GameObject:
   m_ObjectHideFlags: 0
@@ -601,9 +614,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -763288266461227302, guid: f7bddd6b255742d448e61209b3d639e1,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -763288266461227302, guid: f7bddd6b255742d448e61209b3d639e1,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 01e5f09d64b87314da12a1b71ebf8e5e, type: 2}
+    - target: {fileID: -763288266461227302, guid: f7bddd6b255742d448e61209b3d639e1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 106f3ff43a17d4967a2b64c7a92e49ec, type: 2}
+    - target: {fileID: -763288266461227302, guid: f7bddd6b255742d448e61209b3d639e1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 311313efa011949e98b6761d652ad13c, type: 2}
     - target: {fileID: 919132149155446097, guid: f7bddd6b255742d448e61209b3d639e1,
         type: 3}
       propertyPath: m_Name
@@ -677,24 +705,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5410412697799670920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 36502998318351719}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 0.62102604, b: 0, a: 1}
-  outlineWidth: 4
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!4 &849632096987176925 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f7bddd6b255742d448e61209b3d639e1,
@@ -877,24 +887,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5136340514664102686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6963030727393443328}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 0.62102604, b: 0, a: 1}
-  outlineWidth: 4
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!4 &7776158696951391418 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f7bddd6b255742d448e61209b3d639e1,

@@ -3,8 +3,8 @@ using TMPro;
 
 public class HoverInfo : MonoBehaviour
 {
-	public TextMeshProUGUI hoverNameText;
-	public TextMeshProUGUI hoverInfoText;
+	public TextMeshPro hoverNameText;
+	public TextMeshPro hoverInfoText;
 
 	public Transform target;
 	public Transform positionPoint;

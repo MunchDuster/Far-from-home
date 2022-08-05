@@ -29,7 +29,6 @@ public abstract class Minigame : Interactable
 		if (info.success)
 		{
 			this.player = player;
-			player.movement.rb.isKinematic = true;
 			StartGame();
 		}
 
@@ -76,6 +75,9 @@ public abstract class Minigame : Interactable
 		//Disable the player sense
 		player.sensor.TurnOff();
 
+		player.pickuper.SetControllingItem(false);
+
+
 		//Add check for if plaer is trying to leave game
 		OnGameUpdate += CheckLeave;
 
@@ -99,7 +101,8 @@ public abstract class Minigame : Interactable
 		player.movement.cameraCanMove = true;
 		player.movement.enableHeadBob = true;
 
-		player.movement.rb.isKinematic = false;
+		//player.movement.rb.isKinematic = false;
+		player.pickuper.SetControllingItem(true);
 
 		PlayerUI.ui.minigameText.text = "";
 		PlayerUI.ui.minigameTip.text = "";
