@@ -35,7 +35,6 @@ public class PauseMenu : Menu
 	private void Start()
 	{
 		volume.profile.TryGet(out colorAdjustments);
-		Debug.Log(colorAdjustments);
 	}
 
     // Update is called every frame

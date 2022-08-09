@@ -18,18 +18,23 @@ public class Pickupable : Interactable
 		}
 		else return InteractionInfo.Fail("Already holding item, right click to drop.");
 	}
-	public void MakeUndetectable(Transform target = null)
-	{
-		HideDescendants(transform);
-	}
 
-	private void HideDescendants(Transform target)
+	public void MakeDetectable(bool detectable)
 	{
-		target.gameObject.layer = 7;//Wearing layer
-
-		foreach (Transform child in target)
+		if(detectable)
 		{
-			HideDescendants(child);
+			foreach(Transform child in GetComponentsInChildren<Transform>())
+			{
+				child.gameObject.layer = 0; //Default layer
+			}
 		}
+		else
+		{
+			foreach(Transform child in GetComponentsInChildren<Transform>())
+			{
+				child.gameObject.layer = 7; //Wearing layer
+			}
+		}
+		
 	}
 }

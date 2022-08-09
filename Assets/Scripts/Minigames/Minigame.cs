@@ -75,7 +75,7 @@ public abstract class Minigame : Interactable
 		//Disable the player sense
 		player.sensor.TurnOff();
 
-		player.pickuper.SetControllingItem(false);
+		player.pickuper.SetControllingItem(false, false);
 
 
 		//Add check for if plaer is trying to leave game
@@ -128,7 +128,7 @@ public abstract class Minigame : Interactable
 	// Update is called every frame
 	private void Update()
 	{
-		if (player != null) OnGameUpdate();
+		if (player != null && OnGameUpdate != null) OnGameUpdate();
 	}
 
 	// FixedUpdate is called every physics update

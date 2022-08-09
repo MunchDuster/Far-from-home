@@ -52,39 +52,27 @@ public class Engine : Minigame
 		{
 			OnPlayerJoined.Invoke(true);
 			targetPos = GetItemTargetPosition(new Vector2(Screen.width / 2, Screen.height / 2));
-			SetupPlayer();
-			SetupFuelCan();
-			SetupSlider();
+			
+			//Setup fuel can
+			fuelCan.flow.fuelPoint = fuelPoint;
+			fuelCan.flow.engine = this;
+			fuelCan.transform.position = targetPos;
+			
+			//Setup player
+			rb = player.pickuper.item.GetComponentInChildren<Rigidbody>();
+			rb.isKinematic = false;
+			player.pickuper.isAllowedToDropItem = false;
+			
+			//Setup slider
+			fuelCan.fullnessSlider.value = fuel / maxFuel;
+			fuelCan.fullnessSliderFillImage.color = (fuel < maxFuel) ? sliderStartColor : sliderStopColor;
 		}
 		else
 		{
 			OnPlayerJoined.Invoke(false);
-			rb.isKinematic = true;
 			fuelCan.fullnessSliderFillImage.color = sliderStopColor;
 			player.pickuper.isAllowedToDropItem = true;
-			//Reset pickup position
-			fuelCan.transform.localPosition = Vector3.zero;
-			fuelCan.transform.localRotation = Quaternion.identity;
 		}
-	}
-	private void SetupSlider()
-	{
-		fuelCan.fullnessSlider.value = fuel / maxFuel;
-		fuelCan.fullnessSliderFillImage.color = (fuel < maxFuel) ? sliderStartColor : sliderStopColor;
-	}
-	private void SetupPlayer()
-	{
-		rb = player.pickuper.item.GetComponentInChildren<Rigidbody>();
-		rb.isKinematic = false;
-		player.pickuper.isAllowedToDropItem = false;
-	}
-	private void SetupFuelCan()
-	{
-		fuelCan.flow.fuelPoint = fuelPoint;
-		fuelCan.flow.engine = this;
-		
-		fuelCan.GetComponent<Collider>().enabled = true;
-		fuelCan.transform.position = targetPos;
 	}
 
 	private void UpdateInput()

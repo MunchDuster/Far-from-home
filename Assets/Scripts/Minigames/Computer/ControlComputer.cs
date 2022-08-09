@@ -48,7 +48,7 @@ public class ControlComputer: LockedComputer
 		else
 			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 	}
-
+	public GameObject calculatingPanel;
 	public void CalculateFlightPath()
 	{
 		if(!enteredTC || !enteredRMo || !enteredRMa)
@@ -57,6 +57,7 @@ public class ControlComputer: LockedComputer
 			return;
 		}
 
+		calculatingPanel.SetActive(true);
 		float loadTime = 3;
 		StartCoroutine(LoadBar(loadSlider, loadTime));
 		StartCoroutine(LoadText(
@@ -115,6 +116,7 @@ public class ControlComputer: LockedComputer
 			return;
 		}
 		
+		calculatingPanel.SetActive(true);
 		float loadTime = 3;
 		StartCoroutine(LoadBar(loadSlider, loadTime));
 		StartCoroutine(LoadText(

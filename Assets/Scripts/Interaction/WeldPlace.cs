@@ -59,7 +59,7 @@ public class WeldPlace : Minigame
 
 				player.pickuper.Drop(false);
 
-				plate.MakeUndetectable();
+				plate.MakeDetectable(false);
 
 				return InteractionInfo.Fail("");
 			}
