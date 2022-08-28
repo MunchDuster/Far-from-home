@@ -78,7 +78,6 @@ public class WeldPlace : Minigame
 
 				Debug.Log("Starting weld");
 
-
 				return InteractionInfo.Success();
 			}
 			else

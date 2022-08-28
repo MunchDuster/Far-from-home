@@ -4931,21 +4931,45 @@ MonoBehaviour:
   outline: {fileID: 0}
   cameraPoint: {fileID: 8299786933706236846}
   playerTip: Hold mouse to set target point
-  bodyStiffness: 15
-  nozzleStiffness: 15
-  alignmentStiffness: 15
+  bodyStiffness: 120
+  nozzleStiffness: 120
+  alignmentStiffness: 120
   maxFuel: 40
   fuelCan: {fileID: 0}
-  sliderStartColor: {r: 0, g: 0, b: 0, a: 0}
-  sliderStopColor: {r: 0, g: 0, b: 0, a: 0}
+  sliderStartColor: {r: 0, g: 0.7648349, b: 1, a: 1}
+  sliderStopColor: {r: 0.069517374, g: 1, b: 0, a: 1}
   itemPlane: {fileID: 8299786931802995313}
   fuelPoint: {fileID: 8299786931802995313}
   OnPlayerJoined:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnFuelled:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: RocketComputer, Project.MyScripts
+        m_MethodName: EngineFuelled
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   handleDampingStiffness: 0.2
   nozzleDampingStiffness: 0.2
   alignmentDampingStiffness: 0.2

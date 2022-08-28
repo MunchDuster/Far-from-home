@@ -333,11 +333,12 @@ public class PlayerMovement : MonoBehaviour
 
 		if (Physics.Raycast(origin, direction, out RaycastHit hit, maxRaycastDist))
 		{
-			Debug.DrawRay(origin, direction * maxRaycastDist, Color.red);
+			Debug.DrawRay(origin, direction * hit.distance, Color.red);
 			isGrounded = true;
 		}
 		else
 		{
+			Debug.DrawRay(origin, direction * maxRaycastDist, Color.red);
 			isGrounded = false;
 		}
 	}

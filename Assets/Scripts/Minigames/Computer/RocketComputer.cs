@@ -62,9 +62,9 @@ public class RocketComputer : Computer
 	private void Start()
 	{
 		commands.Add("clear", ClearConsole);
-		commands.Add("diagnostics", () => { StartCoroutine(RunDiagnostics()); });
+		commands.Add("diagnostics", StartDiagnostics);
 		commands.Add("help", ListCommands);
-		commands.Add("launch", () => { StartCoroutine(Launch()); });
+		commands.Add("launch", StartLaunch);
 
 		Line.lines = new List<Line>();
 		Line.maxLines = maxLines;
@@ -177,14 +177,17 @@ public class RocketComputer : Computer
 		}
 	}
 	//Commands
-	private void ClearConsole()
+	public void ClearConsole()
 	{
 		Line.lines.Clear();
 		takingInput = true;
 
 		OnFinishedCommand();
 	}
-	
+	public void StartDiagnostics()
+	{
+		StartCoroutine(RunDiagnostics());
+	}
 	private IEnumerator RunDiagnostics()
 	{
 		Line loadingLine = new Line("");
@@ -226,7 +229,10 @@ public class RocketComputer : Computer
 
 		OnFinishedCommand();
 	}
-	
+	public void StartLaunch()
+	{
+		StartCoroutine(Launch());
+	}
 	private IEnumerator Launch()
 	{
 		Line initLine = new Line();
@@ -271,7 +277,7 @@ public class RocketComputer : Computer
 	{
 		StopAllCoroutines();
 	}
-	private void ListCommands()
+	public void ListCommands()
 	{
 		new Line(SystemText("help: See list of commands."));
 		new Line(SystemText("clear: Clear console."));

@@ -2,7 +2,10 @@ fileFormatVersion: 2
 guid: b59e3ebd610b00e46b7b84d15632fde4
 ModelImporter:
   serializedVersion: 22102
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: -623603649343465320
+    second: Scene
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -51,7 +54,7 @@ ModelImporter:
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
     importVisibility: 0
-    importBlendShapes: 0
+    importBlendShapes: 1
     importCameras: 0
     importLights: 0
     nodeNameCollisionStrategy: 1

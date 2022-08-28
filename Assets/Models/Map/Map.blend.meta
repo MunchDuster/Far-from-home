@@ -71,7 +71,7 @@ ModelImporter:
   meshes:
     lODScreenPercentages: []
     globalScale: 0.9
-    meshCompression: 1
+    meshCompression: 2
     addColliders: 1
     useSRGBMaterialColor: 1
     sortHierarchyByName: 0
@@ -94,11 +94,11 @@ ModelImporter:
     optimizeBones: 1
     meshOptimizationFlags: -1
     indexFormat: 0
-    secondaryUVAngleDistortion: 8
-    secondaryUVAreaDistortion: 15
+    secondaryUVAngleDistortion: 13
+    secondaryUVAreaDistortion: 19
     secondaryUVHardAngle: 88
     secondaryUVMarginMethod: 1
-    secondaryUVMinLightmapResolution: 50
+    secondaryUVMinLightmapResolution: 10
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1

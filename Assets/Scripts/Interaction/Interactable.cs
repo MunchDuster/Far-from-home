@@ -10,6 +10,15 @@ public abstract class Interactable : MonoBehaviour
 	public Transform hoverInfoPoint;
 	public Outline outline;
 
+	public void SetHoverName(string hoverName)
+	{
+		this.hoverName = hoverName;
+	}
+	public void SetHoverInfo(string hoverInfo)
+	{
+		hoverInfoText = hoverInfo;
+	}
+
 	//On click
 	public abstract InteractionInfo Interact(Player player);
 
@@ -30,5 +39,9 @@ public abstract class Interactable : MonoBehaviour
 	{
 		outline.enabled = false;
 		hoverInfo.gameObject.SetActive(false);
+	}
+	public void OutlineCompleted()
+	{
+		outline.SetColorMode(Outline.ColorMode.Completed);
 	}
 }
