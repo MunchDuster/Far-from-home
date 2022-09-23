@@ -33,7 +33,7 @@ public class SimpleLookAround : MonoBehaviour
     void Update()
     {
         float deltaX = Input.GetAxis("Mouse X");
-        float deltaY = Input.GetAxis("Mouse Y");
+        float deltaY = -Input.GetAxis("Mouse Y");
 
         x += deltaX;
         y += deltaY;

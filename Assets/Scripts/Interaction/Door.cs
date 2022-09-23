@@ -70,6 +70,9 @@ public class Door : Interactable
     private void UpdateLocked(bool unlocked)
     {
         if (OnUnlock != null) OnUnlock.Invoke(unlocked);
+		
+		if(unlocked) outline.SetColorMode(Outline.ColorMode.Normal);
+		else outline.SetColorMode(Outline.ColorMode.Problem);
     }
 
     //Allow for unityEvents to set task completed

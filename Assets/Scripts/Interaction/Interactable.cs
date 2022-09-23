@@ -44,4 +44,8 @@ public abstract class Interactable : MonoBehaviour
 	{
 		outline.SetColorMode(Outline.ColorMode.Completed);
 	}
+	public void OutlineUncompleted()
+	{
+		outline.SetColorMode(Outline.ColorMode.Normal);
+	}
 }

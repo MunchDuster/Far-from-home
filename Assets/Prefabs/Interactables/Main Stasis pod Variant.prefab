@@ -56,17 +56,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1415082368}
-  m_LocalRotation: {x: 0.00000013809702, y: 0.997864, z: -0.065324895, w: 0.00000017013625}
-  m_LocalPosition: {x: 0, y: 0, z: 0.74029255}
-  m_LocalScale: {x: 0.0036000018, y: 0.0036000009, z: 0.0036000006}
-  m_ConstrainProportionsScale: 0
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.699}
+  m_LocalScale: {x: 0.0035, y: 0.0035, z: 0.0035}
+  m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1389437099267122102}
+  m_Father: {fileID: 1899657834918014601}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: -195, y: 0, z: 180}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.5832005, y: -0.23633528}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.596, y: 0.747}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &6318223839597107554
@@ -501,7 +501,7 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2544094641968082029}
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: b59e3ebd610b00e46b7b84d15632fde4,
+    - targetCorrespondingSourceObject: {fileID: -8170079002313168172, guid: b59e3ebd610b00e46b7b84d15632fde4,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1415082369}
@@ -614,6 +614,12 @@ MonoBehaviour:
   colorMode: 0
   renderers:
   - {fileID: 5912565335085991656}
+--- !u!4 &1899657834918014601 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8170079002313168172, guid: b59e3ebd610b00e46b7b84d15632fde4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1496036010971989085}
+  m_PrefabAsset: {fileID: 0}
 --- !u!137 &5912565335085991656 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 5102395909350310581, guid: b59e3ebd610b00e46b7b84d15632fde4,
