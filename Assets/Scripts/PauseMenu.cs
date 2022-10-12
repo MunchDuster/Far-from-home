@@ -11,7 +11,8 @@ public class PauseMenu : Menu
 	public GameObject subtitles;
 	public Volume volume;
 
-	private ColorAdjustments colorAdjustments;
+	ColorAdjustments colorAdjustments;
+	DepthOfField depthOfField;
 
 	public void SetVolume(float volume)
 	{
@@ -35,6 +36,7 @@ public class PauseMenu : Menu
 	private void Start()
 	{
 		volume.profile.TryGet(out colorAdjustments);
+		volume.profile.TryGet(out depthOfField);
 	}
 
     // Update is called every frame
@@ -57,15 +59,8 @@ public class PauseMenu : Menu
 		
 		if(OnToggleShown != null) OnToggleShown.Invoke(!paused);
 
-		if(paused)
-		{
-			pausePanel.SetActive(true);
-			Time.timeScale = 0;
-		}
-		else
-		{
-			pausePanel.SetActive(false);
-			Time.timeScale = 1;
-		}
+		pausePanel.SetActive(paused);
+
+		depthOfField.active = paused;
 	}
 }

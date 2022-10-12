@@ -1,10 +1,11 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 using TMPro;
 
 public class NumberLock : Lock
 {
-	public TextMeshProUGUI text;
+	public TMP_Text text;
 	public int noOfDigits;
 	public string builder;
 	public int answer;
@@ -12,6 +13,8 @@ public class NumberLock : Lock
 	[Space(10)]
 	public float flashTick = 0.8f;
 	public float flashTime = 3;
+
+	public UnityEvent<bool> OnJoin;
 
 	private int index;
 
@@ -21,6 +24,7 @@ public class NumberLock : Lock
 	protected void Start()
 	{
 		digits = new int[noOfDigits];
+		OnPlayerJoin += (bool joined) => {OnJoin.Invoke(joined); };
 	}
 
 	private Coroutine flashingText;

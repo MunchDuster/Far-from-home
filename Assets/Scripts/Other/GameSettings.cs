@@ -36,11 +36,17 @@ public class GameSettings : MonoBehaviour
 		Application.targetFrameRate = framerate;
 	}
 
+	public float defaultFramerate;
+	public int defaultQuality; 
+
 	// Start is called before the first frame update
 	private void Start()
 	{
 		SetupSingleton();
 		SetupResolutionDropdown();
+
+		SetTargetFramerate(defaultFramerate);
+		SetQuality(defaultQuality);
 	}
 
 	private void SetupSingleton()

@@ -7,8 +7,9 @@ public class CardLock : Lock
 
 	public Pickupable card;
 	public new Camera camera;
-	public TextMeshProUGUI text;
+	public TMP_Text text;
 	public Vector3 cardRotationOffset = Vector3.zero;
+	public int maxSwipes = 20;
 
 	[Space(10)]
 	public Transform slideStart;
@@ -33,6 +34,7 @@ public class CardLock : Lock
 	private float maxSpeed { get { return targetSpeed + (targetSpeedRange / 2f); } }
 	private float minSpeed { get { return targetSpeed - (targetSpeedRange / 2f); } }
 
+	private int scans = 0;
 
 	// Start is called before the first frame update
 	private void Start()
@@ -130,6 +132,15 @@ public class CardLock : Lock
 	{
 		if (player.pickuper.item == card)
 		{
+			scans++;
+
+			if(scans >= maxSwipes)
+			{
+				textDisplayCoroutine = StartCoroutine(ShowText("Validate Success", 2));
+				if (OnUnlock != null) OnUnlock.Invoke();
+				return;
+			}
+
 			float speed = Mathf.Abs((y - lastY) / Time.deltaTime);
 
 			if (textDisplayCoroutine != null) StopCoroutine(textDisplayCoroutine);
@@ -146,7 +157,7 @@ public class CardLock : Lock
 			}
 			else
 			{
-				textDisplayCoroutine = StartCoroutine(ShowText("Validation Success", 2));
+				textDisplayCoroutine = StartCoroutine(ShowText("<color=\"green\">Validate Success</color>", 2));
 				if (OnUnlock != null) OnUnlock.Invoke();
 			}
 		}

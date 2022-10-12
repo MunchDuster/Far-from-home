@@ -25,6 +25,8 @@ public abstract class Computer : MonoBehaviour
 	protected OnStringEvent OnKeyPressed;
 
 	protected ErrorBundle tooManyCharsBundle;
+	protected Coroutine curTask;
+
 	
 	// Awake is called when the gameObject is activated
 	protected virtual void Awake()
@@ -37,13 +39,14 @@ public abstract class Computer : MonoBehaviour
 	{
 		if(on)
 		{
-			StartCoroutine(PowerUp());
+			curTask = StartCoroutine(PowerUp());
 			OnGUIUpdate += CheckInput;
 		}
 		else
 		{
 			OnPowerOn.Invoke(false);
 			OnGUIUpdate -= CheckInput;
+			if(curTask != null) StopCoroutine(curTask);
 		}
 	}
 

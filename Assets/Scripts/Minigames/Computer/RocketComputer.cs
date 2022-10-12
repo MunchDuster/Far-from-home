@@ -32,8 +32,8 @@ public class RocketComputer : Computer
 		}
 	}
 
-	public TextMeshProUGUI loadingText;
-	public TextMeshProUGUI consoleText;
+	public TMP_Text loadingText;
+	public TMP_Text consoleText;
 	public Animator animator;
 
 	[Header("Settings")]
@@ -53,6 +53,7 @@ public class RocketComputer : Computer
 	public UnityEvent OnAfterLaunched;
 
 	private Dictionary<string, OnEvent> commands = new Dictionary<string, OnEvent>();
+
 
 	//Console logs
 	private Line inputLine;
@@ -83,6 +84,7 @@ public class RocketComputer : Computer
 
 		OnCharEntered();
 		caretBlinker = StartCoroutine(BlinkCaret());
+		curTask = caretBlinker;
 	}
 	private void OnFinishedCommand()
 	{
@@ -118,6 +120,7 @@ public class RocketComputer : Computer
 		{
 			takingInput = false;
 			if(caretBlinker != null) StopCoroutine(caretBlinker);
+
 		}
 
 		base.PowerOn(on);
@@ -132,6 +135,7 @@ public class RocketComputer : Computer
 				PoweredOn
 			)
 		);
+		curTask = null;
 	}
 
 	public float engines = 3;
@@ -159,7 +163,7 @@ public class RocketComputer : Computer
 	public void StartRollingCredits()
 	{
 		Line.lines.Clear();
-		StartCoroutine(RollCredits());
+		curTask = StartCoroutine(RollCredits());
 	}
 	private IEnumerator RollCredits()
 	{
@@ -186,7 +190,7 @@ public class RocketComputer : Computer
 	}
 	public void StartDiagnostics()
 	{
-		StartCoroutine(RunDiagnostics());
+		curTask = StartCoroutine(RunDiagnostics());
 	}
 	private IEnumerator RunDiagnostics()
 	{
@@ -231,7 +235,7 @@ public class RocketComputer : Computer
 	}
 	public void StartLaunch()
 	{
-		StartCoroutine(Launch());
+		curTask = StartCoroutine(Launch());
 	}
 	private IEnumerator Launch()
 	{

@@ -144,12 +144,32 @@ public class PlayerMovement : MonoBehaviour
 	}
 	private void UpdateInputs()
 	{
-		sprintPressed = Input.GetKeyDown(sprintKey);
-		jumpPressed = Input.GetKeyDown(jumpKey);
-		crouchPressed = Input.GetKeyDown(crouchKey);
+		if (playerCanMove)
+		{
+			sprintPressed = Input.GetKeyDown(sprintKey);
+			jumpPressed = Input.GetKeyDown(jumpKey);
+			crouchPressed = Input.GetKeyDown(crouchKey);
 
-		moveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-		lookInput = new Vector3(Input.GetAxis("Mouse X"), 0, Input.GetAxis("Mouse Y"));
+			moveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+			
+		}
+		else
+		{
+			sprintPressed = false;
+			jumpPressed = false;
+			crouchPressed = false;
+
+			moveInput = Vector3.zero;
+		}
+
+		if(cameraCanMove)
+		{
+			lookInput = new Vector3(Input.GetAxis("Mouse X"), 0, Input.GetAxis("Mouse Y"));
+		}
+		else
+		{
+			lookInput = Vector3.zero;
+		}
 	}
 	private void CheckCrouch()
 	{
@@ -275,32 +295,28 @@ public class PlayerMovement : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		if (playerCanMove)
+		bool wasWalking = isWalking;
+		bool wantsToMove = moveInput.x != 0 || moveInput.z != 0;
+		bool canSprint = sprintRemaining > 0f && !isSprintCooldown;
+
+		isWalking = wantsToMove && playerCanMove && isGrounded;
+		isSprinting = isWalking && enableSprint && sprintPressed && canSprint;
+
+		if(isWalking && !wasWalking)
 		{
-			bool wasWalking = isWalking;
-			bool wantsToMove = moveInput.x != 0 || moveInput.z != 0;
-			bool canSprint = sprintRemaining > 0f && !isSprintCooldown;
-
-			isWalking = wantsToMove && playerCanMove && isGrounded;
-			isSprinting = isWalking && enableSprint && sprintPressed && canSprint;
-
-			if(isWalking && !wasWalking)
-			{
-				OnMoveStart.Invoke();
-			}
-			else if (!isWalking && wasWalking)
-			{
-				OnMoveStop.Invoke();
-			}
-
-			if (isSprinting)
-			{
-				ApplyMoveForce(sprintSpeed);
-			}
-			else
-			{
-				ApplyMoveForce(walkSpeed);
-			}
+			OnMoveStart.Invoke();
+		}
+		else if (!isWalking && wasWalking)
+		{
+			OnMoveStop.Invoke();
+		}
+		if (isSprinting)
+		{
+			ApplyMoveForce(sprintSpeed);
+		}
+		else
+		{
+			ApplyMoveForce(walkSpeed);
 		}
 	}
 	private void ApplyMoveForce(float speed)
